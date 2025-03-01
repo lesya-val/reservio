@@ -1,7 +1,11 @@
 <template>
-  <div class="app"></div>
+  <div class="app">
+    <router-view />
+  </div>
 </template>
 
 <script setup></script>
 
-<style scoped></style>
+<style scoped lang="scss">
+@import "style.scss";
+</style>
