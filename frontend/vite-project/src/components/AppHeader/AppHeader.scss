@@ -1,0 +1,53 @@
+.header {
+  padding: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+  border-bottom: 1px solid #b3bccb;
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    cursor: pointer;
+
+    &-logo {
+      width: 64px;
+      height: 64px;
+    }
+
+    &-text {
+      font-family: 'Raleway';
+      font-weight: 700;
+    }
+  }
+
+  &__center {
+    &-text {
+      font-family: 'Raleway';
+      font-weight: 600;
+    }
+  }
+
+  &__right {
+    &-nav {
+      display: flex;
+      gap: 30px;
+    }
+
+    &-list {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 30px;
+    }
+
+    &-profile {
+      width: 50px;
+      border-radius: 50%;
+      overflow: hidden;
+      cursor: pointer;
+    }
+  }
+}
