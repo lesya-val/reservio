@@ -1,0 +1,17 @@
+// Сброс стилей
+@import "../src/style/reset";
+
+// Подключение шрифтов
+@import "../src/style/fonts";
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 6px;
+  background-color: #b3bccb;
+}
+::-webkit-scrollbar-track {
+  border-radius: 6px;
+}
