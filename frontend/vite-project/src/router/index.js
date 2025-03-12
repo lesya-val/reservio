@@ -4,6 +4,7 @@ import RestaurantListPage from "../views/RestaurantListPage/RestaurantListPage.v
 
 const routes = [
   { path: "/", name: "App", component: App },
+  { path: "/restaurant-list", name: "RestaurantListPage", component: RestaurantListPage },
 ];
 
 const router = createRouter({

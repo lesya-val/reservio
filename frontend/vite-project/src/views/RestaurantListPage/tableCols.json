@@ -1,0 +1,36 @@
+[
+  {
+    "id": "index",
+    "name": "№",
+    "style": { "width": "3%" }
+  },
+  {
+    "id": "restaurantName",
+    "name": "Название ресторана",
+    "style": { "width": "25%" }
+  },
+  {
+    "id": "address",
+    "name": "Адрес",
+    "style": { "width": "25%" }
+  },
+  {
+    "id": "contactPhone",
+    "name": "Контактный телефон",
+    "style": { "width": "20%" }
+  },
+  {
+    "id": "workingHours",
+    "name": "Часы работы",
+    "style": { "width": "14%" }
+  },
+  {
+    "id": "status",
+    "name": "Статус",
+    "style": { "width": "8%" }
+  },
+  {
+    "id": "delete",
+    "style": { "width": "5%" }
+  }
+]
