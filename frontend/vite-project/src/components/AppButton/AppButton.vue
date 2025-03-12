@@ -8,9 +8,7 @@
       <slot name="icon-before"></slot>
     </span>
 
-    <span class="button-text">
-      {{ text }}
-    </span>
+    <slot class="button-text" />
 
     <span v-if="$slots['icon-after']" class="icon">
       <slot name="icon-after"></slot>
