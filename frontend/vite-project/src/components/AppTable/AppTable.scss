@@ -1,0 +1,59 @@
+.table {
+  max-height: calc(100vh - 180px);
+  overflow-y: auto;
+  padding-left: 25px;
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    color: $dark-gray;
+  }
+
+  &__body {
+    &-row {
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background-color: rgba($color: $blue, $alpha: 0.1);
+        transition: all 0.3s ease;
+
+        .table__cell-delete {
+          opacity: 1;
+          transition: all 0.3s ease;
+        }
+      }
+    }
+  }
+
+  &__header {
+    position: sticky;
+    top: 0;
+    background-color: $white;
+    box-shadow: 0 2px 0px -1px $dark-gray;
+  }
+
+  &__row {
+    border-bottom: 1px solid $light-gray;
+  }
+
+  &__cell {
+    text-align: start;
+    padding: 15px 10px;
+
+    &:has(.table__cell-delete) {
+      padding: 0;
+    }
+
+    &-delete {
+      opacity: 0;
+      background-color: $light-gray;
+      transition: all 0.3s ease;
+    }
+  }
+
+  &__modal {
+    text-align: center;
+    font-size: 16px;
+  }
+}
