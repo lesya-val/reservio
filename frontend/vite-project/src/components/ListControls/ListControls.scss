@@ -1,0 +1,17 @@
+.list-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px 25px;
+  padding-top: 0;
+
+  &__title {
+    color: #414b58;
+    font-size: 24px;
+    font-family: Raleway;
+  }
+
+  &__search {
+    width: 16rem;
+  }
+}
