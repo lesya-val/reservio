@@ -1,0 +1,31 @@
+.modal {
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: $black-background;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &__box {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background: $white;
+    border-radius: 5px;
+    padding: 20px;
+    min-width: 400px;
+    max-width: 95%;
+    max-height: 94%;
+  }
+
+  &__buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 25px;
+  }
+}
