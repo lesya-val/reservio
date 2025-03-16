@@ -4,6 +4,7 @@
     <AppInput
       class="search__input"
       :value="searchValue"
+      :type="'text'"
       :placeholder="'Поиск'"
       @input="onSearchChange"
     >

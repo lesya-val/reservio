@@ -1,6 +1,12 @@
 .input {
   width: 100%;
 
+  &--outlined {
+    border: 1px solid #414b58;
+    border-radius: 4px;
+    padding: 10px 15px;
+  }
+
   &__field {
     width: 100%;
     border-radius: 4px;

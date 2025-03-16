@@ -1,5 +1,5 @@
 <template>
-  <div class="input">
+  <div :class="['input', { 'input--outlined': type === 'outlined' }]">
     <input
       :type="type"
       :value="modelValue"
@@ -20,8 +20,7 @@
 </template>
 
 <script setup lang="ts">
-
-const props = defineProps({
+defineProps({
   modelValue: {
     type: [String, Number],
     default: "",
@@ -29,6 +28,10 @@ const props = defineProps({
   placeholder: {
     type: String,
     default: "Введите значение",
+  },
+  type: {
+    type: String,
+    default: "outlined",
   },
   disabled: {
     type: Boolean,
