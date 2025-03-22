@@ -5,6 +5,20 @@
   padding: 20px 25px;
   padding-top: 0;
 
+  &__row {
+    @include flex-space-between;
+    gap: 20px;
+  }
+
+  &__go-back {
+    color: $blue;
+  }
+
+  &__right {
+    @include flex-center;
+    gap: 20px;
+  }
+
   &__title {
     color: #414b58;
     font-size: 24px;

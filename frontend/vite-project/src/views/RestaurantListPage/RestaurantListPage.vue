@@ -1,7 +1,11 @@
 <template>
   <v-default>
-    <ListControls :title="'Управление ресторанами'" />
-    <AppTable :cols="tableCols" :data="data" class="list-page" />
+    <ListControls
+      :has-back="false"
+      :has-action-button="false"
+      title="Управление ресторанами"
+    />
+    <AppTable class="list-page" :cols="tableCols" :data="data" />
   </v-default>
 </template>
 
@@ -9,6 +13,7 @@
 import AppTable from "../../components/AppTable/AppTable.vue";
 import VDefault from "../../components/DefaultLayout/DefaultLayout.vue";
 import ListControls from "../../components/ListControls/ListControls.vue";
+
 import tableCols from "./tableCols";
 
 const data = [
