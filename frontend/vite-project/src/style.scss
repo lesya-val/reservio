@@ -7,6 +7,9 @@
 // Определение переменных цветов
 @import "../src/style/colors";
 
+// Миксины
+@import "../src/style/mixins";
+
 // Скролл
 ::-webkit-scrollbar {
   width: 4px;

@@ -1,14 +1,11 @@
 .header {
+  @include flex-space-between;
   padding: 25px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   gap: 30px;
   border-bottom: 1px solid $light-gray;
 
   &__left {
-    display: flex;
-    align-items: center;
+    @include flex-center;
     gap: 25px;
     cursor: pointer;
 
@@ -38,9 +35,7 @@
     }
 
     &-list {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      @include flex-space-between;
       gap: 30px;
     }
 

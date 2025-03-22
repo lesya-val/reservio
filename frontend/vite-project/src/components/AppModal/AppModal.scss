@@ -6,9 +6,7 @@
   bottom: 0;
   right: 0;
   background-color: $black-background;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-center;
 
   &__box {
     display: flex;
@@ -23,9 +21,7 @@
   }
 
   &__buttons {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include flex-center;
     gap: 25px;
   }
 }
