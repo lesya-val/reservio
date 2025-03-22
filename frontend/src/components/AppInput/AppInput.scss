@@ -1,10 +1,19 @@
 .input {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
   width: 100%;
 
-  &--outlined {
-    border: 1px solid #414b58;
-    border-radius: 4px;
-    padding: 10px 15px;
+  &__label {
+    font-size: 12px;
+  }
+
+  &__container {
+    &--outlined {
+      border: 1px solid $dark-gray;
+      border-radius: 4px;
+      padding: 10px 15px;
+    }
   }
 
   &__field {
@@ -13,7 +22,7 @@
     transition: border-color 0.3s ease;
 
     &--error {
-      border-color: #d82222;
+      border-color: $red;
     }
 
     &--disabled {
@@ -25,7 +34,7 @@
 
   &__error {
     font-size: 12px;
-    color: #d82222;
+    color: $red;
     margin-top: 4px;
   }
 }

@@ -13,8 +13,8 @@
       <div class="login__form">
         <div class="login__form-title">Вход</div>
         <div class="login__form-inputs">
-          <AppInput placeholder="Введите логин" />
-          <AppInput placeholder="Введите пароль" />
+          <AppInput placeholder="Введите логин" label="Логин" />
+          <AppInput placeholder="Введите пароль" label="Пароль" />
         </div>
         <AppButton class="login__form-button">Войти</AppButton>
       </div>
