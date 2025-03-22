@@ -1,6 +1,6 @@
 <template>
   <button
-    :class="['button', { disabled: disabled }, `button--${view}`]"
+    :class="['button', { 'button--disabled': disabled }, `button--${view}`]"
     :disabled="disabled"
     @click="$emit('click')"
   >
@@ -22,19 +22,15 @@ defineProps({
     type: Boolean,
     default: false,
   },
-  text: {
-    type: String,
-    default: '',
-  },
   view: {
     type: String,
-    default: 'filled',
+    default: "filled",
   },
 });
 
-defineEmits(['click']);
+defineEmits(["click"]);
 </script>
 
 <style scoped lang="scss">
-@import './AppButton';
+@import "./AppButton";
 </style>
