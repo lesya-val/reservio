@@ -1,17 +1,19 @@
 <template>
   <div :class="['input', { 'input--outlined': type === 'outlined' }]">
-    <input
-      :type="type"
-      :value="modelValue"
-      :placeholder="placeholder"
-      :disabled="disabled"
-      :class="[
-        'input__field',
-        { 'input__field--error': errorMessage },
-        { 'input__field--disabled': disabled },
-      ]"
-      @input="updateValue"
-    />
+    <label v-if="hasLabel">
+      <input
+        :type="type"
+        :value="modelValue"
+        :placeholder="placeholder"
+        :disabled="disabled"
+        :class="[
+          'input__field',
+          { 'input__field--error': errorMessage },
+          { 'input__field--disabled': disabled },
+        ]"
+        @input="updateValue"
+      />
+    </label>
 
     <span v-if="errorMessage" class="input__field__error">
       {{ errorMessage }}
@@ -36,6 +38,10 @@ defineProps({
   disabled: {
     type: Boolean,
     default: false,
+  },
+  hasLabel: {
+    type: Boolean,
+    default: true,
   },
   errorMessage: {
     type: String,
