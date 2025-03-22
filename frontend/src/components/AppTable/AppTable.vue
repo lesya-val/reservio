@@ -25,11 +25,11 @@
             :style="col.style"
             :class="[
               'table__cell',
-              { 'table__cell-delete': col.id === 'delete' },
+              { 'table__cell-delete': isDeleteColumn(col) },
             ]"
-            @click="handleCellClick(item)"
+            @click="handleCellAction(col, item)"
           >
-            <AppIcon value="trash" v-if="col.id === 'delete'" />
+            <AppIcon value="trash" v-if="isDeleteColumn(col)" />
             <div v-else>{{ item[col.id] }}</div>
           </td>
         </tr>
@@ -57,18 +57,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
+import { useRouter } from "vue-router";
+
 import AppIcon from "../AppIcon/AppIcon.vue";
 import AppModal from "../AppModal/AppModal.vue";
 import AppButton from "../AppButton/AppButton.vue";
 import AppNotification from "../AppNotification/AppNotification.vue";
-import { useRouter } from "vue-router";
 
-interface TableColumn {
-  id: string;
-  name?: string;
-  style: { [key: string]: string };
-}
+import TableColumn from "../../types/TableColumn";
 
 const props = defineProps<{
   cols: TableColumn[];
@@ -87,21 +84,27 @@ const router = useRouter();
 const isModalActive = ref(false);
 const isNotificationActive = ref(false);
 
+const isDeleteColumn = (col: TableColumn) => col.id === "delete";
+
 const deleteItem = () => {
   isModalActive.value = false;
   isNotificationActive.value = true;
 };
 
-const handleCellClick = (item: { [key: string]: any }) => {
-  if (item.col.id === "delete") {
+function handleCellAction(col: TableColumn, item: any) {
+  if (isDeleteColumn(col)) {
     isModalActive.value = true;
   } else {
-    router.push({
-      name: props.routeConfig.name,
-      params: { id: props.routeConfig.params },
-      query: props.routeConfig.query,
-    });
+    handleCellClick(item);
   }
+}
+
+const handleCellClick = (item: { [key: string]: any }) => {
+  router.push({
+    name: props.routeConfig.name,
+    params: { id: props.routeConfig.params },
+    query: props.routeConfig.query,
+  });
 };
 </script>
 
