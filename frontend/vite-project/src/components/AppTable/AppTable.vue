@@ -27,11 +27,9 @@
               'table__cell',
               { 'table__cell-delete': col.id === 'delete' },
             ]"
-            @click="isModalActive = true"
+            @click="handleCellClick(item)"
           >
-            <div v-if="col.id === 'delete'">
-              <AppIcon value="trash" />
-            </div>
+            <AppIcon value="trash" v-if="col.id === 'delete'" />
             <div v-else>{{ item[col.id] }}</div>
           </td>
         </tr>
@@ -43,9 +41,9 @@
       </template>
 
       <template #buttons>
-        <AppButton view="outlined" @click="isModalActive = false"
-          >Отмена</AppButton
-        >
+        <AppButton view="outlined" @click="isModalActive = false">
+          Отмена
+        </AppButton>
         <AppButton @click="deleteItem">Удалить</AppButton>
       </template>
     </AppModal>
@@ -64,6 +62,7 @@ import AppIcon from "../AppIcon/AppIcon.vue";
 import AppModal from "../AppModal/AppModal.vue";
 import AppButton from "../AppButton/AppButton.vue";
 import AppNotification from "../AppNotification/AppNotification.vue";
+import { useRouter } from "vue-router";
 
 interface TableColumn {
   id: string;
@@ -71,10 +70,19 @@ interface TableColumn {
   style: { [key: string]: string };
 }
 
-defineProps<{
+const props = defineProps<{
   cols: TableColumn[];
-  data: () => [{}];
+  data: Array<{ [key: string]: any }>;
+  routeConfig: {
+    name: string;
+    params: string;
+    query?: { [key: string]: string };
+  };
 }>();
+
+const emit = defineEmits(["clickItem"]);
+
+const router = useRouter();
 
 const isModalActive = ref(false);
 const isNotificationActive = ref(false);
@@ -82,6 +90,18 @@ const isNotificationActive = ref(false);
 const deleteItem = () => {
   isModalActive.value = false;
   isNotificationActive.value = true;
+};
+
+const handleCellClick = (item: { [key: string]: any }) => {
+  if (item.col.id === "delete") {
+    isModalActive.value = true;
+  } else {
+    router.push({
+      name: props.routeConfig.name,
+      params: { id: props.routeConfig.params },
+      query: props.routeConfig.query,
+    });
+  }
 };
 </script>
 

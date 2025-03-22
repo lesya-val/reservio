@@ -41,11 +41,8 @@
     text-align: start;
     padding: 15px 10px;
 
-    &:has(.table__cell-delete) {
-      padding: 0;
-    }
-
     &-delete {
+      padding: 0;
       opacity: 0;
       background-color: $light-gray;
       transition: all 0.3s ease;
