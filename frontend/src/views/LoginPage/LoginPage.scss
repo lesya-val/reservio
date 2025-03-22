@@ -1,7 +1,6 @@
 .login {
+  @include flex-column;
   height: 100vh;
-  display: flex;
-  flex-direction: column;
   gap: 30px;
   background-color: rgba($color: $light-gray, $alpha: 0.5);
 
