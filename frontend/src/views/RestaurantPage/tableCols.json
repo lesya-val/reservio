@@ -1,0 +1,22 @@
+[
+  {
+    "id": "index",
+    "name": "№"
+  },
+  {
+    "id": "adminName",
+    "name": "Имя"
+  },
+  {
+    "id": "adminSurname",
+    "name": "Фамилия"
+  },
+  {
+    "id": "adminEmail",
+    "name": "Email"
+  },
+  {
+    "id": "adminPassword",
+    "name": "Пароль"
+  }
+]
