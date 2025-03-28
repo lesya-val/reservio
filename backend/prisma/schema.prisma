@@ -1,0 +1,21 @@
+generator client {
+  provider = "prisma-client-js"
+} 
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Restaurant {
+  id           Int     @id @default(autoincrement()) // Уникальный идентификатор ресторана
+  name         String  @db.VarChar(255) // Название ресторана
+  address      String  @db.VarChar(255) // Адрес ресторана
+  phone        String? @db.VarChar(20) // Телефон ресторана
+  email        String? @db.VarChar(255) // Email ресторана
+  workingHours String? @db.Text // Часы работы
+  isActive     Boolean @default(true) // Статус активности ресторана
+
+  createdAt DateTime @default(now()) // Дата создания записи
+  updatedAt DateTime @updatedAt // Дата последнего обновления записи
+}
