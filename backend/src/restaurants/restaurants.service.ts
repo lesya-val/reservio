@@ -17,6 +17,13 @@ export class RestaurantsService {
     });
   }
 
+  // Массовое создание ресторанов
+  async createMany(dtos: CreateRestaurantDto[]) {
+    return this.prisma.restaurant.createMany({
+      data: dtos,
+    });
+  }
+
   // Получение всех ресторанов
   async findAll() {
     return this.prisma.restaurant.findMany();
