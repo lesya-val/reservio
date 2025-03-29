@@ -38,8 +38,12 @@
   }
 
   &__cell {
-    text-align: start;
     padding: 15px 10px;
+    line-height: 2;
+
+    &-th {
+      white-space: nowrap;
+    }
 
     &-delete {
       padding: 0;

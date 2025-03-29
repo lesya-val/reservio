@@ -5,29 +5,34 @@
     "style": { "width": "3%" }
   },
   {
-    "id": "restaurantName",
+    "id": "name",
     "name": "Название ресторана",
-    "style": { "width": "25%" }
+    "style": { "width": "17%" }
   },
   {
     "id": "address",
     "name": "Адрес",
-    "style": { "width": "25%" }
+    "style": { "width": "18%" }
   },
   {
-    "id": "contactPhone",
+    "id": "phone",
     "name": "Контактный телефон",
-    "style": { "width": "20%" }
+    "style": { "width": "15%" }
+  },
+  {
+    "id": "email",
+    "name": "Электронный адрес",
+    "style": { "width": "17%" }
   },
   {
     "id": "workingHours",
     "name": "Часы работы",
-    "style": { "width": "14%" }
+    "style": { "width": "20%" }
   },
   {
-    "id": "status",
+    "id": "isActive",
     "name": "Статус",
-    "style": { "width": "8%" }
+    "style": { "width": "5%" }
   },
   {
     "id": "delete",

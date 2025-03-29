@@ -7,7 +7,7 @@
             v-for="col in cols"
             :key="col.id"
             :style="col.style"
-            class="table__cell"
+            class="table__cell table__cell-th"
           >
             <p>{{ col.name || "" }}</p>
           </th>
@@ -44,7 +44,7 @@
         <AppButton view="outlined" @click="isModalActive = false">
           Отмена
         </AppButton>
-        <AppButton @click="deleteItem">Удалить</AppButton>
+        <AppButton @click="deleteItem()">Удалить</AppButton>
       </template>
     </AppModal>
     <AppNotification
@@ -57,7 +57,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 
 import AppIcon from "../AppIcon/AppIcon.vue";
@@ -65,7 +65,7 @@ import AppModal from "../AppModal/AppModal.vue";
 import AppButton from "../AppButton/AppButton.vue";
 import AppNotification from "../AppNotification/AppNotification.vue";
 
-import TableColumn from "../../types/TableColumn";
+import { TableColumn } from "../../types/TableColumn";
 
 const props = defineProps<{
   cols: TableColumn[];
@@ -77,16 +77,22 @@ const props = defineProps<{
   };
 }>();
 
-const emit = defineEmits(["clickItem"]);
+const emit = defineEmits(["clickItem", "delete"]);
 
 const router = useRouter();
 
 const isModalActive = ref(false);
 const isNotificationActive = ref(false);
+const itemToDelete = ref(null);
 
 const isDeleteColumn = (col: TableColumn) => col.id === "delete";
 
 const deleteItem = () => {
+  if (itemToDelete.value) {
+    emit("delete", itemToDelete.value);
+    itemToDelete.value = null;
+  }
+
   isModalActive.value = false;
   isNotificationActive.value = true;
 };
@@ -94,6 +100,7 @@ const deleteItem = () => {
 function handleCellAction(col: TableColumn, item: any) {
   if (isDeleteColumn(col)) {
     isModalActive.value = true;
+    itemToDelete.value = item;
   } else {
     handleCellClick(item);
   }
