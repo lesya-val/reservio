@@ -6,14 +6,9 @@ import { CreateRestaurantDto } from "./restaurants.dto";
 export class RestaurantsController {
   constructor(private readonly restaurantsService: RestaurantsService) {}
 
-  // Создание ресторана(ов)
+  // Создание ресторана
   @Post()
-  create(@Body() dto: CreateRestaurantDto | CreateRestaurantDto[]) {
-    if (Array.isArray(dto)) {
-      // Если пришел массив, вызываем метод для массового создания
-      return this.restaurantsService.createMany(dto);
-    }
-    // Если пришел один объект, вызываем метод для создания одного ресторана
+  create(@Body() dto: CreateRestaurantDto) {
     return this.restaurantsService.create(dto);
   }
 

@@ -6,7 +6,7 @@
           v-if="hasBack"
           class="list-controls__go-back"
           view="text"
-          @click="goBack"
+          @click="emit('back')"
         >
           <template #icon-before>
             <AppIcon value="arrow-left" />
@@ -23,22 +23,18 @@
         <AppButton @click="emit('save')">{{ actionButtonText }}</AppButton>
       </div>
     </div>
-    <div class="list-controls__row">
-      <Search v-if="hasSearch" class="list-controls__search" />
+    <div v-if="hasSearch" class="list-controls__row">
+      <Search class="list-controls__search" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useNavigation } from "../../hooks/useNavigation";
-
 import AppButton from "../AppButton/AppButton.vue";
 import AppIcon from "../AppIcon/AppIcon.vue";
 import Search from "../Search/Search.vue";
 
-const { goBack } = useNavigation();
-
-const props = defineProps({
+defineProps({
   title: {
     type: String,
     default: "",
@@ -65,7 +61,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["cancel", "save"]);
+const emit = defineEmits(["back", "cancel", "save"]);
 </script>
 
 <style scoped lang="scss">

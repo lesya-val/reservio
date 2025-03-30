@@ -9,7 +9,7 @@
     >
       <input
         :type="type"
-        :value="modelValue"
+        :value="value"
         :placeholder="placeholder"
         :disabled="disabled"
         :class="['input__field', { 'input__field--disabled': disabled }]"
@@ -25,7 +25,7 @@
 
 <script setup lang="ts">
 defineProps({
-  modelValue: {
+  value: {
     type: [String, Number],
     default: "",
   },
@@ -51,11 +51,11 @@ defineProps({
   },
 });
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:value"]);
 
 const updateValue = (event: Event) => {
   const target = event.target as HTMLInputElement;
-  emit("update:modelValue", target.value);
+  emit("update:value", target.value);
 };
 </script>
 

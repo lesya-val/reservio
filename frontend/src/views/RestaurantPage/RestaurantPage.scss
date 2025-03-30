@@ -1,13 +1,18 @@
 .restaurant {
+  &__wrapper {
+    max-height: calc(100vh - 205px);
+    overflow-y: auto;
+  }
+
   &__content {
     display: flex;
     justify-content: space-around;
+    padding-bottom: 25px;
   }
 
   &__form {
     @include flex-column;
-    justify-content: space-between;
-    width: 45%;
+    width: 40%;
     gap: 20px;
   }
 
@@ -15,7 +20,7 @@
     margin-bottom: 10px;
     align-self: center;
     white-space: nowrap;
-    font-family: 'Raleway';
+    font-family: "Raleway";
     font-weight: 500;
     font-size: 20px;
     color: $dark-gray;
