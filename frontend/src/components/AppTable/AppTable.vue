@@ -15,7 +15,7 @@
       </thead>
       <tbody class="table__body">
         <tr
-          v-for="item in data"
+          v-for="(item, index) in data"
           :key="item.index"
           class="table__row table__body-row"
         >
@@ -29,7 +29,18 @@
             ]"
             @click="handleCellAction(col, item)"
           >
-            <AppIcon value="trash" v-if="isDeleteColumn(col)" />
+            <!-- Отображение счетчика строк -->
+            <span v-if="col.id === 'index'">{{ index + 1 }}</span>
+
+            <!-- Отображение статуса isActive -->
+            <span v-else-if="col.id === 'isActive'">
+              {{ item.isActive ? "Активен" : "Неактивен" }}
+            </span>
+
+            <!-- Удаление -->
+            <AppIcon value="trash" v-else-if="isDeleteColumn(col)" />
+
+            <!-- Остальные столбцы -->
             <div v-else>{{ item[col.id] }}</div>
           </td>
         </tr>
