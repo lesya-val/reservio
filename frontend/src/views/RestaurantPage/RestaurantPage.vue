@@ -1,6 +1,11 @@
 <template>
   <v-default class="restaurant">
-    <ListControls :has-search="false" @back="goBack" @save="handleSave" />
+    <ListControls
+      :has-search="false"
+      @back="goBack"
+      @cancel="goBack"
+      @save="handleSave"
+    />
     <div class="restaurant__wrapper">
       <div class="restaurant__content">
         <div class="restaurant__form">
@@ -51,8 +56,7 @@ const formData = reactive({
 
 const filteredRestaurantCols = computed(() => {
   return restaurantCols.filter(
-    (col: TableColumn, index: number) =>
-      col.name && col.id !== "status" && index !== 0
+    (col: TableColumn, index: number) => col.name && index !== 0
   );
 });
 
