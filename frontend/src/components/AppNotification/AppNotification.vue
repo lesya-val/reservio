@@ -32,7 +32,7 @@ const toastColor = computed(() => {
   }
 });
 
-onMounted(() => {
+const init = () => {
   setTimeout(() => {
     if (notification.value) {
       notification.value.classList.add("notification--visible");
@@ -53,7 +53,9 @@ onMounted(() => {
 
     setTimeout(() => emit("close"), 500);
   }, duration * 1000);
-});
+};
+
+onMounted(init);
 </script>
 
 <style lang="scss" scoped>
