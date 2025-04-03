@@ -1,10 +1,13 @@
 <template>
   <div class="input">
-    <label v-if="label" class="input__label"> {{ label }}</label>
+    <label v-if="label" class="input__label">{{ label }}</label>
     <div
       :class="[
         'input__container',
-        { 'input__container--outlined': type === 'outlined' },
+        {
+          'input__container--outlined': type === 'input' && view === 'outlined',
+          'input__field--error': error,
+        },
       ]"
     >
       <input
@@ -16,26 +19,27 @@
         @input="updateValue"
       />
     </div>
-
-    <span v-if="errorMessage" class="input__field--error">
-      {{ errorMessage }}
-    </span>
+    <div v-if="error" class="input__error">{{ error }}</div>
   </div>
 </template>
 
 <script setup lang="ts">
 defineProps({
   value: {
-    type: [String, Number],
+    type: [String, Number, Boolean],
     default: "",
   },
   placeholder: {
     type: String,
     default: "Введите значение",
   },
-  type: {
+  view: {
     type: String,
     default: "outlined",
+  },
+  type: {
+    type: String,
+    default: "input",
   },
   label: {
     type: String,
@@ -45,17 +49,17 @@ defineProps({
     type: Boolean,
     default: false,
   },
-  errorMessage: {
+  error: {
     type: String,
     default: "",
   },
 });
 
-const emit = defineEmits(["update:value"]);
+const emit = defineEmits(["input"]);
 
 const updateValue = (event: Event) => {
   const target = event.target as HTMLInputElement;
-  emit("update:value", target.value);
+  emit("input", target.value);
 };
 </script>
 

@@ -12,17 +12,39 @@
           <h2 class="restaurant__title">Добавление ресторана</h2>
           <div v-for="col in filteredRestaurantCols">
             <AppInput
+              v-if="col.id === 'isActive'"
+              class="restaurant__checkbox"
+              :type="'checkbox'"
+              :label="'Ресторан активен'"
+              :value="restaurantData[col.id]"
+              @input="
+                (v: string) =>
+                  handleInput(v, col, restaurantData, restaurantValid)
+              "
+            />
+            <AppInput
+              v-else
               :placeholder="`Укажите ${col.name?.toLowerCase()}`"
               :label="col.name"
-              :value="formData[col.id]"
-              @input="(v: Event) => handleInput(v, col)"
+              :value="restaurantData[col.id]"
+              :error="getErrorMessage(restaurantValid[col.id])"
+              @input="
+                (v: string) =>
+                  handleInput(v, col, restaurantData, restaurantValid)
+              "
             />
           </div>
         </div>
         <div class="restaurant__form">
           <h2 class="restaurant__title">Добавление администратора ресторана</h2>
           <div v-for="col in filteredAdminCols">
-            <AppInput :placeholder="getPlaceholder(col)" :label="col.name" />
+            <AppInput
+              :placeholder="getPlaceholder(col)"
+              :label="col.name"
+              :value="adminData[col.id]"
+              :error="getErrorMessage(adminValid[col.id])"
+              @input="(v: string) => handleInput(v, col, adminData, adminValid)"
+            />
           </div>
         </div>
       </div>
@@ -38,14 +60,18 @@ import ListControls from "../../components/ListControls/ListControls.vue";
 
 import { TableColumn } from "../../types/TableColumn";
 
-import { useNavigation } from "../../hooks/useNavigation";
-import restaurantCols from "../RestaurantListPage/tableCols.json";
-import adminCols from "./tableCols.json";
+import restaurantCols from "../RestaurantListPage/restaurantCols.json";
+import adminCols from "./adminFields.json";
 import { createRestaurant } from "../../services/restaurantApi";
+import { useVuelidate } from "@vuelidate/core";
+import {
+  adminValidationRules,
+  restaurantValidationRules,
+} from "./validationRules";
+import { getErrorMessage } from "../../helpers/validationUtils";
+import { useRouter } from "vue-router";
 
-const { goBack } = useNavigation();
-
-const formData = reactive({
+const restaurantData = reactive({
   name: "",
   address: "",
   phone: "",
@@ -53,6 +79,19 @@ const formData = reactive({
   workingHours: "",
   isActive: true,
 });
+
+const adminData = reactive({
+  name: "",
+  surname: "",
+  phone: "",
+  email: "",
+  password: "",
+});
+
+const router = useRouter();
+
+const restaurantValid = useVuelidate(restaurantValidationRules, restaurantData);
+const adminValid = useVuelidate(adminValidationRules, adminData);
 
 const filteredRestaurantCols = computed(() => {
   return restaurantCols.filter(
@@ -64,6 +103,8 @@ const filteredAdminCols = computed(() => {
   return adminCols.filter((_, index: number) => index !== 0);
 });
 
+const goBack = () => router.push({ name: "RestaurantList" });
+
 const getPlaceholder = (col: TableColumn) => {
   if (col.id === "adminSurname") {
     return "Укажите фамилию";
@@ -72,12 +113,25 @@ const getPlaceholder = (col: TableColumn) => {
 };
 
 const handleSave = async () => {
-  await createRestaurant(formData);
+  const isRestaurantValid = await restaurantValid.value.$validate();
+  const isAdminValid = await adminValid.value.$validate();
+
+  if (!isAdminValid || !isRestaurantValid) {
+    console.error("Заполните поля в соответствии с правилами");
+    return;
+  }
+
+  await createRestaurant(restaurantData);
 };
 
-const handleInput = (e: Event, col: { id: string }) => {
-  const target = e.target as HTMLInputElement;
-  formData[col.id] = target.value;
+const handleInput = (
+  value: string,
+  col: TableColumn,
+  data: any,
+  validation: any
+) => {
+  data[col.id] = value;
+  validation[col.id]?.$touch();
 };
 </script>
 

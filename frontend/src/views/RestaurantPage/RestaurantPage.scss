@@ -25,4 +25,9 @@
     font-size: 20px;
     color: $dark-gray;
   }
+
+  &__checkbox {
+    @include flex-align-center;
+    flex-direction: row;
+  }
 }
