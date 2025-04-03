@@ -15,12 +15,8 @@
     <div class="header__right">
       <nav class="header__right-nav">
         <ul class="header__right-list">
-          <li>
-            <AppButton view="outlined">Залы и столы</AppButton>
-          </li>
-          <li>
-            <AppButton view="outlined">Сотрудники</AppButton>
-          </li>
+          <li><a>Залы и столы</a></li>
+          <li><a>Сотрудники</a></li>
         </ul>
         <AppIcon
           value="user"
@@ -36,7 +32,6 @@
 <script setup>
 import { useRouter } from "vue-router";
 
-import AppButton from "../AppButton/AppButton.vue";
 import AppIcon from "../AppIcon/AppIcon.vue";
 
 const router = useRouter();

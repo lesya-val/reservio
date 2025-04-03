@@ -1,18 +1,20 @@
 import {
   IsString,
   IsOptional,
-  IsBoolean,
   IsEmail,
   IsPhoneNumber,
   IsNotEmpty,
+  IsNumber,
 } from "class-validator";
+
+import { Type } from "class-transformer";
 
 export class CreateRestaurantDto {
   @IsString()
   @IsNotEmpty()
   name: string; // Название ресторана
 
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
   address: string; // Адрес ресторана
 
@@ -29,7 +31,7 @@ export class CreateRestaurantDto {
   workingHours?: string; // Часы работы
 
   @IsOptional()
-  @IsBoolean()
+  @Type(() => Boolean)
   isActive?: boolean; // Статус активности (по умолчанию true)
 }
 
