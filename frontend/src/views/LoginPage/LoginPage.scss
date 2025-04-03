@@ -5,8 +5,7 @@
   background-color: rgba($color: $light-gray, $alpha: 0.5);
 
   &__header {
-    display: flex;
-    align-items: center;
+    @include flex-align-center;
     gap: 30px;
     padding: 25px;
   }
