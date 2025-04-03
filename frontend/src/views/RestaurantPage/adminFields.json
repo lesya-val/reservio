@@ -4,19 +4,23 @@
     "name": "№"
   },
   {
-    "id": "adminName",
+    "id": "name",
     "name": "Имя"
   },
   {
-    "id": "adminSurname",
+    "id": "surname",
     "name": "Фамилия"
   },
   {
-    "id": "adminEmail",
+    "id": "phone",
+    "name": "Номер телефона"
+  },
+  {
+    "id": "email",
     "name": "Email"
   },
   {
-    "id": "adminPassword",
+    "id": "password",
     "name": "Пароль"
   }
 ]

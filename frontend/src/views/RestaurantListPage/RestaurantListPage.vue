@@ -7,7 +7,7 @@
     />
     <AppTable
       class="list-page"
-      :cols="tableCols"
+      :cols="restaurantCols"
       :data="restaurants"
       @delete="deleteItem"
     />
@@ -30,7 +30,7 @@ import AppIcon from "../../components/AppIcon/AppIcon.vue";
 import VDefault from "../../components/DefaultLayout/DefaultLayout.vue";
 import ListControls from "../../components/ListControls/ListControls.vue";
 
-import tableCols from "./tableCols";
+import restaurantCols from "./restaurantCols";
 
 import {
   fetchRestaurants,
