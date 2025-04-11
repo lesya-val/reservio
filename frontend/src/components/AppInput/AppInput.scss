@@ -4,11 +4,28 @@
   gap: 5px;
   width: 100%;
 
+  &__label {
+    &--readonly {
+      pointer-events: none;
+      color: $light-gray;
+    }
+  }
+
   &__container {
     &--outlined {
       border: 1px solid $dark-gray;
       border-radius: 4px;
       padding: 10px 15px;
+    }
+
+    &--error {
+      border-color: $red;
+    }
+
+    &--readonly {
+      padding: 10px 0;
+      border: none;
+      pointer-events: none;
     }
   }
 
@@ -16,16 +33,6 @@
     width: 100%;
     border-radius: 4px;
     transition: border-color 0.3s ease;
-
-    &--error {
-      border-color: $red;
-    }
-
-    &--disabled {
-      background-color: $light-gray;
-      border-color: $light-gray;
-      cursor: not-allowed;
-    }
   }
 
   &__error {
