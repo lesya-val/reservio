@@ -17,17 +17,17 @@
   {
     "id": "phone",
     "name": "Контактный телефон",
-    "style": { "width": "15%" }
+    "style": { "width": "16%" }
   },
   {
     "id": "email",
     "name": "Электронный адрес",
-    "style": { "width": "17%" }
+    "style": { "width": "18%" }
   },
   {
     "id": "workingHours",
     "name": "Часы работы",
-    "style": { "width": "20%" }
+    "style": { "width": "16%" }
   },
   {
     "id": "isActive",
