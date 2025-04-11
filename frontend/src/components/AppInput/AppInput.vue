@@ -1,22 +1,36 @@
 <template>
   <div class="input">
-    <label v-if="label" class="input__label">{{ label }}</label>
+    <label
+      v-if="label"
+      :class="['input__label', { 'input__label--readonly': readonly }]"
+      >{{ label }}</label
+    >
     <div
+      :readonly="readonly"
       :class="[
         'input__container',
         {
           'input__container--outlined': type === 'input' && view === 'outlined',
-          'input__field--error': error,
+          'input__container--readonly': readonly,
+          'input__container--error': error,
         },
       ]"
     >
       <input
+        v-if="type === 'checkbox'"
+        type="checkbox"
+        :checked="Boolean(value)"
+        @change="updateValue"
+        :disabled="readonly"
+      />
+      <input
+        v-else
         :type="type"
         :value="value"
-        :placeholder="placeholder"
-        :disabled="disabled"
-        :class="['input__field', { 'input__field--disabled': disabled }]"
+        :placeholder="readonly ? 'Не указано' : placeholder"
+        :class="['input__field']"
         @input="updateValue"
+        :readonly="readonly"
       />
     </div>
     <div v-if="error" class="input__error">{{ error }}</div>
@@ -24,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-defineProps({
+const props = defineProps({
   value: {
     type: [String, Number, Boolean],
     default: "",
@@ -45,7 +59,7 @@ defineProps({
     type: String,
     default: "",
   },
-  disabled: {
+  readonly: {
     type: Boolean,
     default: false,
   },
@@ -55,11 +69,15 @@ defineProps({
   },
 });
 
-const emit = defineEmits(["input"]);
+const emit = defineEmits(["input", "checked"]);
 
 const updateValue = (event: Event) => {
   const target = event.target as HTMLInputElement;
-  emit("input", target.value);
+  if (props.type === "checkbox") {
+    emit("input", target.checked);
+  } else {
+    emit("input", target.value);
+  }
 };
 </script>
 
