@@ -9,6 +9,7 @@
       class="list-page"
       :cols="restaurantCols"
       :data="restaurants"
+      item-page-name="Restaurant"
       @delete="deleteItem"
     />
     <AppButton class="add-button" @click="addRestaurant">
@@ -52,8 +53,8 @@ const deleteItem = async (item) => {
 
 const addRestaurant = () => {
   router.push({
-    name: "CreateRestaurant",
-    params: "create",
+    name: "Restaurant",
+    params: { id: "create" },
   });
 };
 

@@ -17,10 +17,14 @@
         <div class="list-controls__title">{{ title }}</div>
       </div>
       <div v-if="hasActionButton" class="list-controls__right">
-        <AppButton view="outlined" @click="emit('cancel')">
-          {{ cancelButtonText }}
+        <AppButton v-if="!isEditMode && !isNewDoc" @click="emit('edit')">
+          Редактировать
         </AppButton>
-        <AppButton @click="emit('save')">{{ actionButtonText }}</AppButton>
+
+        <template v-else>
+          <AppButton view="outlined" @click="emit('cancel')">Отмена</AppButton>
+          <AppButton @click="emit('save')">Сохранить</AppButton>
+        </template>
       </div>
     </div>
     <div v-if="hasSearch" class="list-controls__row">
@@ -30,6 +34,7 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue";
 import AppButton from "../AppButton/AppButton.vue";
 import AppIcon from "../AppIcon/AppIcon.vue";
 import Search from "../Search/Search.vue";
@@ -59,9 +64,17 @@ defineProps({
     type: Boolean,
     default: true,
   },
+  isNewDoc: {
+    type: Boolean,
+    default: false,
+  },
+  isEditMode: {
+    type: Boolean,
+    default: false,
+  },
 });
 
-const emit = defineEmits(["back", "cancel", "save"]);
+const emit = defineEmits(["back", "cancel", "save", "edit"]);
 </script>
 
 <style scoped lang="scss">

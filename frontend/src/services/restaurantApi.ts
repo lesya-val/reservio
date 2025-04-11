@@ -8,6 +8,14 @@ export const fetchRestaurants = async () => {
   return response.json();
 };
 
+export const fetchRestaurantById = async (id: string) => {
+  const response = await fetch(`${BASE_URL}/restaurants/${id}`);
+  if (!response.ok) {
+    throw new Error(`Ошибка при получении ресторана: ${response.statusText}`);
+  }
+  return response.json();
+};
+
 export const createRestaurant = async (data: any) => {
   const response = await fetch(`${BASE_URL}/restaurants`, {
     method: "POST",
@@ -18,6 +26,20 @@ export const createRestaurant = async (data: any) => {
   });
   if (!response.ok) {
     throw new Error(`Ошибка при создании ресторана: ${response.statusText}`);
+  }
+  return response.json();
+};
+
+export const updateRestaurant = async (id: number, data: any) => {
+  const response = await fetch(`${BASE_URL}/restaurants/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) {
+    throw new Error(`Ошибка при обновлении ресторана: ${response.statusText}`);
   }
   return response.json();
 };

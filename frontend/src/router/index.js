@@ -21,11 +21,6 @@ const routes = [
     component: RestaurantListPage,
   },
   {
-    path: "/restaurants/create",
-    name: "CreateRestaurant",
-    component: RestaurantPage,
-  },
-  {
     path: "/restaurants/:id",
     name: "Restaurant",
     component: RestaurantPage,

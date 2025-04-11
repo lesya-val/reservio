@@ -2,6 +2,9 @@
   <v-default class="restaurant">
     <ListControls
       :has-search="false"
+      :is-new-doc="isOpCreate"
+      :is-edit-mode="isEditMode"
+      @edit="isEditMode = true"
       @back="goBack"
       @cancel="goBack"
       @save="handleSave"
@@ -9,14 +12,17 @@
     <div class="restaurant__wrapper">
       <div class="restaurant__content">
         <div class="restaurant__form">
-          <h2 class="restaurant__title">Добавление ресторана</h2>
+          <h2 class="restaurant__title">
+            {{ isOpCreate ? "Добавление ресторана" : "Информация о ресторане" }}
+          </h2>
           <div v-for="col in filteredRestaurantCols">
             <AppInput
               v-if="col.id === 'isActive'"
               class="restaurant__checkbox"
-              :type="'checkbox'"
-              :label="'Ресторан активен'"
+              type="checkbox"
+              label="Ресторан активен"
               :value="restaurantData[col.id]"
+              :readonly="!(isOpCreate || isEditMode)"
               @input="
                 (v: string) =>
                   handleInput(v, col, restaurantData, restaurantValid)
@@ -28,6 +34,7 @@
               :label="col.name"
               :value="restaurantData[col.id]"
               :error="getErrorMessage(restaurantValid[col.id])"
+              :readonly="!(isOpCreate || isEditMode)"
               @input="
                 (v: string) =>
                   handleInput(v, col, restaurantData, restaurantValid)
@@ -36,24 +43,34 @@
           </div>
         </div>
         <div class="restaurant__form">
-          <h2 class="restaurant__title">Добавление администратора ресторана</h2>
+          <h2 class="restaurant__title">
+            {{
+              isOpCreate
+                ? "Добавление администратора ресторана"
+                : "Информация об администраторе ресторана"
+            }}
+          </h2>
           <div v-for="col in filteredAdminCols">
             <AppInput
               :placeholder="getPlaceholder(col)"
               :label="col.name"
               :value="adminData[col.id]"
               :error="getErrorMessage(adminValid[col.id])"
+              :readonly="!isOpCreate"
               @input="(v: string) => handleInput(v, col, adminData, adminValid)"
             />
           </div>
         </div>
       </div>
     </div>
+    <AppNotification v-if="isNotificationActive" type="error">
+      Заполните поля в соответствии с правилами!
+    </AppNotification>
   </v-default>
 </template>
 
 <script setup lang="ts">
-import { computed, reactive } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
 import AppInput from "../../components/AppInput/AppInput.vue";
 import VDefault from "../../components/DefaultLayout/DefaultLayout.vue";
 import ListControls from "../../components/ListControls/ListControls.vue";
@@ -62,14 +79,28 @@ import { TableColumn } from "../../types/TableColumn";
 
 import restaurantCols from "../RestaurantListPage/restaurantCols.json";
 import adminCols from "./adminFields.json";
-import { createRestaurant } from "../../services/restaurantApi";
+import {
+  createRestaurant,
+  fetchRestaurantById,
+  updateRestaurant,
+} from "../../services/restaurantApi";
 import { useVuelidate } from "@vuelidate/core";
 import {
   adminValidationRules,
   restaurantValidationRules,
 } from "./validationRules";
 import { getErrorMessage } from "../../helpers/validationUtils";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
+import AppNotification from "../../components/AppNotification/AppNotification.vue";
+
+const router = useRouter();
+const route = useRoute();
+
+const itemId = computed(() => route.params.id as string);
+const isOpCreate = computed(() => itemId.value === "create");
+
+const isEditMode = ref(false);
+const isNotificationActive = ref(false);
 
 const restaurantData = reactive({
   name: "",
@@ -88,8 +119,6 @@ const adminData = reactive({
   password: "",
 });
 
-const router = useRouter();
-
 const restaurantValid = useVuelidate(restaurantValidationRules, restaurantData);
 const adminValid = useVuelidate(adminValidationRules, adminData);
 
@@ -103,8 +132,6 @@ const filteredAdminCols = computed(() => {
   return adminCols.filter((_, index: number) => index !== 0);
 });
 
-const goBack = () => router.push({ name: "RestaurantList" });
-
 const getPlaceholder = (col: TableColumn) => {
   if (col.id === "adminSurname") {
     return "Укажите фамилию";
@@ -117,11 +144,16 @@ const handleSave = async () => {
   const isAdminValid = await adminValid.value.$validate();
 
   if (!isAdminValid || !isRestaurantValid) {
-    console.error("Заполните поля в соответствии с правилами");
+    isNotificationActive.value = true;
     return;
   }
 
-  await createRestaurant(restaurantData);
+  if (isOpCreate.value) {
+    await createRestaurant(restaurantData);
+  } else {
+    await updateRestaurant(+itemId.value, restaurantData);
+  }
+  goBack();
 };
 
 const handleInput = (
@@ -133,6 +165,16 @@ const handleInput = (
   data[col.id] = value;
   validation[col.id]?.$touch();
 };
+
+const goBack = () => router.push({ name: "RestaurantList" });
+
+onMounted(async () => {
+  if (!isOpCreate.value) {
+    const restaurant = await fetchRestaurantById(itemId.value);
+    Object.assign(restaurantData, restaurant);
+    Object.assign(adminData, restaurant.admin);
+  }
+});
 </script>
 
 <style src="./RestaurantPage.scss" scoped lang="scss"></style>

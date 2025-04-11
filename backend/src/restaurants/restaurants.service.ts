@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma.servise";
-import { CreateRestaurantDto } from "./restaurants.dto";
+import { CreateRestaurantDto, UpdateRestaurantDto } from "./restaurants.dto";
 import { ConfigService } from "@nestjs/config";
 
 @Injectable()
@@ -36,13 +36,13 @@ export class RestaurantsService {
     });
   }
 
-  // // Обновление ресторана
-  // async update(id: number, dto: UpdateRestaurantDto) {
-  //   return this.prisma.restaurant.update({
-  //     where: { id },
-  //     data: dto,
-  //   });
-  // }
+  // Обновление ресторана
+  async partialUpdate(id: number, dto: UpdateRestaurantDto) {
+    return this.prisma.restaurant.update({
+      where: { id },
+      data: dto,
+    });
+  }
 
   // Удаление ресторана
   async remove(id: number) {

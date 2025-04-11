@@ -1,6 +1,14 @@
-import { Body, Controller, Delete, Get, Param, Post } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Patch,
+} from "@nestjs/common";
 import { RestaurantsService } from "./restaurants.service";
-import { CreateRestaurantDto } from "./restaurants.dto";
+import { CreateRestaurantDto, UpdateRestaurantDto } from "./restaurants.dto";
 
 @Controller("restaurants")
 export class RestaurantsController {
@@ -24,14 +32,14 @@ export class RestaurantsController {
     return this.restaurantsService.findOne(+id);
   }
 
-  // // Обновление ресторана
-  // @Patch(":id")
-  // update(
-  //   @Param("id") id: string,
-  //   @Body() dto: UpdateRestaurantDto
-  // ) {
-  //   return this.restaurantsService.update(+id, dto);
-  // }
+  // Обновление ресторана
+  @Patch(":id")
+  partialUpdate(
+    @Param("id") id: string,
+    @Body() dto: Partial<UpdateRestaurantDto>
+  ) {
+    return this.restaurantsService.partialUpdate(+id, dto);
+  }
 
   // Удаление ресторана
   @Delete(":id")

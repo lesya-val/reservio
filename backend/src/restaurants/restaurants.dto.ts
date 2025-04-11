@@ -35,4 +35,4 @@ export class CreateRestaurantDto {
   isActive?: boolean; // Статус активности (по умолчанию true)
 }
 
-export type TUpdateRestaurantDto = Partial<CreateRestaurantDto>;
+export type UpdateRestaurantDto = Partial<CreateRestaurantDto>;

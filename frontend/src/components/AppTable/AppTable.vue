@@ -81,11 +81,7 @@ import { TableColumn } from "../../types/TableColumn";
 const props = defineProps<{
   cols: TableColumn[];
   data: Array<{ [key: string]: any }>;
-  routeConfig: {
-    name: string;
-    params: string;
-    query?: { [key: string]: string };
-  };
+  itemPageName: string;
 }>();
 
 const emit = defineEmits(["clickItem", "delete"]);
@@ -108,20 +104,19 @@ const deleteItem = () => {
   isNotificationActive.value = true;
 };
 
-function handleCellAction(col: TableColumn, item: any) {
+const handleCellAction = (col: TableColumn, item: any) => {
   if (isDeleteColumn(col)) {
     isModalActive.value = true;
     itemToDelete.value = item;
   } else {
     handleCellClick(item);
   }
-}
+};
 
-const handleCellClick = (item: { [key: string]: any }) => {
+const handleCellClick = (item) => {
   router.push({
-    name: props.routeConfig.name,
-    params: { id: props.routeConfig.params },
-    query: props.routeConfig.query,
+    name: props.itemPageName,
+    params: { id: item.id },
   });
 };
 </script>
