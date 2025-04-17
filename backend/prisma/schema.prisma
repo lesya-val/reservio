@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client-js"
-} 
+}
 
 datasource db {
   provider = "postgresql"
@@ -8,14 +8,41 @@ datasource db {
 }
 
 model Restaurant {
-  id           Int     @id @default(autoincrement()) // Уникальный идентификатор ресторана
-  name         String  @db.VarChar(255) // Название ресторана
-  address      String  @db.VarChar(255) // Адрес ресторана
-  phone        String? @db.VarChar(20) // Телефон ресторана
-  email        String? @db.VarChar(255) // Email ресторана
-  workingHours String? @db.Text // Часы работы
-  isActive     Boolean @default(true) // Статус активности ресторана
+  id           Int     @id @default(autoincrement())
+  name         String
+  address      String
+  phone        String
+  email        String?
+  workingHours String?
+  isActive     Boolean @default(true)
 
-  createdAt DateTime @default(now()) // Дата создания записи
-  updatedAt DateTime @updatedAt // Дата последнего обновления записи
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  employees Employee[] // Связь с сотрудниками
+  adminId   Int?       @unique // ID администратора (опционально, если админ еще не назначен)
+  admin     Employee?  @relation("Admin", fields: [adminId], references: [id])
+
+  @@map("restaurants")
+}
+
+model Employee {
+  id       Int     @id @default(autoincrement())
+  name     String
+  surname  String
+  phone    String?
+  email    String
+  password String?
+  role     String  @default("employee")
+
+  restaurantId Int // ID ресторана, к которому относится сотрудник
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+
+  // Обратная связь для администратора
+  managedRestaurant Restaurant? @relation("Admin")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("employees")
 }

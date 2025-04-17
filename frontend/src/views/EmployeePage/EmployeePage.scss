@@ -1,0 +1,38 @@
+.employee {
+  &__wrapper {
+    @include flex-center;
+    max-height: calc(100vh - 205px);
+    overflow-y: auto;
+  }
+
+  &__content {
+    @include flex-column;
+    width: 70%;
+    gap: 25px;
+  }
+
+  &__fields {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+  }
+
+  &__field {
+    @include flex-align-center;
+  }
+
+  &__title {
+    margin-bottom: 10px;
+    align-self: center;
+    white-space: nowrap;
+    font-family: "Raleway";
+    font-weight: 500;
+    font-size: 20px;
+    color: $black;
+  }
+
+  &__checkbox {
+    @include flex-align-center;
+    flex-direction: row;
+  }
+}
