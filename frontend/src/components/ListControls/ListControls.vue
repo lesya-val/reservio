@@ -6,7 +6,7 @@
           v-if="hasBack"
           class="list-controls__go-back"
           view="text"
-          @click="emit('back')"
+          @click="router.go(-1)"
         >
           <template #icon-before>
             <AppIcon value="arrow-left" />
@@ -22,7 +22,7 @@
         </AppButton>
 
         <template v-else>
-          <AppButton view="outlined" @click="emit('cancel')">Отмена</AppButton>
+          <AppButton view="outlined" @click="router.go(-1)">Отмена</AppButton>
           <AppButton @click="emit('save')">Сохранить</AppButton>
         </template>
       </div>
@@ -34,10 +34,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
 import AppButton from "../AppButton/AppButton.vue";
 import AppIcon from "../AppIcon/AppIcon.vue";
 import Search from "../Search/Search.vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 defineProps({
   title: {
