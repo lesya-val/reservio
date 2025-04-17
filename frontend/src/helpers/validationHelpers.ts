@@ -29,8 +29,3 @@ export const validPhone = (message: string = "Некорректный номе�
     if (!value) return true;
     return isMobilePhone(value, "ru-RU");
   });
-
-// Утилита для получения первого сообщения об ошибке
-export const getErrorMessage = (field: any) => {
-  return field?.$errors[0]?.$message || null;
-};

@@ -3,7 +3,7 @@ import {
   validEmail,
   validPhone,
   minLengthRule,
-} from "../../helpers/validationUtils";
+} from "../../helpers/validationHelpers";
 
 export const restaurantValidationRules = {
   name: {
@@ -18,32 +18,8 @@ export const restaurantValidationRules = {
     validPhone: validPhone(),
   },
   email: {
-    required: requiredField(),
     validEmail: validEmail(),
   },
-  workingHours: {
-    required: requiredField(),
-  },
+  workingHours: {},
   isActive: {},
-};
-
-export const adminValidationRules = {
-  name: {
-    required: requiredField(),
-  },
-  surname: {
-    required: requiredField(),
-  },
-  phone: {
-    required: requiredField(),
-    validPhone: validPhone(),
-  },
-  email: {
-    required: requiredField(),
-    validEmail: validEmail(),
-  },
-  password: {
-    required: requiredField(),
-    minLength: minLengthRule(6),
-  },
 };

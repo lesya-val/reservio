@@ -3,10 +3,10 @@
     <label
       v-if="label"
       :class="['input__label', { 'input__label--readonly': readonly }]"
-      >{{ label }}</label
     >
+      {{ label }}
+    </label>
     <div
-      :readonly="readonly"
       :class="[
         'input__container',
         {
@@ -19,18 +19,18 @@
       <input
         v-if="type === 'checkbox'"
         type="checkbox"
-        :checked="Boolean(value)"
-        @change="updateValue"
+        :checked="modelValue"
         :disabled="readonly"
+        @change="updateValue"
       />
       <input
         v-else
         :type="type"
-        :value="value"
+        :value="modelValue"
         :placeholder="readonly ? 'Не указано' : placeholder"
-        :class="['input__field']"
+        :class="'input__field'"
+        :disabled="readonly"
         @input="updateValue"
-        :readonly="readonly"
       />
     </div>
     <div v-if="error" class="input__error">{{ error }}</div>
@@ -38,8 +38,11 @@
 </template>
 
 <script setup lang="ts">
+import { watch } from "vue";
+import type { Validation } from "@vuelidate/core";
+
 const props = defineProps({
-  value: {
+  modelValue: {
     type: [String, Number, Boolean],
     default: "",
   },
@@ -67,16 +70,27 @@ const props = defineProps({
     type: String,
     default: "",
   },
+  validation: {
+    type: Object as () => Validation | undefined,
+    default: undefined,
+  },
 });
 
-const emit = defineEmits(["input", "checked"]);
+const emit = defineEmits(["update:modelValue"]);
+
+watch(
+  () => props.modelValue,
+  () => {
+    props.validation?.$touch?.();
+  }
+);
 
 const updateValue = (event: Event) => {
   const target = event.target as HTMLInputElement;
   if (props.type === "checkbox") {
-    emit("input", target.checked);
+    emit("update:modelValue", target.checked);
   } else {
-    emit("input", target.value);
+    emit("update:modelValue", target.value);
   }
 };
 </script>
