@@ -33,21 +33,18 @@ import ListControls from "../../components/ListControls/ListControls.vue";
 
 import restaurantCols from "./restaurantCols";
 
-import {
-  fetchRestaurants,
-  deleteRestaurant,
-} from "../../services/restaurantApi";
+import { getRestaurants, deleteRestaurant } from "../../services/restaurantApi";
 
 const restaurants = ref();
 
 const router = useRouter();
 
 const init = async () => {
-  restaurants.value = await fetchRestaurants();
+  restaurants.value = await getRestaurants();
 };
 
 const deleteItem = async (item) => {
-  await deleteRestaurant(item.id);
+  await deleteRestaurant(+item.id);
   restaurants.value = restaurants.value.filter((i) => i.id !== item.id);
 };
 
