@@ -1,38 +1,65 @@
 import {
   IsString,
   IsOptional,
-  IsEmail,
-  IsPhoneNumber,
+  IsBoolean,
   IsNotEmpty,
-  IsNumber,
+  IsInt,
+  IsPhoneNumber,
+  IsEmail,
 } from "class-validator";
-
-import { Type } from "class-transformer";
 
 export class CreateRestaurantDto {
   @IsString()
   @IsNotEmpty()
-  name: string; // Название ресторана
+  name: string;
 
-  @IsNumber()
-  @IsNotEmpty()
-  address: string; // Адрес ресторана
-
-  @IsOptional()
-  @IsPhoneNumber("RU") // Валидация номера телефона для России
-  phone?: string; // Телефон ресторана
-
-  @IsOptional()
-  @IsEmail()
-  email?: string; // Email ресторана
-
-  @IsOptional()
   @IsString()
-  workingHours?: string; // Часы работы
+  @IsNotEmpty()
+  address: string;
 
+  @IsPhoneNumber("RU")
+  @IsNotEmpty()
+  phone: string;
+
+  @IsEmail()
   @IsOptional()
-  @Type(() => Boolean)
-  isActive?: boolean; // Статус активности (по умолчанию true)
+  email?: string;
+
+  @IsString()
+  @IsOptional()
+  workingHours?: string;
+
+  @IsBoolean()
+  @IsOptional()
+  isActive?: boolean;
 }
 
-export type UpdateRestaurantDto = Partial<CreateRestaurantDto>;
+export class UpdateRestaurantDto {
+  @IsString()
+  @IsOptional()
+  name?: string;
+
+  @IsString()
+  @IsOptional()
+  address?: string;
+
+  @IsPhoneNumber("RU")
+  @IsOptional()
+  phone?: string;
+
+  @IsEmail()
+  @IsOptional()
+  email?: string;
+
+  @IsString()
+  @IsOptional()
+  workingHours?: string;
+
+  @IsBoolean()
+  @IsOptional()
+  isActive?: boolean;
+
+  @IsOptional()
+  @IsInt()
+  adminId?: number; // ID администратора
+}

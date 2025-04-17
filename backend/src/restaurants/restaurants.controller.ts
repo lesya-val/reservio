@@ -1,11 +1,11 @@
 import {
-  Body,
   Controller,
-  Delete,
   Get,
-  Param,
   Post,
+  Body,
+  Param,
   Patch,
+  Delete,
 } from "@nestjs/common";
 import { RestaurantsService } from "./restaurants.service";
 import { CreateRestaurantDto, UpdateRestaurantDto } from "./restaurants.dto";
@@ -16,34 +16,34 @@ export class RestaurantsController {
 
   // Создание ресторана
   @Post()
-  create(@Body() dto: CreateRestaurantDto) {
-    return this.restaurantsService.create(dto);
+  async create(@Body() createRestaurantDto: CreateRestaurantDto) {
+    return this.restaurantsService.create(createRestaurantDto);
   }
 
   // Получение всех ресторанов
   @Get()
-  findAll() {
+  async findAll() {
     return this.restaurantsService.findAll();
   }
 
   // Получение ресторана по ID
   @Get(":id")
-  findOne(@Param("id") id: string) {
+  async findOne(@Param("id") id: string) {
     return this.restaurantsService.findOne(+id);
   }
 
   // Обновление ресторана
   @Patch(":id")
-  partialUpdate(
+  async update(
     @Param("id") id: string,
-    @Body() dto: Partial<UpdateRestaurantDto>
+    @Body() updateRestaurantDto: UpdateRestaurantDto
   ) {
-    return this.restaurantsService.partialUpdate(+id, dto);
+    return this.restaurantsService.update(+id, updateRestaurantDto);
   }
 
   // Удаление ресторана
   @Delete(":id")
-  remove(@Param("id") id: string) {
+  async remove(@Param("id") id: string) {
     return this.restaurantsService.remove(+id);
   }
 }
