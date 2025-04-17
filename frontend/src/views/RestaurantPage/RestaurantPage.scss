@@ -1,19 +1,24 @@
 .restaurant {
   &__wrapper {
+    @include flex-center;
     max-height: calc(100vh - 205px);
     overflow-y: auto;
   }
 
   &__content {
-    display: flex;
-    justify-content: space-around;
-    padding-bottom: 25px;
+    @include flex-column;
+    width: 70%;
+    gap: 25px;
   }
 
-  &__form {
-    @include flex-column;
-    width: 40%;
-    gap: 20px;
+  &__fields {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+  }
+
+  &__field {
+    @include flex-align-center;
   }
 
   &__title {

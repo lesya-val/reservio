@@ -1,6 +1,6 @@
 .list-controls {
   @include flex-column;
-  padding: 25px;
+  padding: 30px 25px;
   gap: 20px;
 
   &__row {
