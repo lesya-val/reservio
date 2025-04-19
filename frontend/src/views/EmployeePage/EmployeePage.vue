@@ -52,7 +52,7 @@ import { getErrorMessage } from "../../helpers/errorHelpers";
 import AppNotification from "../../components/AppNotification/AppNotification.vue";
 import useVuelidate from "@vuelidate/core";
 import employeeFields from "./employeeFields.json";
-import { Employee, TableColumn } from "../../types";
+import { Employee, Role, TableColumn } from "../../types";
 import { updateRestaurant } from "../../services/restaurantApi";
 
 const router = useRouter();
@@ -69,7 +69,7 @@ const adminData = reactive({
   surname: "",
   phone: "",
   email: "",
-  role: "admin",
+  role: Role.RESTAURANT_ADMIN,
   restaurantId: +route.params.restaurantId,
 });
 
@@ -101,10 +101,7 @@ const handleSave = async () => {
 
   if (isOpCreate.value) {
     const admin = await createEmployee(adminData.restaurantId, cleanedData);
-
-    const updateData = { adminId: admin.id };
-
-    await updateRestaurant(adminData.restaurantId, updateData);
+    await updateRestaurant(adminData.restaurantId, { adminId: admin.id });
   } else {
     await updateEmployee(adminData.restaurantId, adminData.id, adminData);
   }

@@ -7,6 +7,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  SYSTEM_ADMIN @map("SYSTEM_ADMIN")
+  RESTAURANT_ADMIN @map("RESTAURANT_ADMIN")
+  EMPLOYEE @map("EMPLOYEE")
+}
+
 model Restaurant {
   id           Int     @id @default(autoincrement())
   name         String
@@ -33,7 +39,7 @@ model Employee {
   phone    String?
   email    String
   password String?
-  role     String  @default("employee")
+  role     Role
 
   restaurantId Int // ID ресторана, к которому относится сотрудник
   restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
@@ -43,6 +49,9 @@ model Employee {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  // Флаг для проверки, изменил ли пользователь временный пароль
+  isTempPassword Boolean @default(true)
 
   @@map("employees")
 }

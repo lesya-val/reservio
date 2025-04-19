@@ -1,3 +1,4 @@
+import { Role } from "@prisma/client";
 import {
   IsString,
   IsOptional,
@@ -6,11 +7,6 @@ import {
   IsEmail,
   IsPhoneNumber,
 } from "class-validator";
-
-export enum Role {
-  ADMIN = "admin",
-  EMPLOYEE = "employee",
-}
 
 export class CreateEmployeeDto {
   @IsString()
@@ -34,8 +30,7 @@ export class CreateEmployeeDto {
   password?: string;
 
   @IsEnum(Role)
-  @IsOptional()
-  role?: Role; // По умолчанию "employee"
+  role: Role;
 }
 
 export class UpdateEmployeeDto {
@@ -60,6 +55,5 @@ export class UpdateEmployeeDto {
   password?: string;
 
   @IsEnum(Role)
-  @IsOptional()
-  role?: Role;
+  role: Role;
 }

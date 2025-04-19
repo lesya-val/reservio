@@ -1,3 +1,6 @@
+-- CreateEnum
+CREATE TYPE "Role" AS ENUM ('SYSTEM_ADMIN', 'RESTAURANT_ADMIN', 'EMPLOYEE');
+
 -- CreateTable
 CREATE TABLE "restaurants" (
     "id" SERIAL NOT NULL,
@@ -22,10 +25,11 @@ CREATE TABLE "employees" (
     "phone" TEXT,
     "email" TEXT NOT NULL,
     "password" TEXT,
-    "role" TEXT NOT NULL DEFAULT 'employee',
+    "role" "Role" NOT NULL,
     "restaurantId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "isTempPassword" BOOLEAN NOT NULL DEFAULT true,
 
     CONSTRAINT "employees_pkey" PRIMARY KEY ("id")
 );
@@ -37,4 +41,4 @@ CREATE UNIQUE INDEX "restaurants_adminId_key" ON "restaurants"("adminId");
 ALTER TABLE "restaurants" ADD CONSTRAINT "restaurants_adminId_fkey" FOREIGN KEY ("adminId") REFERENCES "employees"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "employees" ADD CONSTRAINT "employees_restaurantId_fkey" FOREIGN KEY ("restaurantId") REFERENCES "restaurants"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "employees" ADD CONSTRAINT "employees_restaurantId_fkey" FOREIGN KEY ("restaurantId") REFERENCES "restaurants"("id") ON DELETE CASCADE ON UPDATE CASCADE;
