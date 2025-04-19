@@ -122,10 +122,17 @@ const handleSave = async () => {
 };
 
 const goToAdminForm = async () => {
-  await router.push({
-    name: "Employee",
-    params: { restaurantId: restaurantId.value, id: adminId.value },
-  });
+  if (adminId.value) {
+    await router.push({
+      name: "Employee",
+      params: { restaurantId: restaurantId.value, id: adminId.value },
+    });
+  } else {
+    await router.push({
+      name: "Employee",
+      params: { restaurantId: +restaurantId.value, id: "create" },
+    });
+  }
 };
 
 onMounted(async () => {
