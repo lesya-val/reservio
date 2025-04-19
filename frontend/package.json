@@ -17,6 +17,8 @@
     "vue-router": "^4.5.0"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/nodemailer": "^6.4.17",
     "@vitejs/plugin-vue": "1.10.2",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^10.0.1",
