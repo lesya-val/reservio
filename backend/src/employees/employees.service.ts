@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma.servise";
 import { CreateEmployeeDto, UpdateEmployeeDto } from "./employees.dto";
+import { generateTemporaryPassword, hashPassword } from "../helpers/authUtils";
 
 @Injectable()
 export class EmployeesService {
@@ -20,8 +21,21 @@ export class EmployeesService {
 
   // Создание нового сотрудника
   async create(restaurantId: number, createEmployeeDto: CreateEmployeeDto) {
-    return this.prisma.employee.create({
-      data: { ...createEmployeeDto, restaurantId },
+    // Генерация временного пароля
+    const temporaryPassword = generateTemporaryPassword();
+
+    // Хэширование пароля
+    const hashedPassword = await hashPassword(temporaryPassword);
+
+    // Создание сотрудника с хэшированным паролем
+    const employeeData = {
+      ...createEmployeeDto,
+      password: hashedPassword,
+      restaurantId,
+    };
+
+    return await this.prisma.employee.create({
+      data: employeeData,
     });
   }
 
