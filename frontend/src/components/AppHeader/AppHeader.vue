@@ -18,26 +18,42 @@
           <li><a>Залы и столы</a></li>
           <li><a>Сотрудники</a></li>
         </ul>
-        <AppIcon
-          value="user"
-          class="header__right-profile"
-          width="32px"
-          height="32px"
-        />
+        <div class="header__right-profile-container">
+          <AppIcon
+            value="user"
+            class="header__right-profile"
+            width="32px"
+            height="32px"
+            @click="toggleDropdown"
+          />
+          <div v-if="isDropdownOpen" class="dropdown-menu">
+            <div class="dropdown-menu__item" @click="handleLogout">Выход</div>
+          </div>
+        </div>
       </nav>
     </div>
   </div>
 </template>
 
 <script setup>
+import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { useAuthStore } from "../../stores/auth";
 
 import AppIcon from "../AppIcon/AppIcon.vue";
 
 const router = useRouter();
 
-const navigateToHome = () => {
-  router.push({ name: "App" });
+const isDropdownOpen = ref(false);
+
+const toggleDropdown = () => {
+  isDropdownOpen.value = !isDropdownOpen.value;
+};
+
+const handleLogout = () => {
+  const authStore = useAuthStore();
+  authStore.logout();
+  router.push({ name: "Login" });
 };
 </script>
 
