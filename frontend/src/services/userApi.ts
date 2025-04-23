@@ -1,12 +1,16 @@
-import { Employee } from "../types";
+// frontend/src/services/userApi.ts
+import { User } from "../types/index";
+import apiClient from "./apiClient";
 
 const BASE_URL = "http://localhost:3000/restaurants";
 
 // Получить список всех сотрудников ресторана
 export const getEmployeesByRestaurantId = async (
   restaurantId: number
-): Promise<Employee[]> => {
-  const response = await fetch(`${BASE_URL}/${restaurantId}/employees`);
+): Promise<User[]> => {
+  const response = await apiClient.fetchWithAuth(
+    `${BASE_URL}/${restaurantId}/employees`
+  );
   if (!response.ok) {
     throw new Error("Не удалось получить список сотрудников ресторана!");
   }
@@ -17,8 +21,8 @@ export const getEmployeesByRestaurantId = async (
 export const getEmployeeById = async (
   restaurantId: number,
   employeeId: number
-): Promise<Employee> => {
-  const response = await fetch(
+): Promise<User> => {
+  const response = await apiClient.fetchWithAuth(
     `${BASE_URL}/${restaurantId}/employees/${employeeId}`
   );
   if (!response.ok) {
@@ -30,13 +34,15 @@ export const getEmployeeById = async (
 // Создать нового сотрудника
 export const createEmployee = async (
   restaurantId: number,
-  data: Partial<Employee>
-): Promise<Employee> => {
-  const response = await fetch(`${BASE_URL}/${restaurantId}/employees`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
+  data: Partial<User>
+): Promise<User> => {
+  const response = await apiClient.fetchWithAuth(
+    `${BASE_URL}/${restaurantId}/employees`,
+    {
+      method: "POST",
+      body: JSON.stringify(data),
+    }
+  );
   if (!response.ok) {
     throw new Error("Ошибка при создании сотрудника!");
   }
@@ -47,13 +53,12 @@ export const createEmployee = async (
 export const updateEmployee = async (
   restaurantId: number,
   employeeId: number,
-  data: Partial<Employee>
-): Promise<Employee> => {
-  const response = await fetch(
+  data: Partial<User>
+): Promise<User> => {
+  const response = await apiClient.fetchWithAuth(
     `${BASE_URL}/${restaurantId}/employees/${employeeId}`,
     {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     }
   );
@@ -68,7 +73,7 @@ export const deleteEmployee = async (
   restaurantId: number,
   employeeId: number
 ): Promise<void> => {
-  const response = await fetch(
+  const response = await apiClient.fetchWithAuth(
     `${BASE_URL}/${restaurantId}/employees/${employeeId}`,
     {
       method: "DELETE",

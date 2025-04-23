@@ -8,9 +8,9 @@ datasource db {
 }
 
 enum Role {
-  SYSTEM_ADMIN @map("SYSTEM_ADMIN")
+  SYSTEM_ADMIN     @map("SYSTEM_ADMIN")
   RESTAURANT_ADMIN @map("RESTAURANT_ADMIN")
-  EMPLOYEE @map("EMPLOYEE")
+  EMPLOYEE         @map("EMPLOYEE")
 }
 
 model Restaurant {
@@ -25,14 +25,14 @@ model Restaurant {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  employees Employee[] // Связь с сотрудниками
-  adminId   Int?       @unique // ID администратора (опционально, если админ еще не назначен)
-  admin     Employee?  @relation("Admin", fields: [adminId], references: [id])
+  users   User[] // Связь с сотрудниками
+  adminId Int?   @unique // ID администратора (опционально, если админ еще не назначен)
+  admin   User?  @relation("Admin", fields: [adminId], references: [id])
 
   @@map("restaurants")
 }
 
-model Employee {
+model User {
   id       Int     @id @default(autoincrement())
   name     String
   surname  String
@@ -41,8 +41,8 @@ model Employee {
   password String?
   role     Role
 
-  restaurantId Int // ID ресторана, к которому относится сотрудник
-  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  restaurantId Int? // ID ресторана, к которому относится сотрудник
+  restaurant   Restaurant? @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
 
   // Обратная связь для администратора
   managedRestaurant Restaurant? @relation("Admin")
@@ -53,5 +53,5 @@ model Employee {
   // Флаг для проверки, изменил ли пользователь временный пароль
   isTempPassword Boolean @default(true)
 
-  @@map("employees")
+  @@map("users")
 }

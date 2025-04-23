@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma.servise";
-import { CreateEmployeeDto, UpdateEmployeeDto } from "./employees.dto";
+import { CreateEmployeeDto, UpdateEmployeeDto } from "./users.dto";
 import { generateTemporaryPassword, hashPassword } from "../helpers/authUtils";
 
 @Injectable()
@@ -9,12 +9,12 @@ export class EmployeesService {
 
   // Получение всех сотрудников ресторана
   async findAll(restaurantId: number) {
-    return this.prisma.employee.findMany({ where: { restaurantId } });
+    return this.prisma.user.findMany({ where: { restaurantId } });
   }
 
   // Получение сотрудника по ID
   async findOne(restaurantId: number, id: number) {
-    return this.prisma.employee.findFirst({
+    return this.prisma.user.findFirst({
       where: { id, restaurantId },
     });
   }
@@ -23,6 +23,7 @@ export class EmployeesService {
   async create(restaurantId: number, createEmployeeDto: CreateEmployeeDto) {
     // Генерация временного пароля
     const temporaryPassword = generateTemporaryPassword();
+    console.log('пароль: ', temporaryPassword);
 
     // Хэширование пароля
     const hashedPassword = await hashPassword(temporaryPassword);
@@ -34,7 +35,7 @@ export class EmployeesService {
       restaurantId,
     };
 
-    return await this.prisma.employee.create({
+    return await this.prisma.user.create({
       data: employeeData,
     });
   }
@@ -45,7 +46,7 @@ export class EmployeesService {
     id: number,
     updateEmployeeDto: UpdateEmployeeDto
   ) {
-    return this.prisma.employee.update({
+    return this.prisma.user.update({
       where: { id },
       data: { ...updateEmployeeDto, restaurantId },
     });
@@ -53,7 +54,7 @@ export class EmployeesService {
 
   // Удаление сотрудника
   async remove(id: number) {
-    return this.prisma.employee.delete({
+    return this.prisma.user.delete({
       where: { id },
     });
   }
