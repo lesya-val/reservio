@@ -10,7 +10,7 @@
       :class="[
         'input__container',
         {
-          'input__container--outlined': type === 'input' && view === 'outlined',
+          'input__container--outlined': view === 'outlined',
           'input__container--readonly': readonly,
           'input__container--error': error,
         },

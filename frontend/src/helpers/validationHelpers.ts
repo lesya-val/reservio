@@ -29,3 +29,16 @@ export const validPhone = (message: string = "Некорректный номе�
     if (!value) return true;
     return isMobilePhone(value, "ru-RU");
   });
+
+// Утилита для проверки пароля
+export const validPassword = (
+  message: string = "Пароль должен содержать цифру и специальный символ"
+) => {
+  return (value: string) => {
+    const hasNumber = /\d/.test(value);
+    const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(value);
+    const hasMinLength = minLengthRule(8);
+
+    return (hasNumber && hasSpecial && hasMinLength) || message;
+  };
+};
