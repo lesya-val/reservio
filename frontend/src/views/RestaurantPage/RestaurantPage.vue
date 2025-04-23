@@ -28,9 +28,9 @@
               :placeholder="`Укажите ${col.name?.toLowerCase()}`"
               :label="col.name"
               v-model="restaurantData[col.id]"
-              :error="getErrorMessage(restaurantValid[col.id])"
+              :error="getErrorMessage(v$[col.id])"
               :readonly="!(isOpCreate || isEditMode)"
-              :validation="restaurantValid[col.id]"
+              :validation="v$[col.id]"
             />
           </div>
         </div>
@@ -39,8 +39,12 @@
         </AppButton>
       </div>
     </div>
-    <AppNotification v-if="isNotificationActive" type="error">
-      Заполните поля в соответствии с правилами!
+    <AppNotification
+      v-if="notification.isVisible"
+      :type="notification.type"
+      @close="hideNotification"
+    >
+      {{ notification.message }}
     </AppNotification>
   </v-default>
 </template>
@@ -65,9 +69,11 @@ import { cleanData } from "../../helpers/dataHelpers";
 import { getErrorMessage } from "../../helpers/errorHelpers";
 import AppNotification from "../../components/AppNotification/AppNotification.vue";
 import AppButton from "../../components/AppButton/AppButton.vue";
+import { useNotification } from "../../composables/useNotification";
 
 const router = useRouter();
 const route = useRoute();
+const { notification, showNotification, hideNotification } = useNotification();
 
 const restaurantId = computed(() => route.params.id as string);
 const isOpCreate = computed(() => restaurantId.value === "create");
@@ -86,7 +92,7 @@ const restaurantData = reactive({
   isActive: true,
 });
 
-const restaurantValid = useVuelidate(restaurantValidationRules, restaurantData);
+const v$ = useVuelidate(restaurantValidationRules, restaurantData);
 
 const filteredRestaurantCols = computed(() => {
   return restaurantCols.filter(
@@ -95,7 +101,7 @@ const filteredRestaurantCols = computed(() => {
 });
 
 const handleSave = async () => {
-  const isValid = await restaurantValid.value.$validate();
+  const isValid = await v$.value.$validate();
 
   if (!isValid) {
     isNotificationActive.value = false;
@@ -110,12 +116,18 @@ const handleSave = async () => {
   if (isOpCreate.value) {
     const response = await createRestaurant(cleanedData);
 
+    if (response) showNotification("Ресторан успешно добавлен!", "success");
+    else showNotification("Ошибка при создании ресторана!");
+
     await router.push({
       name: "Employee",
       params: { restaurantId: response.id, id: "create" },
     });
   } else {
-    await updateRestaurant(+restaurantId.value, cleanedData);
+    const response = await updateRestaurant(+restaurantId.value, cleanedData);
+
+    if (response) showNotification("Ресторан успешно обновлен!", "success");
+    else showNotification("Ошибка при обновлении ресторана!");
 
     isEditMode.value = false;
   }

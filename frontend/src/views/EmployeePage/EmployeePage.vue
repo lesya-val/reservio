@@ -23,14 +23,18 @@
             v-model="adminData[col.id]"
             :placeholder="getPlaceholder(col)"
             :label="col.name"
-            :error="getErrorMessage(adminValid[col.id])"
+            :error="getErrorMessage(v$[col.id])"
             :readonly="!(isOpCreate || isEditMode)"
           />
         </div>
       </div>
     </div>
-    <AppNotification v-if="isNotificationActive" type="error">
-      Заполните поля в соответствии с правилами!
+    <AppNotification
+      v-if="notification.isVisible"
+      :type="notification.type"
+      @close="hideNotification"
+    >
+      {{ notification.message }}
     </AppNotification>
   </v-default>
 </template>
@@ -45,18 +49,20 @@ import {
   createEmployee,
   getEmployeeById,
   updateEmployee,
-} from "../../services/employeeApi";
+} from "../../services/userApi";
 import { adminValidationRules } from "./validationRules";
 import { cleanData } from "../../helpers/dataHelpers";
 import { getErrorMessage } from "../../helpers/errorHelpers";
 import AppNotification from "../../components/AppNotification/AppNotification.vue";
 import useVuelidate from "@vuelidate/core";
 import employeeFields from "./employeeFields.json";
-import { Employee, Role, TableColumn } from "../../types";
+import { User, Role, TableColumn } from "../../types";
 import { updateRestaurant } from "../../services/restaurantApi";
+import { useNotification } from "../../composables/useNotification";
 
 const router = useRouter();
 const route = useRoute();
+const { notification, showNotification, hideNotification } = useNotification();
 
 const isOpCreate = computed(() => route.params.id === "create");
 
@@ -73,7 +79,7 @@ const adminData = reactive({
   restaurantId: +route.params.restaurantId,
 });
 
-const adminValid = useVuelidate(adminValidationRules, adminData);
+const v$ = useVuelidate(adminValidationRules, adminData);
 
 const filteredAdminCols = computed(() => {
   return employeeFields.filter((_, index: number) => index !== 0);
@@ -87,17 +93,14 @@ const getPlaceholder = (col: TableColumn) => {
 };
 
 const handleSave = async () => {
-  const isValid = await adminValid.value.$validate();
+  const isValid = await v$.value.$validate();
 
   if (!isValid) {
-    isNotificationActive.value = false;
-    setTimeout(() => {
-      isNotificationActive.value = true;
-    }, 0);
+    showNotification("Заполните поля в соответствии с правилами!");
     return;
   }
 
-  const cleanedData = cleanData<Employee>(adminData);
+  const cleanedData = cleanData<User>(adminData);
 
   if (isOpCreate.value) {
     const admin = await createEmployee(adminData.restaurantId, cleanedData);
@@ -106,7 +109,10 @@ const handleSave = async () => {
     await updateEmployee(adminData.restaurantId, adminData.id, adminData);
   }
 
-  await router.push({ name: "RestaurantList" });
+  const response = await router.push({ name: "RestaurantList" });
+
+  if (response) showNotification("Сотрудник успешно сохранен", "success");
+  else showNotification("Ошибка при сохранении сотрудника");
 };
 
 onMounted(async () => {
