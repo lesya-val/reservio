@@ -1,5 +1,0 @@
-export enum Role {
-  SYSTEM_ADMIN,
-  RESTAURANT_ADMIN,
-  EMPLOYEE,
-}
