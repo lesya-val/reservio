@@ -1,10 +1,12 @@
+// frontend/src/services/restaurantApi.ts
 import { Restaurant } from "../types";
+import apiClient from "./apiClient";
 
 const BASE_URL = "http://localhost:3000/restaurants";
 
 // Получить список всех ресторанов
 export const getRestaurants = async (): Promise<Restaurant[]> => {
-  const response = await fetch(BASE_URL);
+  const response = await apiClient.fetchWithAuth(BASE_URL);
   if (!response.ok) {
     throw new Error("Не удалось получить список ресторанов!");
   }
@@ -13,7 +15,7 @@ export const getRestaurants = async (): Promise<Restaurant[]> => {
 
 // Получить конкретный ресторан по ID
 export const getRestaurantById = async (id: number): Promise<Restaurant> => {
-  const response = await fetch(`${BASE_URL}/${id}`);
+  const response = await apiClient.fetchWithAuth(`${BASE_URL}/${id}`);
   if (!response.ok) {
     throw new Error("Не удалось найти ресторан!");
   }
@@ -24,9 +26,8 @@ export const getRestaurantById = async (id: number): Promise<Restaurant> => {
 export const createRestaurant = async (
   data: Partial<Restaurant>
 ): Promise<Restaurant> => {
-  const response = await fetch(BASE_URL, {
+  const response = await apiClient.fetchWithAuth(BASE_URL, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
 
@@ -42,9 +43,8 @@ export const updateRestaurant = async (
   id: number,
   data: Partial<Restaurant>
 ): Promise<Restaurant> => {
-  const response = await fetch(`${BASE_URL}/${id}`, {
+  const response = await apiClient.fetchWithAuth(`${BASE_URL}/${id}`, {
     method: "PATCH",
-    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
 
@@ -57,7 +57,9 @@ export const updateRestaurant = async (
 
 // Удалить ресторан
 export const deleteRestaurant = async (id: number) => {
-  const response = await fetch(`${BASE_URL}/${id}`, { method: "DELETE" });
+  const response = await apiClient.fetchWithAuth(`${BASE_URL}/${id}`, {
+    method: "DELETE",
+  });
 
   if (!response.ok) {
     throw new Error("Ошибка при удалении ресторана!");

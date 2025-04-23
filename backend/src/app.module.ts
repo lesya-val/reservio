@@ -1,7 +1,8 @@
 import { Module } from "@nestjs/common";
 import { RestaurantsModule } from "./restaurants/restaurants.module";
 import { ConfigModule } from "@nestjs/config";
-import { EmployeesModule } from './employees/employees.module';
+import { EmployeesModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -10,6 +11,7 @@ import { EmployeesModule } from './employees/employees.module';
     }),
     RestaurantsModule,
     EmployeesModule,
+    AuthModule,
   ],
 })
 export class AppModule {}

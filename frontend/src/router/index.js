@@ -4,6 +4,7 @@ import RestaurantListPage from "../views/RestaurantListPage";
 import RestaurantPage from "../views/RestaurantPage";
 import LoginPage from "../views/LoginPage";
 import EmployeePage from "../views/EmployeePage/EmployeePage.vue";
+import { useAuthStore } from "../stores/auth";
 
 const routes = [
   {
@@ -36,6 +37,18 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore();
+  const publicPages = ["/login"];
+  const authRequired = !publicPages.includes(to.path);
+
+  if (authRequired && !authStore.isAuthenticated) {
+    return next("/login");
+  }
+
+  next();
 });
 
 export default router;
