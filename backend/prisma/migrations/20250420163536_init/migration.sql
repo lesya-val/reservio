@@ -49,7 +49,7 @@ VALUES (
     'System',
     'Admin',
     'admin@system.com',
-    '$2b$10$h8hXxOMG409igiqUA6molOK3tymgDzh4TWiTkJP9R80hjwjtTQ8O6',
+    '$2b$10$4WjEJWjmhqpXqXC4hwExBuqoHL2UnJ74o9mLmtJNhBRr1w70aOtG6',
     'SYSTEM_ADMIN',
     true,
     CURRENT_TIMESTAMP,
