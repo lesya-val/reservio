@@ -8,7 +8,6 @@ CREATE TABLE "restaurants" (
     "address" TEXT NOT NULL,
     "phone" TEXT NOT NULL,
     "email" TEXT,
-    "workingHours" TEXT,
     "isActive" BOOLEAN NOT NULL DEFAULT true,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -49,7 +48,7 @@ VALUES (
     'System',
     'Admin',
     'admin@system.com',
-    '$2b$10$4WjEJWjmhqpXqXC4hwExBuqoHL2UnJ74o9mLmtJNhBRr1w70aOtG6',
+    '$2b$10$4WjEJWjmhqpXqXC4hwExBuqoHL2UnJ74o9mLmtJNhBRr1w70aOtG6', -- хеш для пароля 'Admin123!'
     'SYSTEM_ADMIN',
     true,
     CURRENT_TIMESTAMP,

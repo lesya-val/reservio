@@ -19,7 +19,6 @@ model Restaurant {
   address      String
   phone        String
   email        String?
-  workingHours String?
   isActive     Boolean @default(true)
 
   createdAt DateTime @default(now())

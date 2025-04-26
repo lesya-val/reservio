@@ -25,10 +25,6 @@ export class CreateRestaurantDto {
   @IsOptional()
   email?: string;
 
-  @IsString()
-  @IsOptional()
-  workingHours?: string;
-
   @IsBoolean()
   @IsOptional()
   isActive?: boolean;
@@ -50,10 +46,6 @@ export class UpdateRestaurantDto {
   @IsEmail()
   @IsOptional()
   email?: string;
-
-  @IsString()
-  @IsOptional()
-  workingHours?: string;
 
   @IsBoolean()
   @IsOptional()

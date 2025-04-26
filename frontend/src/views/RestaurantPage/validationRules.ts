@@ -20,6 +20,5 @@ export const restaurantValidationRules = {
   email: {
     validEmail: validEmail(),
   },
-  workingHours: {},
   isActive: {},
 };
