@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <div @click="navigateToHome" class="login__header">
+    <div @click="router.push({ name: 'Login' })" class="login__header">
       <AppIcon
         class="login__header-logo"
         value="logo"
@@ -17,6 +17,7 @@
             v-model="loginData.email"
             placeholder="Введите email"
             label="Email"
+            :validation="v$.email"
             :error="getErrorMessage(v$.email)"
           />
           <AppInput
@@ -24,6 +25,7 @@
             placeholder="Введите пароль"
             label="Пароль"
             type="password"
+            :validation="v$.password"
             :error="getErrorMessage(v$.password)"
           />
           <AppButton class="login__form-button" type="submit">
@@ -48,7 +50,7 @@ import AppIcon from "../../components/AppIcon/AppIcon.vue";
 import AppInput from "../../components/AppInput/AppInput.vue";
 import AppNotification from "../../components/AppNotification/AppNotification.vue";
 
-import { computed, reactive, ref } from "vue";
+import { reactive } from "vue";
 import { useRouter } from "vue-router";
 import { useVuelidate } from "@vuelidate/core";
 import { useAuthStore } from "../../stores/auth";
@@ -75,15 +77,12 @@ const handleLogin = async () => {
   }
 
   const success = await authStore.login(loginData, router);
+  console.log(loginData);
   if (success) {
     showNotification("Вход выполнен успешно!", "success");
   } else {
     showNotification("Неверный email или пароль");
   }
-};
-
-const navigateToHome = () => {
-  router.push("/");
 };
 </script>
 

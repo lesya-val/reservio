@@ -1,4 +1,5 @@
 import {
+  minLengthRule,
   requiredField,
   validEmail,
   validPassword,
@@ -11,6 +12,7 @@ export const loginValidationRules = {
   },
   password: {
     required: requiredField(),
+    minLength: minLengthRule(8),
     validPassword: validPassword(),
   },
 };

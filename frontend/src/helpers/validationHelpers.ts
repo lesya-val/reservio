@@ -32,13 +32,11 @@ export const validPhone = (message: string = "Некорректный номе�
 
 // Утилита для проверки пароля
 export const validPassword = (
-  message: string = "Пароль должен содержать цифру и специальный символ"
+  message: string = "Пароль должен содержать цифру, специальный символ"
 ) => {
-  return (value: string) => {
+  return helpers.withMessage(message, (value: string) => {
     const hasNumber = /\d/.test(value);
     const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(value);
-    const hasMinLength = minLengthRule(8);
-
-    return (hasNumber && hasSpecial && hasMinLength) || message;
-  };
+    return hasNumber && hasSpecial;
+  });
 };
