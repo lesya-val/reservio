@@ -28,7 +28,7 @@
       </div>
     </div>
     <div v-if="hasSearch" class="list-controls__row">
-      <Search class="list-controls__search" />
+      <Search class="list-controls__search" @search="handleSearch" />
     </div>
   </div>
 </template>
@@ -76,7 +76,11 @@ defineProps({
   },
 });
 
-const emit = defineEmits(["back", "cancel", "save", "edit"]);
+const emit = defineEmits(["back", "cancel", "save", "edit", "search"]);
+
+const handleSearch = (query: string) => {
+  emit("search", query);
+};
 </script>
 
 <style scoped lang="scss">

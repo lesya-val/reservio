@@ -4,11 +4,12 @@
       :has-back="false"
       :has-action-button="false"
       title="Управление ресторанами"
+      @search="handleSearch"
     />
     <AppTable
       class="list-page"
       :cols="restaurantCols"
-      :data="restaurants"
+      :data="filteredRestaurants"
       item-page-name="Restaurant"
       @delete="deleteItem"
     />
@@ -22,7 +23,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 import { useRouter } from "vue-router";
 
 import AppButton from "../../components/AppButton/AppButton.vue";
@@ -36,8 +37,23 @@ import restaurantCols from "./restaurantCols";
 import { getRestaurants, deleteRestaurant } from "../../services/restaurantApi";
 
 const restaurants = ref();
+const searchQuery = ref("");
 
 const router = useRouter();
+
+const filteredRestaurants = computed(() => {
+  if (!searchQuery.value) {
+    return restaurants.value;
+  }
+
+  const query = searchQuery.value.toLowerCase();
+
+  return restaurants.value.filter((restaurant) => {
+    return Object.values(restaurant).some((value) => {
+      return String(value).toLowerCase().includes(query);
+    });
+  });
+});
 
 const init = async () => {
   restaurants.value = await getRestaurants();
@@ -46,6 +62,10 @@ const init = async () => {
 const deleteItem = async (item) => {
   await deleteRestaurant(+item.id);
   restaurants.value = restaurants.value.filter((i) => i.id !== item.id);
+};
+
+const handleSearch = (query) => {
+  searchQuery.value = query;
 };
 
 const addRestaurant = () => {
