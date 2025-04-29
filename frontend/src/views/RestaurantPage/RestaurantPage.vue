@@ -34,8 +34,8 @@
             />
           </div>
         </div>
-        <AppButton v-if="!isOpCreate" @click="goToAdminForm">
-          Редактировать данные администратора
+        <AppButton v-if="!isOpCreate" class="restaurant__button" @click="goToAdminForm">
+          {{restaurantData.adminId ? 'Редактировать данные администратора' : 'Добавить администратора'}}
         </AppButton>
       </div>
     </div>
@@ -87,7 +87,6 @@ const restaurantData = reactive({
   address: "",
   phone: "",
   email: "",
-  workingHours: "",
   adminId: null,
   isActive: true,
 });
