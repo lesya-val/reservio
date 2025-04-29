@@ -9,12 +9,12 @@
       />
       <h2 class="header__left-text">Reservio</h2>
     </div>
-    <div class="header__center">
+    <div v-if="userRole !== 'SYSTEM_ADMIN'" class="header__center">
       <h2 class="header__center-text">Название ресторана</h2>
     </div>
     <div class="header__right">
       <nav class="header__right-nav">
-        <ul class="header__right-list">
+        <ul v-if="userRole !== 'SYSTEM_ADMIN'" class="header__right-list">
           <li><a>Залы и столы</a></li>
           <li><a>Сотрудники</a></li>
         </ul>
@@ -36,24 +36,34 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../../stores/auth";
 
 import AppIcon from "../AppIcon/AppIcon.vue";
 
 const router = useRouter();
+const authStore = useAuthStore();
 
 const isDropdownOpen = ref(false);
+
+const userRole = computed(() => authStore?.user?.role);
 
 const toggleDropdown = () => {
   isDropdownOpen.value = !isDropdownOpen.value;
 };
 
 const handleLogout = () => {
-  const authStore = useAuthStore();
   authStore.logout();
   router.push({ name: "Login" });
+};
+
+const navigateToHome = () => {
+  if (userRole.value === "SYSTEM_ADMIN") {
+    router.push({ name: "RestaurantList" });
+  } else {
+    router.push({ name: "BookingListPage" });
+  }
 };
 </script>
 
