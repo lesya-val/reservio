@@ -1,9 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
 import App from "../App.vue";
 import RestaurantListPage from "../views/RestaurantListPage";
+import BookingListPage from "../views/BookingListPage";
 import RestaurantPage from "../views/RestaurantPage";
+import EmployeePage from "../views/EmployeePage";
 import LoginPage from "../views/LoginPage";
-import EmployeePage from "../views/EmployeePage/EmployeePage.vue";
 import { useAuthStore } from "../stores/auth";
 
 const routes = [
@@ -31,6 +32,11 @@ const routes = [
     path: "/restaurants/:restaurantId/employees/:id?",
     name: "Employee",
     component: EmployeePage,
+  },
+  {
+    path: "/booking-list",
+    name: "BookingListPage",
+    component: BookingListPage,
   },
 ];
 

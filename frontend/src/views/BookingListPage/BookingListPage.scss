@@ -1,0 +1,13 @@
+.modal {
+  &__title {
+    font-size: 20px;
+    font-weight: 600;
+    font-family: "Raleway";
+  }
+}
+
+:deep() {
+  .modal__box {
+    width: 50%;
+  }
+}
