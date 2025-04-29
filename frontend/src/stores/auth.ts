@@ -44,7 +44,7 @@ export const useAuthStore = defineStore("auth", {
         if (user.role === "SYSTEM_ADMIN") {
           await router.push({ name: "RestaurantList" });
         } else {
-          await router.push({ name: "App" });
+          await router.push({ name: "BookingListPage" });
         }
 
         return true;
@@ -60,6 +60,13 @@ export const useAuthStore = defineStore("auth", {
       this.isAuthenticated = false;
       localStorage.removeItem("token");
       localStorage.removeItem("user");
+    },
+
+    updateUser(updatedUserData: Partial<any>) {
+      if (this.user) {
+        this.user = { ...this.user, ...updatedUserData };
+        localStorage.setItem("user", JSON.stringify(this.user));
+      }
     },
   },
 });

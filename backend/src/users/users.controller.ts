@@ -48,8 +48,24 @@ export class EmployeesController {
     return this.employeesService.update(+restaurantId, +id, updateEmployeeDto);
   }
 
+  // Удаление сотрудника
   @Delete(":id")
   async remove(@Param("id") id: string) {
     return this.employeesService.remove(+id);
+  }
+
+  // Обновление пароля
+  @Patch(":id/change-password")
+  async changePassword(
+    @Param("restaurantId") restaurantId: string,
+    @Param("id") id: string,
+    @Body() body: { oldPassword: string; newPassword: string }
+  ) {
+    return this.employeesService.changePassword(
+      +restaurantId,
+      +id,
+      body.oldPassword,
+      body.newPassword
+    );
   }
 }

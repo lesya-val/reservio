@@ -83,3 +83,23 @@ export const deleteEmployee = async (
     throw new Error("Ошибка при удалении сотрудника!");
   }
 };
+
+// Изменить пароль
+export const changePassword = async (
+  restaurantId: number,
+  userId: number,
+  oldPassword: string,
+  newPassword: string
+): Promise<void> => {
+  const response = await apiClient.fetchWithAuth(
+    `${BASE_URL}/${restaurantId}/employees/${userId}/change-password`,
+    {
+      method: "PATCH",
+      body: JSON.stringify({ oldPassword, newPassword }),
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Ошибка при изменении пароля!");
+  }
+  return response.json();
+};

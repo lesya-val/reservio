@@ -3,6 +3,8 @@ import { PrismaService } from "src/prisma.servise";
 import { CreateEmployeeDto, UpdateEmployeeDto } from "./users.dto";
 import { generateTemporaryPassword, hashPassword } from "../helpers/authUtils";
 
+import * as bcrypt from "bcrypt";
+
 @Injectable()
 export class EmployeesService {
   constructor(private prisma: PrismaService) {}
@@ -23,7 +25,7 @@ export class EmployeesService {
   async create(restaurantId: number, createEmployeeDto: CreateEmployeeDto) {
     // Генерация временного пароля
     const temporaryPassword = generateTemporaryPassword();
-    console.log('пароль: ', temporaryPassword);
+    console.log("пароль: ", temporaryPassword);
 
     // Хэширование пароля
     const hashedPassword = await hashPassword(temporaryPassword);
@@ -56,6 +58,39 @@ export class EmployeesService {
   async remove(id: number) {
     return this.prisma.user.delete({
       where: { id },
+    });
+  }
+
+  // Изменение пароля
+  async changePassword(
+    restaurantId: number,
+    id: number,
+    oldPassword: string,
+    newPassword: string
+  ) {
+    const employee = await this.findOne(restaurantId, id);
+
+    if (!employee || !employee.password) {
+      throw new Error("Сотрудник не найден!");
+    }
+
+    const isPasswordValid = await bcrypt.compare(
+      oldPassword,
+      employee.password
+    );
+
+    if (!isPasswordValid) {
+      throw new Error("Неверный временный пароль");
+    }
+
+    const hashedPassword = await hashPassword(newPassword);
+
+    return this.prisma.user.update({
+      where: { id },
+      data: {
+        password: hashedPassword,
+        isTempPassword: false,
+      },
     });
   }
 }
