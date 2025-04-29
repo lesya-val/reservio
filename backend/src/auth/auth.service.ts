@@ -46,11 +46,9 @@ export class AuthService {
       access_token: this.jwtService.sign(payload),
       user: {
         id: user.id,
-        email: user.email,
         role: user.role,
-        name: user.name,
-        surname: user.surname,
         restaurantId: user.restaurantId,
+        isTempPassword: user.isTempPassword,
       },
     };
   }
