@@ -1,7 +1,31 @@
 import * as bcrypt from "bcrypt";
 
 export const generateTemporaryPassword = (): string => {
-  return Math.random().toString(36).slice(-8); // Генерирует строку из 8 символов
+  const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const digits = "0123456789";
+  const specialChars = '!@#$%^&*(),.?":{}|<>';
+
+  // Вспомогательная функция для выбора случайного символа
+  const getRandomChar = (pool: string): string => {
+    const index = Math.floor(Math.random() * pool.length);
+    return pool[index];
+  };
+
+  // Гарантированно добавляем одну цифру и один специальный символ
+  const requiredDigit = getRandomChar(digits);
+  const requiredSpecialChar = getRandomChar(specialChars);
+
+  const remainingLength = 6;
+  const randomLetters = Array.from({ length: remainingLength }, () =>
+    getRandomChar(letters)
+  );
+
+  const allChars = [...randomLetters, requiredDigit, requiredSpecialChar];
+
+  // Перемешиваем символы
+  const shuffledChars = allChars.sort(() => Math.random() - 0.5);
+
+  return shuffledChars.join("");
 };
 
 export const hashPassword = async (password: string): Promise<string> => {
