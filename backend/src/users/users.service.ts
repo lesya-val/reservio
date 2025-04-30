@@ -4,6 +4,7 @@ import { CreateEmployeeDto, UpdateEmployeeDto } from "./users.dto";
 import { generateTemporaryPassword, hashPassword } from "../helpers/authUtils";
 
 import * as bcrypt from "bcrypt";
+import { sendTemporaryPasswordEmail } from "src/mail/mail.service";
 
 @Injectable()
 export class EmployeesService {
@@ -25,7 +26,6 @@ export class EmployeesService {
   async create(restaurantId: number, createEmployeeDto: CreateEmployeeDto) {
     // Генерация временного пароля
     const temporaryPassword = generateTemporaryPassword();
-    console.log("пароль: ", temporaryPassword);
 
     // Хэширование пароля
     const hashedPassword = await hashPassword(temporaryPassword);
@@ -37,9 +37,18 @@ export class EmployeesService {
       restaurantId,
     };
 
-    return await this.prisma.user.create({
+    const createdEmployee = await this.prisma.user.create({
       data: employeeData,
     });
+
+    // Отправка временного пароля на email сотрудника
+    await sendTemporaryPasswordEmail(
+      createEmployeeDto.email,
+      temporaryPassword,
+      employeeData
+    );
+
+    return createdEmployee;
   }
 
   // Обновление сотрудника
