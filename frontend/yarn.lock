@@ -167,13 +167,6 @@
   dependencies:
     "undici-types" "~6.21.0"
 
-"@types/nodemailer@^6.4.17":
-  "integrity" "sha512-I9CCaIp6DTldEg7vyUTZi8+9Vo0hi1/T8gv3C89yk1rSAAzoKQ8H8ki/jBYJSFoH/BisgLP8tkZMlQ91CIquww=="
-  "resolved" "https://registry.npmjs.org/@types/nodemailer/-/nodemailer-6.4.17.tgz"
-  "version" "6.4.17"
-  dependencies:
-    "@types/node" "*"
-
 "@types/vue-the-mask@^0.11.5":
   "integrity" "sha512-kO47HeoXxzBgJUK70CihEXgsyPrB1uTinFBc/R2gubD62zMV/dSg7XhFbnEF1zcRKA9MBDGVZm3VicmSFDngdQ=="
   "resolved" "https://registry.npmjs.org/@types/vue-the-mask/-/vue-the-mask-0.11.5.tgz"
