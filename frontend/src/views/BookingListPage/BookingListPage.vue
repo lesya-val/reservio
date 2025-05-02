@@ -87,7 +87,6 @@ const handleChangePassword = async () => {
 };
 
 onMounted(() => {
-  console.log(authStore.user);
   if (authStore.user?.isTempPassword) {
     isModalActive.value = true;
   }

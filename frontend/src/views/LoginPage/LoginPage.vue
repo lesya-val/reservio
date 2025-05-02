@@ -77,7 +77,6 @@ const handleLogin = async () => {
   }
 
   const success = await authStore.login(loginData, router);
-  console.log(loginData);
   if (success) {
     showNotification("Вход выполнен успешно!", "success");
   } else {

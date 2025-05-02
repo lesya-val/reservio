@@ -1,4 +1,3 @@
-// frontend/src/services/restaurantApi.ts
 import { Restaurant } from "../types";
 import apiClient from "./apiClient";
 
