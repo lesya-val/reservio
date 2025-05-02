@@ -10,7 +10,7 @@
       <h2 class="header__left-text">Reservio</h2>
     </div>
     <div v-if="userRole !== 'SYSTEM_ADMIN'" class="header__center">
-      <h2 class="header__center-text">Название ресторана</h2>
+      <h2 class="header__center-text">{{ restaurantName }}</h2>
     </div>
     <div class="header__right">
       <nav class="header__right-nav">
@@ -36,9 +36,10 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../../stores/auth";
+import { getRestaurantById } from "../../services/restaurantApi";
 
 import AppIcon from "../AppIcon/AppIcon.vue";
 
@@ -46,6 +47,7 @@ const router = useRouter();
 const authStore = useAuthStore();
 
 const isDropdownOpen = ref(false);
+const restaurantName = ref("");
 
 const userRole = computed(() => authStore?.user?.role);
 
@@ -65,6 +67,11 @@ const navigateToHome = () => {
     router.push({ name: "BookingListPage" });
   }
 };
+
+onMounted(async () => {
+  const restaurant = await getRestaurantById(authStore?.user?.restaurantId);
+  restaurantName.value = restaurant.name;
+});
 </script>
 
 <style scoped lang="scss">
