@@ -3,7 +3,7 @@
     <div class="modal__box">
       <div class="modal__title">
         <slot name="title" />
-        <slot />
+        <slot name="subtitle" />
       </div>
       <div class="modal__content">
         <div class="modal__inputs">
