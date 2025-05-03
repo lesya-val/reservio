@@ -69,8 +69,10 @@ const navigateToHome = () => {
 };
 
 onMounted(async () => {
-  const restaurant = await getRestaurantById(authStore?.user?.restaurantId);
-  restaurantName.value = restaurant.name;
+  if (userRole.value !== "SYSTEM_ADMIN") {
+    const restaurant = await getRestaurantById(authStore?.user?.restaurantId);
+    restaurantName.value = restaurant.name;
+  }
 });
 </script>
 
