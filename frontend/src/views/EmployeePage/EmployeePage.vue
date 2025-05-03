@@ -58,7 +58,7 @@ import useVuelidate from "@vuelidate/core";
 import employeeFields from "./employeeFields.json";
 import { User, Role, TableColumn } from "../../types";
 import { updateRestaurant } from "../../services/restaurantApi";
-import { useNotification } from "../../composables/useNotification";
+import { useNotification } from "../../hooks/useNotification";
 
 const router = useRouter();
 const route = useRoute();

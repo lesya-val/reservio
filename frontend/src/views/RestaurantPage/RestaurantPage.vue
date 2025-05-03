@@ -34,8 +34,16 @@
             />
           </div>
         </div>
-        <AppButton v-if="!isOpCreate" class="restaurant__button" @click="goToAdminForm">
-          {{restaurantData.adminId ? 'Редактировать данные администратора' : 'Добавить администратора'}}
+        <AppButton
+          v-if="!isOpCreate"
+          class="restaurant__button"
+          @click="goToAdminForm"
+        >
+          {{
+            restaurantData.adminId
+              ? "Редактировать данные администратора"
+              : "Добавить администратора"
+          }}
         </AppButton>
       </div>
     </div>
@@ -69,7 +77,7 @@ import { cleanData } from "../../helpers/dataHelpers";
 import { getErrorMessage } from "../../helpers/errorHelpers";
 import AppNotification from "../../components/AppNotification/AppNotification.vue";
 import AppButton from "../../components/AppButton/AppButton.vue";
-import { useNotification } from "../../composables/useNotification";
+import { useNotification } from "../../hooks/useNotification";
 
 const router = useRouter();
 const route = useRoute();

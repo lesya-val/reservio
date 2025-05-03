@@ -56,7 +56,7 @@ import { useVuelidate } from "@vuelidate/core";
 import { useAuthStore } from "../../stores/auth";
 import { loginValidationRules } from "./validationRules";
 import { getErrorMessage } from "../../helpers/errorHelpers";
-import { useNotification } from "../../composables/useNotification";
+import { useNotification } from "../../hooks/useNotification";
 
 const router = useRouter();
 const authStore = useAuthStore();

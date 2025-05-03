@@ -66,7 +66,7 @@ import AppInput from "../../components/AppInput/AppInput.vue";
 import AppButton from "../../components/AppButton/AppButton.vue";
 import AppNotification from "../../components/AppNotification/AppNotification.vue";
 import { useAuthStore } from "../../stores/auth";
-import { useNotification } from "../../composables/useNotification";
+import { useNotification } from "../../hooks/useNotification";
 import { useVuelidate } from "@vuelidate/core";
 import { changePassword } from "../../services/userApi";
 import { getErrorMessage } from "../../helpers/errorHelpers";
