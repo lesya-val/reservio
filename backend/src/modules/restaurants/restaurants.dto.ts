@@ -3,7 +3,6 @@ import {
   IsOptional,
   IsBoolean,
   IsNotEmpty,
-  IsInt,
   IsPhoneNumber,
   IsEmail,
 } from "class-validator";
@@ -24,10 +23,6 @@ export class CreateRestaurantDto {
   @IsEmail()
   @IsOptional()
   email?: string;
-
-  @IsBoolean()
-  @IsOptional()
-  isActive?: boolean;
 }
 
 export class UpdateRestaurantDto {
@@ -50,8 +45,4 @@ export class UpdateRestaurantDto {
   @IsBoolean()
   @IsOptional()
   isActive?: boolean;
-
-  @IsOptional()
-  @IsInt()
-  adminId?: number; // ID администратора
 }

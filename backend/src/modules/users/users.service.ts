@@ -1,10 +1,13 @@
 import { Injectable } from "@nestjs/common";
-import { PrismaService } from "src/prisma.servise";
+import { PrismaService } from "prisma/prisma.servise";
 import { CreateEmployeeDto, UpdateEmployeeDto } from "./users.dto";
-import { generateTemporaryPassword, hashPassword } from "../helpers/authUtils";
+import {
+  generateTemporaryPassword,
+  hashPassword,
+} from "../../helpers/authUtils";
 
 import * as bcrypt from "bcrypt";
-import { sendTemporaryPasswordEmail } from "src/mail/mail.service";
+import { sendTemporaryPasswordEmail } from "src/shared/mail/mail.service";
 
 @Injectable()
 export class EmployeesService {
