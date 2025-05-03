@@ -4,10 +4,9 @@
       :has-back="false"
       :has-action-button="false"
       title="Управление ресторанами"
-      @search="handleSearch"
+      @search="(v) => (searchQuery = v)"
     />
     <AppTable
-      class="list-page"
       :cols="restaurantCols"
       :data="filteredRestaurants"
       item-page-name="Restaurant"
@@ -62,10 +61,6 @@ const init = async () => {
 const deleteItem = async (item) => {
   await deleteRestaurant(+item.id);
   restaurants.value = restaurants.value.filter((i) => i.id !== item.id);
-};
-
-const handleSearch = (query) => {
-  searchQuery.value = query;
 };
 
 const addRestaurant = () => {
