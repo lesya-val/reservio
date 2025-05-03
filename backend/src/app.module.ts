@@ -1,8 +1,9 @@
 import { Module } from "@nestjs/common";
-import { RestaurantsModule } from "./restaurants/restaurants.module";
+import { RestaurantsModule } from "./modules/restaurants/restaurants.module";
 import { ConfigModule } from "@nestjs/config";
-import { EmployeesModule } from './users/users.module';
-import { AuthModule } from './auth/auth.module';
+import { EmployeesModule } from "./modules/users/users.module";
+import { BookingsModule } from "./modules/bookings/bookings.module";
+import { AuthModule } from "./shared/auth/auth.module";
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { AuthModule } from './auth/auth.module';
     }),
     RestaurantsModule,
     EmployeesModule,
+    BookingsModule,
     AuthModule,
   ],
 })

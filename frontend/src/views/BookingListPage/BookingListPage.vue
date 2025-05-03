@@ -1,13 +1,33 @@
 <template>
   <v-default>
+    <ListControls
+      :has-back="false"
+      :has-action-button="false"
+      title="Управление бронированиями"
+      @search="handleSearch"
+    />
+    <AppTable
+      :cols="bookingCols"
+      :data="filteredBookings"
+      item-page-name="Booking"
+      @delete="deleteItem"
+    />
+    <AppButton class="add-button" @click="addBooking">
+      <template #icon-after>
+        <AppIcon value="plus" width="20px" height="20px" />
+      </template>
+      <p>Создать бронь</p>
+    </AppButton>
     <AppModal v-if="isModalActive" @close="handleCloseModal">
       <template #title>
         <p class="modal__title">Смена временного пароля</p>
       </template>
-      <p class="modal__subtitle">
-        Вы вошли в систему по временному паролю. Пожалуйста, смените пароль на
-        постоянный
-      </p>
+      <template #subtitle>
+        <p class="modal__subtitle">
+          Вы вошли в систему по временному паролю. Пожалуйста, смените пароль на
+          постоянный
+        </p>
+      </template>
       <template #inputs>
         <AppInput
           v-model="passwordData.oldPassword"
@@ -51,11 +71,16 @@ import { useVuelidate } from "@vuelidate/core";
 import { changePassword } from "../../services/userApi";
 import { getErrorMessage } from "../../helpers/errorHelpers";
 import { passwordValidationRules } from "./validationRules";
+import AppTable from "../../components/AppTable/AppTable.vue";
+import AppIcon from "../../components/AppIcon/AppIcon.vue";
+import ListControls from "../../components/ListControls/ListControls.vue";
 
 const authStore = useAuthStore();
 const { notification, showNotification, hideNotification } = useNotification();
 
 const isModalActive = ref(false);
+const bookings = ref();
+const searchQuery = ref("");
 
 const passwordData = reactive({
   oldPassword: "",
@@ -86,11 +111,15 @@ const handleChangePassword = async () => {
   } else showNotification("Ошибка при изменении пароля!");
 };
 
-onMounted(() => {
+const init = async () => {
+  //bookings.value = await getBookings();
+
   if (authStore.user?.isTempPassword) {
     isModalActive.value = true;
   }
-});
+};
+
+onMounted(init);
 </script>
 
 <style scoped lang="scss">

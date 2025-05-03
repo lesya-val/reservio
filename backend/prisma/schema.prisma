@@ -14,19 +14,21 @@ enum Role {
 }
 
 model Restaurant {
-  id           Int     @id @default(autoincrement())
-  name         String
-  address      String
-  phone        String
-  email        String?
-  isActive     Boolean @default(true)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id       Int     @id @default(autoincrement())
+  name     String
+  address  String
+  phone    String
+  email    String?
+  isActive Boolean @default(true)
 
   users   User[] // Связь с сотрудниками
   adminId Int?   @unique // ID администратора (опционально, если админ еще не назначен)
   admin   User?  @relation("Admin", fields: [adminId], references: [id])
+
+  bookings Booking[] // Связь с бронированиями
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("restaurants")
 }
@@ -46,11 +48,36 @@ model User {
   // Обратная связь для администратора
   managedRestaurant Restaurant? @relation("Admin")
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
   // Флаг для проверки, изменил ли пользователь временный пароль
   isTempPassword Boolean @default(true)
 
+  bookings Booking[] // Связь с бронированиями, которые создал сотрудник
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@map("users")
+}
+
+model Booking {
+  id           Int        @id @default(autoincrement())
+  restaurantId Int
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+
+  userId Int?
+  user   User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  name  String
+  phone String
+
+  date DateTime
+  guestsCount Int
+  tableNumber Int?
+
+  notes String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("bookings")
 }

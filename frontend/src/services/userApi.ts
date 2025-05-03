@@ -1,4 +1,3 @@
-// frontend/src/services/userApi.ts
 import { User } from "../types/index";
 import apiClient from "./apiClient";
 
