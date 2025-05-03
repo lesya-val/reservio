@@ -10,6 +10,13 @@
 // Миксины
 @import "../src/style/mixins";
 
+.add-button {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  padding: 15px 25px;
+}
+
 // Скролл
 ::-webkit-scrollbar {
   width: 4px;
