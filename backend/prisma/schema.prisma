@@ -27,10 +27,44 @@ model Restaurant {
 
   bookings Booking[] // Связь с бронированиями
 
+  halls Hall[] // Связь с залами ресторана
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("restaurants")
+}
+
+model Hall {
+  id           Int        @id @default(autoincrement())
+  name         String
+  description  String
+  restaurantId Int
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+
+  tables Table[] // Связь со столами в зале
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("halls")
+}
+
+model Table {
+  id       Int  @id @default(autoincrement())
+  number   Int
+  capacity Int
+  x        Int
+  y        Int
+  width    Int
+  height   Int
+  hallId   Int
+  hall     Hall @relation(fields: [hallId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("tables")
 }
 
 model User {
@@ -67,11 +101,11 @@ model Booking {
   userId Int?
   user   User? @relation(fields: [userId], references: [id], onDelete: SetNull)
 
-  name  String
-  phone String
+  name   String
+  phone  String
   status String?
 
-  date DateTime
+  date        DateTime
   guestsCount Int
   tableNumber Int?
 
