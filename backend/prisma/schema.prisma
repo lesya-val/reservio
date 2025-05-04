@@ -69,6 +69,7 @@ model Booking {
 
   name  String
   phone String
+  status String?
 
   date DateTime
   guestsCount Int
