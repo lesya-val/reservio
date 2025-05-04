@@ -1,11 +1,12 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { useAuthStore } from "../stores/auth";
 import App from "../App.vue";
 import RestaurantListPage from "../views/RestaurantListPage";
 import BookingListPage from "../views/BookingListPage";
 import RestaurantPage from "../views/RestaurantPage";
+import BookingPage from "../views/BookingPage";
 import EmployeePage from "../views/EmployeePage";
 import LoginPage from "../views/LoginPage";
-import { useAuthStore } from "../stores/auth";
 
 const routes = [
   {
@@ -37,6 +38,11 @@ const routes = [
     path: "/booking-list",
     name: "BookingListPage",
     component: BookingListPage,
+  },
+  {
+    path: "/bookings/:id",
+    name: "Booking",
+    component: BookingPage,
   },
 ];
 
