@@ -35,11 +35,19 @@ export class AuthService {
   async login(email: string, password: string) {
     const user = await this.validateUser(email, password);
 
+    const restaurant = user.restaurantId
+      ? await this.prisma.restaurant.findUnique({
+          where: { id: user.restaurantId },
+          select: { name: true },
+        })
+      : null;
+
     const payload = {
       sub: user.id,
       email: user.email,
       role: user.role,
       restaurantId: user.restaurantId,
+      restaurantName: restaurant?.name || null,
     };
 
     return {
@@ -48,6 +56,7 @@ export class AuthService {
         id: user.id,
         role: user.role,
         restaurantId: user.restaurantId,
+        restaurantName: restaurant?.name || null,
         isTempPassword: user.isTempPassword,
       },
     };
