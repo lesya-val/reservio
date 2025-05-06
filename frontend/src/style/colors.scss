@@ -3,6 +3,7 @@ $black-background: rgba(0, 0, 0, 0.6);
 
 $white: #ffffff;
 
+$grey: #666666;
 $dark-gray: #414b58;
 $light-gray: #b6b6b6;
 $disabled: rgba(
@@ -18,6 +19,10 @@ $blue-translucent: rgba(
 
 $yellow: #fec41c;
 $dark-yellow: #e2ae18;
+$yellow-translucent: rgba(
+  $color: #fec41c,
+  $alpha: 0.8,
+);
 
 $red: #d82222;
 $red-light: #fce9e9;
