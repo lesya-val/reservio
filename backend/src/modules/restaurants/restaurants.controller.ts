@@ -17,19 +17,18 @@ import { Role } from "@prisma/client";
 
 @Controller("restaurants")
 @UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(Role.SYSTEM_ADMIN)
 export class RestaurantsController {
   constructor(private readonly restaurantsService: RestaurantsService) {}
 
   // Создание ресторана
   @Post()
-  @Roles(Role.SYSTEM_ADMIN)
   async create(@Body() createRestaurantDto: CreateRestaurantDto) {
     return this.restaurantsService.create(createRestaurantDto);
   }
 
   // Получение всех ресторанов
   @Get()
-  @Roles(Role.SYSTEM_ADMIN)
   async findAll() {
     return this.restaurantsService.findAll();
   }
@@ -42,7 +41,6 @@ export class RestaurantsController {
 
   // Обновление ресторана
   @Patch(":id")
-  @Roles(Role.SYSTEM_ADMIN)
   async update(
     @Param("id") id: string,
     @Body() updateRestaurantDto: UpdateRestaurantDto
@@ -52,7 +50,6 @@ export class RestaurantsController {
 
   // Удаление ресторана
   @Delete(":id")
-  @Roles(Role.SYSTEM_ADMIN)
   async remove(@Param("id") id: string) {
     return this.restaurantsService.remove(+id);
   }
