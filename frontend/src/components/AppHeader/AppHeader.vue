@@ -10,13 +10,19 @@
       <h2 class="header__left-text">Reservio</h2>
     </div>
     <div v-if="userRole !== 'SYSTEM_ADMIN'" class="header__center">
-      <h2 class="header__center-text">{{ restaurantName }}</h2>
+      <h2 class="header__center-text">{{ authStore?.user?.restaurantName }}</h2>
     </div>
     <div class="header__right">
       <nav class="header__right-nav">
         <ul v-if="userRole !== 'SYSTEM_ADMIN'" class="header__right-list">
-          <li><a>Залы и столы</a></li>
-          <li><a>Сотрудники</a></li>
+          <li
+            v-for="(item, index) in menuItems"
+            :key="index"
+            :class="['nav__item', { 'nav__item--active': isActive(item.route) }]"
+            @click="navigate(item.route)"
+          >
+            <a>{{ item.label }}</a>
+          </li>
         </ul>
         <div class="header__right-profile-container">
           <AppIcon
@@ -39,7 +45,6 @@
 import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../../stores/auth";
-import { getRestaurantById } from "../../services/restaurantApi";
 
 import AppIcon from "../AppIcon/AppIcon.vue";
 
@@ -47,12 +52,24 @@ const router = useRouter();
 const authStore = useAuthStore();
 
 const isDropdownOpen = ref(false);
-const restaurantName = ref("");
+
+const menuItems = [
+  { label: "Залы и столы", route: "HallList" },
+  { label: "Сотрудники", route: "EmployeeList" },
+];
 
 const userRole = computed(() => authStore?.user?.role);
 
 const toggleDropdown = () => {
   isDropdownOpen.value = !isDropdownOpen.value;
+};
+
+const isActive = (routeName) => {
+  return router.currentRoute.value.name === routeName;
+};
+
+const navigate = (routeName) => {
+  router.push({ name: routeName });
 };
 
 const handleLogout = () => {
@@ -64,16 +81,9 @@ const navigateToHome = () => {
   if (userRole.value === "SYSTEM_ADMIN") {
     router.push({ name: "RestaurantList" });
   } else {
-    router.push({ name: "BookingListPage" });
+    router.push({ name: "BookingList" });
   }
 };
-
-onMounted(async () => {
-  if (userRole.value !== "SYSTEM_ADMIN") {
-    const restaurant = await getRestaurantById(authStore?.user?.restaurantId);
-    restaurantName.value = restaurant.name;
-  }
-});
 </script>
 
 <style scoped lang="scss">
