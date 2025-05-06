@@ -2,16 +2,16 @@
   <v-default class="restaurant">
     <ListControls
       :has-search="false"
-      :is-new-doc="isOpCreate"
+      :is-new-doc="createMode"
       :is-edit-mode="isEditMode"
-      :has-back="!isOpCreate"
+      :has-back="!createMode"
       @edit="isEditMode = true"
       @save="handleSave"
     />
-    <div class="restaurant__wrapper">
+    <div class="wrapper">
       <div class="restaurant__content">
         <h2 class="restaurant__title">
-          {{ isOpCreate ? "Добавление ресторана" : "Информация о ресторане" }}
+          {{ createMode ? "Добавление ресторана" : "Информация о ресторане" }}
         </h2>
         <div class="restaurant__fields">
           <div v-for="col in filteredRestaurantCols" class="restaurant__field">
@@ -21,7 +21,7 @@
               type="checkbox"
               label="Ресторан активен"
               v-model="restaurantData[col.id]"
-              :readonly="!(isOpCreate || isEditMode)"
+              :readonly="!(createMode || isEditMode)"
             />
             <AppInput
               v-else
@@ -29,13 +29,13 @@
               :label="col.name"
               v-model="restaurantData[col.id]"
               :error="getErrorMessage(v$[col.id])"
-              :readonly="!(isOpCreate || isEditMode)"
+              :readonly="!(createMode || isEditMode)"
               :validation="v$[col.id]"
             />
           </div>
         </div>
         <AppButton
-          v-if="!isOpCreate"
+          v-if="!createMode"
           class="restaurant__button"
           @click="goToAdminForm"
         >
@@ -78,13 +78,14 @@ import { getErrorMessage } from "../../helpers/errorHelpers";
 import AppNotification from "../../components/AppNotification/AppNotification.vue";
 import AppButton from "../../components/AppButton/AppButton.vue";
 import { useNotification } from "../../hooks/useNotification";
+import { isCreateMode } from "../../helpers/routeHelpers";
 
 const router = useRouter();
 const route = useRoute();
+const createMode = isCreateMode();
 const { notification, showNotification, hideNotification } = useNotification();
 
 const restaurantId = computed(() => route.params.id as string);
-const isOpCreate = computed(() => restaurantId.value === "create");
 
 const adminId = ref();
 const isEditMode = ref(false);
@@ -120,7 +121,7 @@ const handleSave = async () => {
 
   const cleanedData = cleanData<Restaurant>(restaurantData);
 
-  if (isOpCreate.value) {
+  if (createMode.value) {
     const response = await createRestaurant(cleanedData);
 
     if (response) showNotification("Ресторан успешно добавлен!", "success");
@@ -155,7 +156,7 @@ const goToAdminForm = async () => {
 };
 
 onMounted(async () => {
-  if (!isOpCreate.value) {
+  if (!createMode.value) {
     const restaurant = await getRestaurantById(+restaurantId.value);
     Object.assign(restaurantData, restaurant);
 
