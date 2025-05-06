@@ -1249,6 +1249,11 @@
   "resolved" "https://registry.npmjs.org/graphemer/-/graphemer-1.4.0.tgz"
   "version" "1.4.0"
 
+"gridstack@^12.1.1":
+  "integrity" "sha512-wpfNUkzVBuHJftRRMRQDpH8DPIO5NBdfE0ioIIVoXFePBzqqVTpfgttSs5IJYqO4Uj5LfnJ2fjOmsFEBqpeSwg=="
+  "resolved" "https://registry.npmjs.org/gridstack/-/gridstack-12.1.1.tgz"
+  "version" "12.1.1"
+
 "has-bigints@^1.0.2":
   "integrity" "sha512-R3pbpkcIqv2Pm3dUwgjclDRVmWpTJW2DcMzcIhEXEx1oh/CEMObMm3KLmRJOdvhM7o4uQBnwr8pzRK2sJWIqfg=="
   "resolved" "https://registry.npmjs.org/has-bigints/-/has-bigints-1.1.0.tgz"
