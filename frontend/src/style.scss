@@ -10,6 +10,11 @@
 // Миксины
 @import "../src/style/mixins";
 
+.wrapper {
+  overflow-y: auto;
+  max-height: calc(100vh - 115px);
+}
+
 .add-button {
   position: absolute;
   bottom: 30px;

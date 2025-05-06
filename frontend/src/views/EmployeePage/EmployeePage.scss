@@ -1,10 +1,9 @@
-.employee {
-  &__wrapper {
-    @include flex-center;
-    max-height: calc(100vh - 205px);
-    overflow-y: auto;
-  }
+.wrapper {
+  display: flex;
+  justify-content: center;
+}
 
+.employee {
   &__content {
     @include flex-column;
     width: 70%;
