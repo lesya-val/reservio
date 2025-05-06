@@ -2,17 +2,17 @@
   <v-default class="employee">
     <ListControls
       :has-search="false"
-      :is-new-doc="isOpCreate"
+      :is-new-doc="createMode"
       :is-edit-mode="isEditMode"
-      :has-back="!isOpCreate"
+      :has-back="!createMode"
       @edit="isEditMode = true"
       @save="handleSave"
     />
-    <div class="employee__wrapper">
+    <div class="wrapper">
       <div class="employee__content">
         <h2 class="employee__title">
           {{
-            isOpCreate
+            createMode
               ? "Добавление администратора"
               : "Информация об администраторе"
           }}
@@ -24,7 +24,7 @@
             :placeholder="getPlaceholder(col)"
             :label="col.name"
             :error="getErrorMessage(v$[col.id])"
-            :readonly="!(isOpCreate || isEditMode)"
+            :readonly="!(createMode || isEditMode)"
           />
         </div>
       </div>
@@ -59,15 +59,14 @@ import employeeFields from "./employeeFields.json";
 import { User, Role, TableColumn } from "../../types";
 import { updateRestaurant } from "../../services/restaurantApi";
 import { useNotification } from "../../hooks/useNotification";
+import { isCreateMode } from "../../helpers/routeHelpers";
 
 const router = useRouter();
 const route = useRoute();
+const createMode = isCreateMode();
 const { notification, showNotification, hideNotification } = useNotification();
 
-const isOpCreate = computed(() => route.params.id === "create");
-
 const isEditMode = ref(false);
-const isNotificationActive = ref(false);
 
 const adminData = reactive({
   id: 0,
@@ -102,23 +101,38 @@ const handleSave = async () => {
 
   const cleanedData = cleanData<User>(adminData);
 
-  if (isOpCreate.value) {
+  if (createMode.value) {
     const admin = await createEmployee(adminData.restaurantId, cleanedData);
-    await updateRestaurant(adminData.restaurantId, { adminId: admin.id });
+    const response = await updateRestaurant(adminData.restaurantId, {
+      adminId: admin.id,
+    });
+
+    if (response) showNotification("Сотрудник успешно сохранен!", "success");
+    else {
+      showNotification("Ошибка при сохранении сотрудника!");
+      return;
+    }
   } else {
-    await updateEmployee(adminData.restaurantId, adminData.id, adminData);
+    const response = await updateEmployee(
+      adminData.restaurantId,
+      adminData.id,
+      adminData
+    );
+
+    if (response) showNotification("Сотрудник успешно обновлен!", "success");
+    else {
+      showNotification("Ошибка при обновлении сотрудника!");
+      return;
+    }
   }
 
-  const response = await router.push({ name: "RestaurantList" });
-
-  if (response) showNotification("Сотрудник успешно сохранен", "success");
-  else showNotification("Ошибка при сохранении сотрудника");
+  await router.push({ name: "RestaurantList" });
 };
 
 onMounted(async () => {
   const employeeId = route.params.id;
 
-  if (!isOpCreate.value) {
+  if (!createMode.value) {
     const employee = await getEmployeeById(adminData.restaurantId, +employeeId);
     Object.assign(adminData, employee);
   }
