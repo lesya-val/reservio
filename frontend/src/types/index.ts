@@ -1,4 +1,2 @@
-export * from "./table";
-export * from "./restaurant";
-export * from "./user";
-export * from "./booking";
+export * from "./table-column";
+export * from "./models";
