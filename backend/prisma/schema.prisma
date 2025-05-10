@@ -38,7 +38,6 @@ model Restaurant {
 model Hall {
   id          Int     @id @default(autoincrement())
   name        String
-  description String?
   capacity    Int
 
   restaurantId Int
@@ -60,6 +59,7 @@ model Table {
   y        Int
   width    Int
   height   Int
+
   hallId   Int
   hall     Hall @relation(fields: [hallId], references: [id], onDelete: Cascade)
 
