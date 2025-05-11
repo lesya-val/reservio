@@ -32,7 +32,6 @@ export interface Restaurant {
 export interface Hall {
   id: number;
   name: string;
-  description?: string;
   capacity: number;
   restaurantId: number;
   tables?: Table[];
@@ -41,14 +40,14 @@ export interface Hall {
 }
 
 export interface Table {
-  id: number;
+  id?: number;
   number: number;
   capacity: number;
   x: number;
   y: number;
   width: number;
   height: number;
-  hallId: number;
+  hallId?: number;
   createdAt?: Date;
   updatedAt?: Date;
 }
