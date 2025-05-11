@@ -8,32 +8,18 @@
       @edit="isEditMode = true"
       @save="handleSave"
     />
+
     <div class="wrapper">
       <div class="restaurant__content">
-        <h2 class="restaurant__title">
-          {{ createMode ? "Добавление ресторана" : "Информация о ресторане" }}
-        </h2>
-        <div class="restaurant__fields">
-          <div v-for="col in filteredRestaurantCols" class="restaurant__field">
-            <AppInput
-              v-if="col.id === 'isActive'"
-              class="restaurant__checkbox"
-              type="checkbox"
-              label="Ресторан активен"
-              v-model="restaurantData[col.id]"
-              :readonly="!(createMode || isEditMode)"
-            />
-            <AppInput
-              v-else
-              :placeholder="`Укажите ${col.name?.toLowerCase()}`"
-              :label="col.name"
-              v-model="restaurantData[col.id]"
-              :error="getErrorMessage(v$[col.id])"
-              :readonly="!(createMode || isEditMode)"
-              :validation="v$[col.id]"
-            />
-          </div>
-        </div>
+        <AppForm
+          :title="
+            createMode ? 'Добавление ресторана' : 'Информация о ресторане'
+          "
+          :model="restaurantData"
+          :cols="filteredRestaurantCols"
+          :validation="v$"
+          :readonly="!(createMode || isEditMode)"
+        />
         <AppButton
           v-if="!createMode"
           class="restaurant__button"
@@ -47,6 +33,7 @@
         </AppButton>
       </div>
     </div>
+
     <AppNotification
       v-if="notification.isVisible"
       :type="notification.type"
@@ -58,40 +45,46 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from "vue";
-import AppInput from "../../components/AppInput/AppInput.vue";
-import VDefault from "../../components/DefaultLayout/DefaultLayout.vue";
-import ListControls from "../../components/ListControls/ListControls.vue";
-import { useRouter, useRoute } from "vue-router";
-import { Restaurant, TableColumn } from "../../types";
+import { onMounted, reactive, ref, computed } from "vue";
+import { useRoute, useRouter } from "vue-router";
+
+import {
+  AppButton,
+  AppForm,
+  VDefault,
+  ListControls,
+  AppNotification,
+} from "@/components";
 
 import restaurantCols from "../RestaurantListPage/restaurantCols.json";
 import {
-  createRestaurant,
   getRestaurantById,
+  createRestaurant,
   updateRestaurant,
-} from "../../services/restaurantApi";
+} from "@/services/restaurantApi";
+
+import { useNotification } from "@/hooks/useNotification";
+import { getErrorMessage } from "@/helpers/errorHelpers";
+import { cleanData } from "@/helpers/dataHelpers";
+import { isCreateMode } from "@/helpers/routeHelpers";
 import { useVuelidate } from "@vuelidate/core";
 import { restaurantValidationRules } from "./validationRules";
-import { cleanData } from "../../helpers/dataHelpers";
-import { getErrorMessage } from "../../helpers/errorHelpers";
-import AppNotification from "../../components/AppNotification/AppNotification.vue";
-import AppButton from "../../components/AppButton/AppButton.vue";
-import { useNotification } from "../../hooks/useNotification";
-import { isCreateMode } from "../../helpers/routeHelpers";
+import type { Restaurant, TableColumn } from "@/types";
 
 const router = useRouter();
 const route = useRoute();
-const createMode = isCreateMode();
+
+// Подключаем уведомления
 const { notification, showNotification, hideNotification } = useNotification();
 
-const restaurantId = computed(() => route.params.id as string);
+// true если создаём новый ресторан
+const createMode = isCreateMode();
 
-const adminId = ref();
+// Включает режим редактирования
 const isEditMode = ref(false);
-const isNotificationActive = ref(false);
 
-const restaurantData = reactive({
+// Данные ресторана
+const restaurantData = reactive<Restaurant>({
   name: "",
   address: "",
   phone: "",
@@ -100,69 +93,92 @@ const restaurantData = reactive({
   isActive: true,
 });
 
+const formFields = [
+  {
+    id: "name",
+    label: "Email",
+    placeholder: "Введите email",
+  },
+  {
+    id: "password",
+    label: "Пароль",
+    placeholder: "Введите пароль",
+    type: "password",
+  },
+];
+
+// Получение ошибок валидации
 const v$ = useVuelidate(restaurantValidationRules, restaurantData);
 
-const filteredRestaurantCols = computed(() => {
-  return restaurantCols.filter(
-    (col: TableColumn, index: number) => col.name && index !== 0
-  );
-});
+// ID ресторана из параметра маршрута
+const restaurantId = computed(() => route.params.id as string);
 
+// readonly-состояние для полей
+const readonly = computed(() => !(createMode || isEditMode.value));
+
+// Фильтруем колонки
+const filteredRestaurantCols = computed(() =>
+  restaurantCols.filter(
+    (col: TableColumn, index: number) => col.name && index !== 0
+  )
+);
+
+// Сохранение
 const handleSave = async () => {
   const isValid = await v$.value.$validate();
-
   if (!isValid) {
-    isNotificationActive.value = false;
-    setTimeout(() => {
-      isNotificationActive.value = true;
-    }, 0);
+    showNotification("Заполните поля в соответствии с правилами!");
     return;
   }
 
   const cleanedData = cleanData<Restaurant>(restaurantData);
 
-  if (createMode.value) {
-    const response = await createRestaurant(cleanedData);
-
-    if (response) showNotification("Ресторан успешно добавлен!", "success");
-    else showNotification("Ошибка при создании ресторана!");
-
-    await router.push({
-      name: "Employee",
-      params: { restaurantId: response.id, id: "create" },
-    });
-  } else {
-    const response = await updateRestaurant(+restaurantId.value, cleanedData);
-
-    if (response) showNotification("Ресторан успешно обновлен!", "success");
-    else showNotification("Ошибка при обновлении ресторана!");
-
-    isEditMode.value = false;
+  try {
+    if (createMode.value) {
+      const result = await createRestaurant(cleanedData);
+      if (result) {
+        showNotification("Ресторан успешно добавлен!", "success");
+        await router.push({
+          name: "Employee",
+          params: { restaurantId: result.id, id: "create" },
+        });
+      }
+    } else {
+      const result = await updateRestaurant(+restaurantId.value, cleanedData);
+      if (result) {
+        showNotification("Ресторан успешно обновлён!", "success");
+        isEditMode.value = false;
+      }
+    }
+  } catch (e) {
+    showNotification("Ошибка при сохранении ресторана!");
   }
 };
 
+// Переход к форме администратора
 const goToAdminForm = async () => {
-  if (adminId.value) {
-    await router.push({
-      name: "Employee",
-      params: { restaurantId: restaurantId.value, id: adminId.value },
-    });
-  } else {
-    await router.push({
-      name: "Employee",
-      params: { restaurantId: +restaurantId.value, id: "create" },
-    });
-  }
+  await router.push({
+    name: "Employee",
+    params: {
+      restaurantId: +restaurantId.value,
+      id: restaurantData.adminId ?? "create",
+    },
+  });
 };
 
+// Загрузка данных ресторана при редактировании
 onMounted(async () => {
   if (!createMode.value) {
-    const restaurant = await getRestaurantById(+restaurantId.value);
-    Object.assign(restaurantData, restaurant);
-
-    adminId.value = restaurantData.adminId;
+    try {
+      const data = await getRestaurantById(+restaurantId.value);
+      Object.assign(restaurantData, data);
+    } catch (e) {
+      showNotification("Ошибка при загрузке ресторана");
+    }
   }
 });
 </script>
 
-<style src="./RestaurantPage.scss" scoped lang="scss"></style>
+<style scoped lang="scss">
+@import "./RestaurantPage.scss";
+</style>

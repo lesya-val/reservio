@@ -6,27 +6,17 @@
       :is-edit-mode="isEditMode"
       :has-back="!createMode"
       @edit="isEditMode = true"
-      @save="handleSave"
+      @save="handleSubmit"
     />
     <div class="wrapper">
       <div class="employee__content">
-        <h2 class="employee__title">
-          {{
-            createMode
-              ? "Добавление администратора"
-              : "Информация об администраторе"
-          }}
-        </h2>
-        <div class="employee__fields">
-          <AppInput
-            v-for="col in filteredAdminCols"
-            v-model="adminData[col.id]"
-            :placeholder="getPlaceholder(col)"
-            :label="col.name"
-            :error="getErrorMessage(v$[col.id])"
-            :readonly="!(createMode || isEditMode)"
-          />
-        </div>
+        <AppForm
+          :title="formTitle"
+          :model="adminData"
+          :cols="filteredAdminCols"
+          :validation="v$"
+          :readonly="!(createMode || isEditMode)"
+        />
       </div>
     </div>
     <AppNotification
@@ -41,31 +31,27 @@
 
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from "vue";
-import AppInput from "../../components/AppInput/AppInput.vue";
-import VDefault from "../../components/DefaultLayout/DefaultLayout.vue";
-import ListControls from "../../components/ListControls/ListControls.vue";
+
+import { AppNotification, AppForm, VDefault, ListControls } from "@/components";
 import { useRouter, useRoute } from "vue-router";
+import useVuelidate from "@vuelidate/core";
+import { useNotification } from "@/hooks/useNotification";
 import {
   createEmployee,
   getEmployeeById,
   updateEmployee,
-} from "../../services/userApi";
+} from "@/services/userApi";
+import { updateRestaurant } from "@/services/restaurantApi";
 import { adminValidationRules } from "./validationRules";
-import { cleanData } from "../../helpers/dataHelpers";
-import { getErrorMessage } from "../../helpers/errorHelpers";
-import AppNotification from "../../components/AppNotification/AppNotification.vue";
-import useVuelidate from "@vuelidate/core";
+import { cleanData } from "@/helpers/dataHelpers";
+import { isCreateMode } from "@/helpers/routeHelpers";
 import employeeFields from "./employeeFields.json";
-import { User, Role, TableColumn } from "../../types";
-import { updateRestaurant } from "../../services/restaurantApi";
-import { useNotification } from "../../hooks/useNotification";
-import { isCreateMode } from "../../helpers/routeHelpers";
+import { Role, User } from "@/types";
 
 const router = useRouter();
 const route = useRoute();
 const createMode = isCreateMode();
-const { notification, showNotification, hideNotification } = useNotification();
-
+const { notification, showNotification } = useNotification();
 const isEditMode = ref(false);
 
 const adminData = reactive({
@@ -80,18 +66,17 @@ const adminData = reactive({
 
 const v$ = useVuelidate(adminValidationRules, adminData);
 
-const filteredAdminCols = computed(() => {
-  return employeeFields.filter((_, index: number) => index !== 0);
-});
+const filteredAdminCols = computed(() =>
+  employeeFields.filter((_, index) => index !== 0)
+);
 
-const getPlaceholder = (col: TableColumn) => {
-  if (col.id === "adminSurname") {
-    return "Укажите фамилию";
-  }
-  return col.name ? `Укажите ${col.name.toLowerCase()}` : "";
-};
+const formTitle = computed(() =>
+  createMode.value
+    ? "Добавление администратора"
+    : "Информация об администраторе"
+);
 
-const handleSave = async () => {
+const handleSubmit = async () => {
   const isValid = await v$.value.$validate();
 
   if (!isValid) {
@@ -101,42 +86,36 @@ const handleSave = async () => {
 
   const cleanedData = cleanData<User>(adminData);
 
-  if (createMode.value) {
-    const admin = await createEmployee(adminData.restaurantId, cleanedData);
-    const response = await updateRestaurant(adminData.restaurantId, {
-      adminId: admin.id,
-    });
-
-    if (response) showNotification("Сотрудник успешно сохранен!", "success");
-    else {
-      showNotification("Ошибка при сохранении сотрудника!");
-      return;
+  try {
+    if (createMode.value) {
+      const admin = await createEmployee(adminData.restaurantId, cleanedData);
+      await updateRestaurant(adminData.restaurantId, { adminId: admin.id });
+    } else {
+      await updateEmployee(adminData.restaurantId, adminData.id, cleanedData);
     }
-  } else {
-    const response = await updateEmployee(
-      adminData.restaurantId,
-      adminData.id,
-      adminData
+    showNotification(
+      createMode.value
+        ? "Сотрудник успешно сохранен!"
+        : "Сотрудник успешно обновлен!",
+      "success"
     );
-
-    if (response) showNotification("Сотрудник успешно обновлен!", "success");
-    else {
-      showNotification("Ошибка при обновлении сотрудника!");
-      return;
-    }
+    await router.push({ name: "RestaurantList" });
+  } catch {
+    showNotification("Ошибка при сохранении сотрудника!");
   }
-
-  await router.push({ name: "RestaurantList" });
 };
 
 onMounted(async () => {
-  const employeeId = route.params.id;
-
   if (!createMode.value) {
-    const employee = await getEmployeeById(adminData.restaurantId, +employeeId);
+    const employee = await getEmployeeById(
+      adminData.restaurantId,
+      +route.params.id
+    );
     Object.assign(adminData, employee);
   }
 });
 </script>
 
-<style src="./EmployeePage.scss" scoped lang="scss"></style>
+<style scoped lang="scss">
+@import "./EmployeePage.scss";
+</style>

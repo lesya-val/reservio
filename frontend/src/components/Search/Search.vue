@@ -4,24 +4,23 @@
     <AppInput
       class="search__input"
       v-model="searchValue"
-      :view="'text'"
       :placeholder="'Поиск'"
+      :view="'text'"
     />
   </div>
 </template>
 
-<script setup>
-import { ref, watch } from "vue";
-import AppIcon from "../AppIcon/AppIcon.vue";
-import AppInput from "../AppInput/AppInput.vue";
+<script setup lang="ts">
+import { ref } from "vue";
+import { AppIcon, AppInput } from "../index";
 
 const searchValue = ref("");
 
 const emit = defineEmits(["search"]);
 
-watch(searchValue, () => {
-  emit("search", searchValue.value);
-})
+emit("search", searchValue.value);
 </script>
 
-<style lang="scss" src="./Search.scss"></style>
+<style scoped lang="scss">
+@import "./Search.scss";
+</style>

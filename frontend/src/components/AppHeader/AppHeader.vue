@@ -1,33 +1,34 @@
 <template>
-  <div class="header">
-    <div @click="navigateToHome" class="header__left">
-      <AppIcon
-        class="header__left-logo"
-        value="logo"
-        width="64px"
-        height="64px"
-      />
-      <h2 class="header__left-text">Reservio</h2>
+  <header class="header">
+    <div class="header__left" @click="navigateToHome">
+      <AppIcon class="header__logo" value="logo" width="64px" height="64px" />
+      <h2 class="header__title">Reservio</h2>
     </div>
-    <div v-if="userRole !== 'SYSTEM_ADMIN'" class="header__center">
-      <h2 class="header__center-text">{{ authStore?.user?.restaurantName }}</h2>
+
+    <div v-if="!isSystemAdmin" class="header__center">
+      <h2>{{ restaurantName }}</h2>
     </div>
+
     <div class="header__right">
-      <nav class="header__right-nav">
-        <ul v-if="userRole !== 'SYSTEM_ADMIN'" class="header__right-list">
+      <nav class="header__nav">
+        <ul v-if="!isSystemAdmin" class="header__menu">
           <li
             v-for="(item, index) in menuItems"
             :key="index"
-            :class="['nav__item', { 'nav__item--active': isActive(item.route) }]"
+            :class="[
+              'nav__item',
+              { 'nav__item--active': isActive(item.route) },
+            ]"
             @click="navigate(item.route)"
           >
             <a>{{ item.label }}</a>
           </li>
         </ul>
-        <div class="header__right-profile-container">
+
+        <div class="header__profile">
           <AppIcon
             value="user"
-            class="header__right-profile"
+            class="header__profile-icon"
             width="32px"
             height="32px"
             @click="toggleDropdown"
@@ -38,15 +39,16 @@
         </div>
       </nav>
     </div>
-  </div>
+  </header>
 </template>
 
-<script setup>
-import { ref, computed, onMounted } from "vue";
-import { useRouter } from "vue-router";
-import { useAuthStore } from "../../stores/auth";
+<script setup lang="ts">
+import { ref, computed } from "vue";
 
-import AppIcon from "../AppIcon/AppIcon.vue";
+import AppIcon from "../index";
+
+import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -59,16 +61,17 @@ const menuItems = [
 ];
 
 const userRole = computed(() => authStore?.user?.role);
+const restaurantName = computed(() => authStore?.user?.restaurantName || "");
+const isSystemAdmin = computed(() => userRole.value === "SYSTEM_ADMIN");
 
 const toggleDropdown = () => {
   isDropdownOpen.value = !isDropdownOpen.value;
 };
 
-const isActive = (routeName) => {
-  return router.currentRoute.value.name === routeName;
-};
+const isActive = (routeName: string) =>
+  router.currentRoute.value.name === routeName;
 
-const navigate = (routeName) => {
+const navigate = (routeName: string) => {
   router.push({ name: routeName });
 };
 
@@ -78,14 +81,11 @@ const handleLogout = () => {
 };
 
 const navigateToHome = () => {
-  if (userRole.value === "SYSTEM_ADMIN") {
-    router.push({ name: "RestaurantList" });
-  } else {
-    router.push({ name: "BookingList" });
-  }
+  const routeName = isSystemAdmin.value ? "RestaurantList" : "BookingList";
+  router.push({ name: routeName });
 };
 </script>
 
 <style scoped lang="scss">
-@import "./AppHeader";
+@import "./AppHeader.scss";
 </style>

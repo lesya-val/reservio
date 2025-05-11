@@ -6,40 +6,33 @@
     >
       {{ label }}
     </label>
-    <div
-      :class="[
-        'input__container',
-        {
-          'input__container--outlined':
-            type !== 'checkbox' && view === 'outlined',
-          'input__container--readonly': readonly,
-          'input__container--error': error,
-        },
-      ]"
-    >
+
+    <div :class="inputClasses">
       <input
         v-if="type === 'checkbox'"
         type="checkbox"
         :checked="modelValue"
         :disabled="readonly"
-        @change="updateValue"
+        @change="onChange"
       />
       <input
         v-else
         :type="type"
+        :min="min"
         :value="modelValue"
         :placeholder="readonly ? 'Не указано' : placeholder"
-        :class="'input__field'"
+        class="input__field"
         :disabled="readonly"
-        @input="updateValue"
+        @input="onChange"
       />
     </div>
+
     <div v-if="error" class="input__error">{{ error }}</div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { watch } from "vue";
+import { computed, watch } from "vue";
 import type { Validation } from "@vuelidate/core";
 
 const props = defineProps({
@@ -58,6 +51,9 @@ const props = defineProps({
   type: {
     type: String,
     default: "input",
+  },
+  min: {
+    type: Number,
   },
   label: {
     type: String,
@@ -86,13 +82,22 @@ watch(
   }
 );
 
-const updateValue = (event: Event) => {
-  const target = event.target as HTMLInputElement;
-  if (props.type === "checkbox") {
-    emit("update:modelValue", target.checked);
-  } else {
-    emit("update:modelValue", target.value);
-  }
+const inputClasses = computed(() => [
+  "input__container",
+  {
+    "input__container--outlined":
+      props.type !== "checkbox" && props.view === "outlined",
+    "input__container--readonly": props.readonly,
+    "input__container--error": props.error,
+  },
+]);
+
+const onChange = (e: Event) => {
+  const target = e.target as HTMLInputElement;
+  emit(
+    "update:modelValue",
+    props.type === "checkbox" ? target.checked : target.value
+  );
 };
 </script>
 

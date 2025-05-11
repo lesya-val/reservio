@@ -8,38 +8,36 @@
     @include flex-center;
     gap: 25px;
     cursor: pointer;
+  }
 
-    &-logo {
-      width: 64px;
-      height: 64px;
-    }
+  &__logo {
+    width: 64px;
+    height: 64px;
+  }
 
-    &-text {
-      font-family: "Raleway";
-      font-weight: 700;
-    }
+  &__title {
+    font-family: "Raleway";
+    font-weight: 700;
   }
 
   &__center {
-    &-text {
-      font-family: "Raleway";
-      font-weight: 600;
-      color: $dark-gray;
-    }
+    font-family: "Raleway";
+    font-weight: 600;
+    color: $dark-gray;
   }
 
-  &__right {
-    &-nav {
-      display: flex;
-      gap: 30px;
-    }
+  &__nav {
+    display: flex;
+    gap: 30px;
+  }
 
-    &-list {
-      @include flex-space-between;
-      gap: 30px;
-    }
+  &__menu {
+    @include flex-space-between;
+    gap: 30px;
+  }
 
-    &-profile {
+  &__profile {
+    &-icon {
       position: relative;
       cursor: pointer;
     }

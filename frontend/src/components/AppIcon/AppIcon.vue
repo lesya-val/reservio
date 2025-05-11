@@ -1,13 +1,14 @@
 <template>
-  <div class="icon">
-    <svg :style="{ height, width }">
+  <div class="icon" v-if="value">
+    <svg :width="width" :height="height" role="img">
       <use :xlink:href="`${spritePath}#${value}`" />
     </svg>
   </div>
 </template>
 
-<script setup>
-import spritePath from "../../assets/sprite.svg";
+<script setup lang="ts">
+import spritePath from "@/assets/sprite.svg";
+
 defineProps({
   value: {
     type: String,

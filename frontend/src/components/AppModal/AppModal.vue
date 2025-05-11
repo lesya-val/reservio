@@ -1,23 +1,25 @@
 <template>
   <div class="modal">
     <div class="modal__box">
-      <div class="modal__title">
+      <header class="modal__title">
         <slot name="title" />
         <slot name="subtitle" />
-      </div>
-      <div class="modal__content">
+      </header>
+
+      <section class="modal__content">
         <div class="modal__inputs">
           <slot name="inputs" />
         </div>
-        <div class="modal__buttons">
+
+        <footer class="modal__buttons">
           <slot name="buttons" />
-        </div>
-      </div>
+        </footer>
+      </section>
     </div>
   </div>
 </template>
 
-<script setup></script>
+<script setup lang="ts"></script>
 
 <style scoped lang="scss">
 @import "./AppModal";

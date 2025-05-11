@@ -1,0 +1,11 @@
+[
+  {
+    "id": "email",
+    "name": "Email"
+  },
+  {
+    "id": "password",
+    "name": "Пароль",
+    "type": "password"
+  }
+]

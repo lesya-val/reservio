@@ -1,36 +1,25 @@
 [
   {
     "id": "index",
-    "name": "№",
-    "style": { "width": "4" }
+    "name": "№"
   },
   {
     "id": "name",
-    "name": "Название ресторана",
-    "style": { "width": "20%" }
+    "name": "Название ресторана"
   },
   {
     "id": "address",
-    "name": "Адрес",
-    "style": { "width": "30%" }
+    "name": "Адрес"
   },
   {
     "id": "phone",
-    "name": "Контактный телефон",
-    "style": { "width": "16%" }
+    "name": "Контактный телефон"
   },
   {
     "id": "email",
-    "name": "Электронный адрес",
-    "style": { "width": "20%" }
+    "name": "Электронный адрес"
   },
   {
-    "id": "isActive",
-    "name": "Статус",
-    "style": { "width": "5%" }
-  },
-  {
-    "id": "delete",
-    "style": { "width": "4%" }
+    "id": "delete"
   }
 ]

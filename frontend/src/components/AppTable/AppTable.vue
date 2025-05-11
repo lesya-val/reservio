@@ -16,7 +16,7 @@
       <tbody class="table__body">
         <tr
           v-for="(item, index) in data"
-          :key="item.index"
+          :key="item.id"
           class="table__row table__body-row"
         >
           <td
@@ -29,23 +29,18 @@
             ]"
             @click="handleCellAction(col, item)"
           >
-            <!-- Отображение счетчика строк -->
             <span v-if="col.id === 'index'">{{ index + 1 }}</span>
-
-            <!-- Отображение статуса isActive -->
             <span v-else-if="col.id === 'isActive'">
               {{ item.isActive ? "Активен" : "Неактивен" }}
             </span>
 
-            <!-- Удаление -->
-            <AppIcon value="trash" v-else-if="isDeleteColumn(col)" />
-
-            <!-- Остальные столбцы -->
+            <AppIcon v-else-if="isDeleteColumn(col)" value="trash" />
             <div v-else>{{ item[col.id] }}</div>
           </td>
         </tr>
       </tbody>
     </table>
+
     <AppModal v-if="isModalActive">
       <template #title>
         <div class="table__modal">Вы уверены, что хотите удалить объект?</div>
@@ -55,9 +50,10 @@
         <AppButton view="outlined" @click="isModalActive = false">
           Отмена
         </AppButton>
-        <AppButton @click="deleteItem()">Удалить</AppButton>
+        <AppButton @click="deleteItem">Удалить</AppButton>
       </template>
     </AppModal>
+
     <AppNotification
       v-if="isNotificationActive"
       @close="isNotificationActive = false"
@@ -71,12 +67,9 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
-import AppIcon from "../AppIcon/AppIcon.vue";
-import AppModal from "../AppModal/AppModal.vue";
-import AppButton from "../AppButton/AppButton.vue";
-import AppNotification from "../AppNotification/AppNotification.vue";
+import { AppIcon, AppModal, AppButton, AppNotification } from "../index";
 
-import { TableColumn } from "../../types/TableColumn";
+import type { TableColumn } from "@/types";
 
 const props = defineProps<{
   cols: TableColumn[];
@@ -84,13 +77,16 @@ const props = defineProps<{
   itemPageName: string;
 }>();
 
-const emit = defineEmits(["clickItem", "delete"]);
+const emit = defineEmits<{
+  (e: "clickItem", item: any): void;
+  (e: "delete", item: any): void;
+}>();
 
 const router = useRouter();
 
 const isModalActive = ref(false);
 const isNotificationActive = ref(false);
-const itemToDelete = ref(null);
+const itemToDelete = ref<any | null>(null);
 
 const isDeleteColumn = (col: TableColumn) => col.id === "delete";
 
@@ -99,7 +95,6 @@ const deleteItem = () => {
     emit("delete", itemToDelete.value);
     itemToDelete.value = null;
   }
-
   isModalActive.value = false;
   isNotificationActive.value = true;
 };
@@ -109,15 +104,8 @@ const handleCellAction = (col: TableColumn, item: any) => {
     isModalActive.value = true;
     itemToDelete.value = item;
   } else {
-    handleCellClick(item);
+    router.push({ name: props.itemPageName, params: { id: item.id } });
   }
-};
-
-const handleCellClick = (item) => {
-  router.push({
-    name: props.itemPageName,
-    params: { id: item.id },
-  });
 };
 </script>
 

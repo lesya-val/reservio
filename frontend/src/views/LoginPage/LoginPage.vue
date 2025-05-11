@@ -11,27 +11,14 @@
     </div>
     <div class="login__form-wrapper">
       <div class="login__form">
-        <div class="login__form-title">Вход</div>
-        <form @submit.prevent="handleLogin" class="login__form-inputs">
-          <AppInput
-            v-model="loginData.email"
-            placeholder="Введите email"
-            label="Email"
-            :validation="v$.email"
-            :error="getErrorMessage(v$.email)"
-          />
-          <AppInput
-            v-model="loginData.password"
-            placeholder="Введите пароль"
-            label="Пароль"
-            type="password"
-            :validation="v$.password"
-            :error="getErrorMessage(v$.password)"
-          />
-          <AppButton class="login__form-button" type="submit">
-            Войти
-          </AppButton>
-        </form>
+        <AppForm
+          title="Вход"
+          submit-text="Войти"
+          :model="loginData"
+          :cols="loginCols"
+          :validation="v$"
+          @submit="handleLogin"
+        />
       </div>
     </div>
     <AppNotification
@@ -45,18 +32,18 @@
 </template>
 
 <script setup lang="ts">
-import AppButton from "../../components/AppButton/AppButton.vue";
-import AppIcon from "../../components/AppIcon/AppIcon.vue";
-import AppInput from "../../components/AppInput/AppInput.vue";
-import AppNotification from "../../components/AppNotification/AppNotification.vue";
-
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
+
+import { AppButton, AppIcon, AppForm, AppNotification } from "@/components";
+
 import { useVuelidate } from "@vuelidate/core";
-import { useAuthStore } from "../../stores/auth";
+import { useAuthStore } from "@/stores/auth";
+import { getErrorMessage } from "@/helpers/errorHelpers";
+import { useNotification } from "@/hooks/useNotification";
+
+import loginCols from "./loginCols.json";
 import { loginValidationRules } from "./validationRules";
-import { getErrorMessage } from "../../helpers/errorHelpers";
-import { useNotification } from "../../hooks/useNotification";
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -70,12 +57,6 @@ const loginData = reactive({
 const v$ = useVuelidate(loginValidationRules, loginData);
 
 const handleLogin = async () => {
-  const isValid = await v$.value.$validate();
-  if (!isValid) {
-    showNotification("Заполните поля в соответствии с правилами!");
-    return;
-  }
-
   const success = await authStore.login(loginData, router);
   if (success) {
     showNotification("Вход выполнен успешно!", "success");

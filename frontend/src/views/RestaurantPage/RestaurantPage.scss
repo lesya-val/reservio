@@ -10,34 +10,19 @@
     gap: 25px;
   }
 
-  &__fields {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    align-items: baseline;
-    gap: 30px;
-  }
-
-  &__field {
-    @include flex-align-center;
-  }
-
-  &__title {
-    margin-bottom: 10px;
-    align-self: center;
-    white-space: nowrap;
-    font-family: "Raleway";
-    font-weight: 500;
-    font-size: 20px;
-    color: $black;
-  }
-
-  &__checkbox {
-    @include flex-align-center;
-    flex-direction: row;
-  }
-
   &__button {
     width: 80%;
     align-self: center;
+  }
+}
+
+:deep() {
+  .form {
+    &__fields {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      align-items: baseline;
+      gap: 30px;
+    }
   }
 }

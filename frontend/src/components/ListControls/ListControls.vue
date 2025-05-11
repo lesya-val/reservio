@@ -6,7 +6,7 @@
           v-if="hasBack"
           class="list-controls__go-back"
           view="text"
-          @click="router.go(-1)"
+          @click="goBack"
         >
           <template #icon-before>
             <AppIcon value="arrow-left" />
@@ -16,70 +16,46 @@
 
         <div class="list-controls__title">{{ title }}</div>
       </div>
+
       <div v-if="hasActionButton" class="list-controls__right">
-        <AppButton v-if="!isEditMode && !isNewDoc" @click="emit('edit')">
+        <AppButton v-if="!isEditMode && !isNewDoc" @click="$emit('edit')">
           Редактировать
         </AppButton>
 
         <template v-else>
-          <AppButton view="outlined" @click="router.go(-1)">Отмена</AppButton>
-          <AppButton @click="emit('save')">Сохранить</AppButton>
+          <AppButton view="outlined" @click="goBack">
+            {{ cancelButtonText }}
+          </AppButton>
+          <AppButton @click="$emit('save')">{{ actionButtonText }}</AppButton>
         </template>
       </div>
     </div>
+
     <div v-if="hasSearch" class="list-controls__row">
-      <Search class="list-controls__search" @search="handleSearch" />
+      <Search class="list-controls__search" @search="$emit('search', $event)" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import AppButton from "../AppButton/AppButton.vue";
-import AppIcon from "../AppIcon/AppIcon.vue";
-import Search from "../Search/Search.vue";
+import { AppButton, AppIcon, Search } from "../index";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 
 defineProps({
-  title: {
-    type: String,
-    default: "",
-  },
-  cancelButtonText: {
-    type: String,
-    default: "Отмена",
-  },
-  actionButtonText: {
-    type: String,
-    default: "Сохранить",
-  },
-  hasSearch: {
-    type: Boolean,
-    default: true,
-  },
-  hasBack: {
-    type: Boolean,
-    default: true,
-  },
-  hasActionButton: {
-    type: Boolean,
-    default: true,
-  },
-  isNewDoc: {
-    type: Boolean,
-    default: false,
-  },
-  isEditMode: {
-    type: Boolean,
-    default: false,
-  },
+  title: String,
+  cancelButtonText: { type: String, default: "Отмена" },
+  actionButtonText: { type: String, default: "Сохранить" },
+  hasSearch: { type: Boolean, default: true },
+  hasBack: { type: Boolean, default: true },
+  hasActionButton: { type: Boolean, default: true },
+  isNewDoc: { type: Boolean, default: false },
+  isEditMode: { type: Boolean, default: false },
 });
 
-const emit = defineEmits(["back", "cancel", "save", "edit", "search"]);
-
-const handleSearch = (query: string) => {
-  emit("search", query);
+const goBack = () => {
+  router.go(-1);
 };
 </script>
 

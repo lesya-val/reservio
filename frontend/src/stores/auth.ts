@@ -44,7 +44,7 @@ export const useAuthStore = defineStore("auth", {
         if (user.role === "SYSTEM_ADMIN") {
           await router.push({ name: "RestaurantList" });
         } else {
-          await router.push({ name: "BookingListPage" });
+          await router.push({ name: "BookingList" });
         }
 
         return true;

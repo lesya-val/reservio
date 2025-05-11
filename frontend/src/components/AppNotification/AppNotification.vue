@@ -2,62 +2,48 @@
   <div
     ref="notification"
     class="notification"
-    :style="`background: ${toastColor.background}`"
+    :style="{ background: toastColor.background }"
   >
-    <div class="notification__text" :style="`color: ${toastColor.color}`">
+    <p class="notification__text" :style="{ color: toastColor.color }">
       <slot />
-    </div>
+    </p>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
 
-const props = defineProps({
-  type: {
-    type: String,
-    default: "success",
-  },
-});
+const props = defineProps<{
+  type?: "success" | "error";
+}>();
 
-const emit = defineEmits<{ (e: "close"): void }>();
+const emit = defineEmits(["close"]);
 
 const notification = ref<HTMLElement | null>(null);
 
 const toastColor = computed(() => {
-  if (props.type === "error") {
-    return { background: "#FCE9E9", color: "#D82222" };
-  } else {
-    return { background: "#E5FFF0", color: "#17AD53" };
-  }
+  const colors = {
+    success: { background: "#E5FFF0", color: "#17AD53" },
+    error: { background: "#FCE9E9", color: "#D82222" },
+  };
+  return colors[props.type || "success"];
 });
 
-const init = () => {
-  setTimeout(() => {
-    if (notification.value) {
-      notification.value.classList.add("notification--visible");
-    }
-  }, 0);
+onMounted(() => {
+  setTimeout(
+    () => notification.value?.classList.add("notification--visible"),
+    0
+  );
 
-  let duration = 0;
-  if (props.type === "error") {
-    duration = 5;
-  } else {
-    duration = 2;
-  }
+  const duration = props.type === "error" ? 5000 : 2000;
 
   setTimeout(() => {
-    if (notification.value) {
-      notification.value.classList.add("notification--fade-out");
-    }
-
+    notification.value?.classList.add("notification--fade-out");
     setTimeout(() => emit("close"), 500);
-  }, duration * 1000);
-};
-
-onMounted(init);
+  }, duration);
+});
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 @import "./AppNotification.scss";
 </style>
