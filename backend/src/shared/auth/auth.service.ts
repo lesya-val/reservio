@@ -44,10 +44,10 @@ export class AuthService {
 
     const payload = {
       sub: user.id,
-      email: user.email,
       role: user.role,
       restaurantId: user.restaurantId,
       restaurantName: restaurant?.name || null,
+      isTempPassword: user.isTempPassword,
     };
 
     return {
