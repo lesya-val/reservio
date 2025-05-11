@@ -4,6 +4,7 @@ import {
   minLength,
   maxLength,
   helpers,
+  minValue,
 } from "@vuelidate/validators";
 import { isMobilePhone } from "validator";
 
@@ -22,6 +23,10 @@ export const minLengthRule = (min: number, message?: string) =>
 // Утилита для проверки максимальной длины
 export const maxLengthRule = (max: number, message?: string) =>
   helpers.withMessage(message || `Максимум ${max} символов`, maxLength(max));
+
+// Утилита для проверки минимального значения
+export const minValueRule = (min: number, message?: string) =>
+  helpers.withMessage(message || `Минимум ${min}`, minValue(min));
 
 // Утилита для проверки номера телефона
 export const validPhone = (message: string = "Некорректный номер телефона") =>
