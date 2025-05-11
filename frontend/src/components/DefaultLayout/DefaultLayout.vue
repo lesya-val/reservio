@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import AppHeader from "../index";
+import AppHeader from "../AppHeader";
 </script>
 
 <style scoped lang="scss">
