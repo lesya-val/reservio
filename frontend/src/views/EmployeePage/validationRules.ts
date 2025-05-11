@@ -2,7 +2,7 @@ import {
   requiredField,
   validEmail,
   validPhone,
-} from "../../helpers/validationHelpers";
+} from "@/helpers/validationHelpers";
 
 export const adminValidationRules = {
   name: {

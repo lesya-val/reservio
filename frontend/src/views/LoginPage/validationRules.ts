@@ -3,7 +3,7 @@ import {
   requiredField,
   validEmail,
   validPassword,
-} from "../../helpers/validationHelpers";
+} from "@/helpers/validationHelpers";
 
 export const loginValidationRules = {
   email: {

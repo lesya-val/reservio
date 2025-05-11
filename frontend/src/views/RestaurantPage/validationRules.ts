@@ -3,7 +3,7 @@ import {
   validEmail,
   validPhone,
   minLengthRule,
-} from "../../helpers/validationHelpers";
+} from "@/helpers/validationHelpers";
 
 export const restaurantValidationRules = {
   name: {
