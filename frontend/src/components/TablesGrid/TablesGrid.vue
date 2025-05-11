@@ -59,6 +59,7 @@ import {
 import { getErrorMessage } from "@/helpers/errorHelpers";
 import { requiredField } from "@/helpers/validationHelpers";
 import useVuelidate from "@vuelidate/core";
+import "gridstack/dist/gridstack.min.css";
 
 import { useNotification } from "@/hooks/useNotification";
 
