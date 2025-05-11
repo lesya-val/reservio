@@ -1,5 +1,6 @@
 import {
   IsString,
+  IsInt,
   IsOptional,
   IsBoolean,
   IsNotEmpty,
@@ -45,4 +46,8 @@ export class UpdateRestaurantDto {
   @IsBoolean()
   @IsOptional()
   isActive?: boolean;
+
+  @IsInt()
+  @IsOptional()
+  adminId?: number;
 }
