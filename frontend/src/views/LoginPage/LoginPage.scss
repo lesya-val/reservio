@@ -1,0 +1,32 @@
+.login {
+  @include flex-column;
+  height: 100vh;
+  gap: 30px;
+  background-color: rgba($color: $light-gray, $alpha: 0.5);
+
+  &__header {
+    @include flex-align-center;
+    gap: 30px;
+    padding: 25px;
+  }
+
+  &__form {
+    @include flex-center;
+    flex-direction: column;
+    width: 70%;
+    height: 100%;
+    gap: 32px;
+
+    &-wrapper {
+      @include flex-center;
+      flex-direction: column;
+      align-self: center;
+      height: 60%;
+      width: 60%;
+      gap: 32px;
+      border-radius: 16px;
+      background-color: $white;
+      box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+    }
+  }
+}

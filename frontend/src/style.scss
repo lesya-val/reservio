@@ -1,0 +1,38 @@
+// Сброс стилей
+@import "../src/style/reset";
+
+// Подключение шрифтов
+@import "../src/style/fonts";
+
+// Определение переменных цветов
+@import "../src/style/colors";
+
+// Миксины
+@import "../src/style/mixins";
+
+.wrapper {
+  overflow-y: auto;
+  max-height: calc(100vh - 115px);
+}
+
+.add-button {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  padding: 15px 25px;
+}
+
+// Скролл
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: $light-gray;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 4px;
+}

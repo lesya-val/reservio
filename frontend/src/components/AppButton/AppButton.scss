@@ -1,0 +1,26 @@
+.button {
+  @include flex-center;
+  padding: 10px 20px;
+  border-radius: 4px;
+  gap: 10px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+
+  &--outlined {
+    border: 1px solid $blue;
+
+    &:hover {
+      background-color: $blue-translucent;
+      transition: all 0.3s ease;
+    }
+  }
+
+  &--filled {
+    background-color: $blue;
+    color: $white;
+  }
+
+  &--text {
+    padding: 0;
+  }
+}

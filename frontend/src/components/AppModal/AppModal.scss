@@ -1,0 +1,45 @@
+.modal {
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: $black-background;
+  @include flex-center;
+
+  &__box {
+    @include flex-column;
+    gap: 15px;
+    background: $white;
+    border-radius: 4px;
+    padding: 20px;
+    min-width: 400px;
+    max-width: 95%;
+    max-height: 94%;
+  }
+
+  &__title {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    line-height: 1.5;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  &__inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  &__buttons {
+    @include flex-center;
+    gap: 25px;
+  }
+}

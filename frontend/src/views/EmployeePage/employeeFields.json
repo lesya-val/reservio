@@ -1,0 +1,22 @@
+[
+  {
+    "id": "index",
+    "name": "№"
+  },
+  {
+    "id": "name",
+    "name": "Имя"
+  },
+  {
+    "id": "surname",
+    "name": "Фамилия"
+  },
+  {
+    "id": "phone",
+    "name": "Номер телефона"
+  },
+  {
+    "id": "email",
+    "name": "Email"
+  }
+]

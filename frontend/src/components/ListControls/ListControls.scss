@@ -1,0 +1,29 @@
+.list-controls {
+  @include flex-column;
+  padding: 30px 25px;
+  gap: 20px;
+
+  &__row {
+    @include flex-space-between;
+    gap: 20px;
+  }
+
+  &__go-back {
+    color: $blue;
+  }
+
+  &__right {
+    @include flex-center;
+    gap: 20px;
+  }
+
+  &__title {
+    color: $dark-gray;
+    font-size: 24px;
+    font-family: Raleway;
+  }
+
+  &__search {
+    width: 16rem;
+  }
+}
