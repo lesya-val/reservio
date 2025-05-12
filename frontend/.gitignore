@@ -7,14 +7,23 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Node.js dependencies
 node_modules
+
+# Build output
 dist
 dist-ssr
-*.local
+build
+
+# Local environment variables
+.env.local
 
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
 .idea
 .DS_Store
 *.suo
@@ -22,3 +31,22 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Temporary files
+*.tmp
+*.temp
+.temp
+.tmp
+
+# Lock files
+# Keep package-lock.json or yarn.lock, but ignore the others
+# npm packages update automatically
+# yarn lockfile changes are managed by Yarn
+# pnpm lockfile is already ignored by default
+/yarn.lock
+/package-lock.json
+/pnpm-lock.yaml
+
+# Optional: Add more specific ignores for your project
+# For example, if you're using a custom build directory
+/build
