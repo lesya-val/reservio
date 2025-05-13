@@ -44,14 +44,6 @@
       </template>
     </AppModal>
 
-    <AppNotification
-      v-if="notification.isVisible"
-      :type="notification.type"
-      @close="hideNotification"
-    >
-      {{ notification.message }}
-    </AppNotification>
-
     <AppButton class="add-button" @click="addHall">
       <template #icon-after>
         <AppIcon value="plus" width="20px" height="20px" />
@@ -71,18 +63,15 @@ import {
   AppButton,
   AppIcon,
   AppModal,
-  AppNotification,
 } from "@/components";
 
 import { getHalls, deleteHall } from "@/services/hallsApi";
-import { useNotification } from "@/hooks/useNotification";
+import { showNotification } from "@/hooks/useNotification";
 
 const router = useRouter();
 const halls = ref([]);
 const isModalActive = ref(false);
 const hallToDelete = ref(null);
-
-const { notification, showNotification, hideNotification } = useNotification();
 
 const openHall = (hallId: number) => {
   router.push({ name: "Hall", params: { id: hallId } });

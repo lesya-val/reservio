@@ -33,14 +33,6 @@
         <AppButton @click="confirmAddTable">Добавить</AppButton>
       </template>
     </AppModal>
-
-    <AppNotification
-      v-if="notification.isVisible"
-      :type="notification.type"
-      @close="hideNotification"
-    >
-      {{ notification.message }}
-    </AppNotification>
   </div>
 </template>
 
@@ -48,20 +40,14 @@
 import { ref, onMounted, reactive, watch } from "vue";
 import { GridStack } from "gridstack";
 
-import {
-  AppButton,
-  AppIcon,
-  AppInput,
-  AppModal,
-  AppNotification,
-} from "../index";
+import { AppButton, AppIcon, AppInput, AppModal } from "../index";
 
 import { getErrorMessage } from "@/helpers/errorHelpers";
 import { requiredField } from "@/helpers/validationHelpers";
 import useVuelidate from "@vuelidate/core";
 import "gridstack/dist/gridstack.min.css";
 
-import { useNotification } from "@/hooks/useNotification";
+import { showNotification } from "@/hooks/useNotification";
 
 import { Table } from "@/types";
 
@@ -76,7 +62,6 @@ const tableData = reactive({ capacity: 1 });
 const tablesState = reactive<Table[]>([]);
 
 const v$ = useVuelidate({ capacity: { required: requiredField() } }, tableData);
-const { notification, showNotification, hideNotification } = useNotification();
 
 // Открытие/закрытие модального окна
 const openAddTableModal = () => {

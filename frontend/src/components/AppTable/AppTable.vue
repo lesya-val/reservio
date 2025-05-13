@@ -53,13 +53,6 @@
         <AppButton @click="deleteItem">Удалить</AppButton>
       </template>
     </AppModal>
-
-    <AppNotification
-      v-if="isNotificationActive"
-      @close="isNotificationActive = false"
-    >
-      Объект успешно удален!
-    </AppNotification>
   </div>
 </template>
 
@@ -67,7 +60,9 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
-import { AppIcon, AppModal, AppButton, AppNotification } from "../index";
+import { AppIcon, AppModal, AppButton } from "../index";
+
+import { showNotification } from "@/hooks/useNotification";
 
 import type { TableColumn } from "@/types";
 
@@ -85,7 +80,6 @@ const emit = defineEmits<{
 const router = useRouter();
 
 const isModalActive = ref(false);
-const isNotificationActive = ref(false);
 const itemToDelete = ref<any | null>(null);
 
 const isDeleteColumn = (col: TableColumn) => col.id === "delete";
@@ -96,7 +90,7 @@ const deleteItem = () => {
     itemToDelete.value = null;
   }
   isModalActive.value = false;
-  isNotificationActive.value = true;
+  showNotification("Объект успешно удален!", "success");
 };
 
 const handleCellAction = (col: TableColumn, item: any) => {

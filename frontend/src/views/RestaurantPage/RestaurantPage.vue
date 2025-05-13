@@ -33,14 +33,6 @@
         </AppButton>
       </div>
     </div>
-
-    <AppNotification
-      v-if="notification.isVisible"
-      :type="notification.type"
-      @close="hideNotification"
-    >
-      {{ notification.message }}
-    </AppNotification>
   </v-default>
 </template>
 
@@ -48,13 +40,7 @@
 import { onMounted, reactive, ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import {
-  AppButton,
-  AppForm,
-  VDefault,
-  ListControls,
-  AppNotification,
-} from "@/components";
+import { AppButton, AppForm, VDefault, ListControls } from "@/components";
 
 import restaurantCols from "../RestaurantListPage/restaurantCols.json";
 import {
@@ -63,8 +49,7 @@ import {
   updateRestaurant,
 } from "@/services/restaurantApi";
 
-import { useNotification } from "@/hooks/useNotification";
-import { getErrorMessage } from "@/helpers/errorHelpers";
+import { showNotification } from "@/hooks/useNotification";
 import { cleanData } from "@/helpers/dataHelpers";
 import { isCreateMode } from "@/helpers/routeHelpers";
 import { useVuelidate } from "@vuelidate/core";
@@ -73,9 +58,6 @@ import type { Restaurant, TableColumn } from "@/types";
 
 const router = useRouter();
 const route = useRoute();
-
-// Подключаем уведомления
-const { notification, showNotification, hideNotification } = useNotification();
 
 // true если создаём новый ресторан
 const createMode = isCreateMode();

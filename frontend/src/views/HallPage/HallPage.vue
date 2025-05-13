@@ -30,14 +30,6 @@
         </div>
       </div>
     </div>
-
-    <AppNotification
-      v-if="notification.isVisible"
-      :type="notification.type"
-      @close="hideNotification"
-    >
-      {{ notification.message }}
-    </AppNotification>
   </v-default>
 </template>
 
@@ -47,7 +39,6 @@ import { useRoute, useRouter } from "vue-router";
 
 import {
   AppForm,
-  AppNotification,
   ListControls,
   TablesGrid,
   VDefault,
@@ -56,7 +47,7 @@ import {
 import useVuelidate from "@vuelidate/core";
 import { requiredField } from "@/helpers/validationHelpers";
 import { isCreateMode } from "@/helpers/routeHelpers";
-import { useNotification } from "@/hooks/useNotification";
+import { showNotification } from "@/hooks/useNotification";
 import { createHall, getHallById, updateHall } from "@/services/hallsApi";
 
 import type { Table } from "@/types";
@@ -71,8 +62,6 @@ const hallData = ref({ name: "", tables: [] as Table[] });
 const hallFields = [{ id: "name", name: "Название зала" }];
 
 const v$ = useVuelidate({ name: { required: requiredField() } }, hallData);
-
-const { notification, showNotification, hideNotification } = useNotification();
 
 const formVisible = computed(() => createMode.value || isEditMode.value);
 

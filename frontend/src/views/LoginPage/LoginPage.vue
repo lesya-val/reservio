@@ -21,13 +21,6 @@
         />
       </div>
     </div>
-    <AppNotification
-      v-if="notification.isVisible"
-      :type="notification.type"
-      @close="hideNotification"
-    >
-      {{ notification.message }}
-    </AppNotification>
   </div>
 </template>
 
@@ -35,19 +28,17 @@
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
 
-import { AppButton, AppIcon, AppForm, AppNotification } from "@/components";
+import { AppIcon, AppForm } from "@/components";
 
 import { useVuelidate } from "@vuelidate/core";
 import { useAuthStore } from "@/stores/auth";
-import { getErrorMessage } from "@/helpers/errorHelpers";
-import { useNotification } from "@/hooks/useNotification";
+import { showNotification } from "@/hooks/useNotification";
 
 import loginCols from "./loginCols.json";
 import { loginValidationRules } from "./validationRules";
 
 const router = useRouter();
 const authStore = useAuthStore();
-const { notification, showNotification, hideNotification } = useNotification();
 
 const loginData = reactive({
   email: "",

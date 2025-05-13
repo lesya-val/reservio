@@ -20,13 +20,6 @@
       </template>
       <p>Добавить ресторан</p>
     </AppButton>
-    <AppNotification
-      v-if="notification.isVisible"
-      :type="notification.type"
-      @close="hideNotification"
-    >
-      {{ notification.message }}
-    </AppNotification>
   </v-default>
 </template>
 
@@ -45,12 +38,9 @@ import {
 import restaurantCols from "./restaurantCols";
 import { getRestaurants, deleteRestaurant } from "@/services/restaurantApi";
 import type { Restaurant } from "@/types";
-import { useNotification } from "@/hooks/useNotification";
+import { showNotification } from "@/hooks/useNotification";
 
 const router = useRouter();
-
-// Подключаем уведомления
-const { notification, showNotification, hideNotification } = useNotification();
 
 // Список ресторанов
 const restaurants = ref<Restaurant[]>([]);

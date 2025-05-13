@@ -23,26 +23,16 @@
         </AppButton>
       </slot>
     </div>
-
-    <AppNotification
-      v-if="notification.isVisible"
-      :type="notification.type"
-      @close="hideNotification"
-    >
-      {{ notification.message }}
-    </AppNotification>
   </form>
 </template>
 
 <script setup lang="ts">
-import { AppButton, AppInput, AppNotification } from "@/components";
+import { AppButton, AppInput } from "@/components";
 
 import { getErrorMessage } from "@/helpers/errorHelpers";
-import { useNotification } from "@/hooks/useNotification";
+import { showNotification } from "@/hooks/useNotification";
 
 import type { PropType } from "vue";
-
-const { notification, showNotification, hideNotification } = useNotification();
 
 const props = defineProps({
   title: String,

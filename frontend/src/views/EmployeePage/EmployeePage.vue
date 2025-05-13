@@ -19,23 +19,16 @@
         />
       </div>
     </div>
-    <AppNotification
-      v-if="notification.isVisible"
-      :type="notification.type"
-      @close="hideNotification"
-    >
-      {{ notification.message }}
-    </AppNotification>
   </v-default>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from "vue";
 
-import { AppNotification, AppForm, VDefault, ListControls } from "@/components";
+import { AppForm, VDefault, ListControls } from "@/components";
 import { useRouter, useRoute } from "vue-router";
 import useVuelidate from "@vuelidate/core";
-import { useNotification } from "@/hooks/useNotification";
+import { showNotification } from "@/hooks/useNotification";
 import {
   createEmployee,
   getEmployeeById,
@@ -51,7 +44,6 @@ import { Role, User } from "@/types";
 const router = useRouter();
 const route = useRoute();
 const createMode = isCreateMode();
-const { notification, showNotification } = useNotification();
 const isEditMode = ref(false);
 
 const adminData = reactive({
