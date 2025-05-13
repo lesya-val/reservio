@@ -1,17 +1,20 @@
 import { Injectable } from "@nestjs/common";
-import { PrismaService } from "prisma/prisma.servise";
+import { PrismaService } from "@/prisma/prisma.service";
 import { CreateEmployeeDto, UpdateEmployeeDto } from "./users.dto";
 import {
   generateTemporaryPassword,
   hashPassword,
 } from "../../helpers/authUtils";
+import { MailService } from "@/shared/mail/mail.service";
 
 import * as bcrypt from "bcrypt";
-import { sendTemporaryPasswordEmail } from "src/shared/mail/mail.service";
 
 @Injectable()
 export class EmployeesService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private mailService: MailService
+  ) {}
 
   // Получение всех сотрудников ресторана
   async findAll(restaurantId: number) {
@@ -30,8 +33,10 @@ export class EmployeesService {
     // Генерация временного пароля
     const temporaryPassword = generateTemporaryPassword();
 
+    
     // Хэширование пароля
     const hashedPassword = await hashPassword(temporaryPassword);
+    console.log(temporaryPassword, hashedPassword);
 
     // Создание сотрудника с хэшированным паролем
     const employeeData = {
@@ -44,8 +49,8 @@ export class EmployeesService {
       data: employeeData,
     });
 
-    // Отправка временного пароля на email сотрудника
-    await sendTemporaryPasswordEmail(
+    // Используем MailService из DI
+    await this.mailService.sendTemporaryPasswordEmail(
       createEmployeeDto.email,
       temporaryPassword,
       employeeData
