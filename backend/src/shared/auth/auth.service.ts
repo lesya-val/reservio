@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { PrismaService } from "@/../prisma/prisma.servise";
+import { PrismaService } from "@/prisma/prisma.service";
 import * as bcrypt from "bcrypt";
 
 @Injectable()
@@ -23,6 +23,8 @@ export class AuthService {
       throw new UnauthorizedException("Пароль не установлен");
     }
 
+    console.log(password, user.password);
+
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
@@ -33,6 +35,7 @@ export class AuthService {
   }
 
   async login(email: string, password: string) {
+    console.log(password);
     const user = await this.validateUser(email, password);
 
     const restaurant = user.restaurantId
