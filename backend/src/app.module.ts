@@ -10,6 +10,7 @@ import { HallsModule } from "./modules/halls/halls.module";
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: ".env",
     }),
     RestaurantsModule,
     EmployeesModule,
