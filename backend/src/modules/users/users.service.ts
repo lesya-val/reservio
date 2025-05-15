@@ -36,7 +36,6 @@ export class EmployeesService {
     
     // Хэширование пароля
     const hashedPassword = await hashPassword(temporaryPassword);
-    console.log(temporaryPassword, hashedPassword);
 
     // Создание сотрудника с хэшированным паролем
     const employeeData = {
