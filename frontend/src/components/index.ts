@@ -10,3 +10,4 @@ export { default as ListControls } from "./ListControls";
 export { default as Search } from "./Search";
 export { default as TablesGrid } from "./TablesGrid";
 export { default as AppForm } from "./AppForm";
+export { default as AppSelect } from "./AppSelect";

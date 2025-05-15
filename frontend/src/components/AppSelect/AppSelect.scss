@@ -1,0 +1,61 @@
+.input {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  &__label {
+    white-space: nowrap;
+
+    &--readonly {
+      pointer-events: none;
+      color: $light-gray;
+    }
+  }
+
+  &__container {
+    position: relative;
+    width: 100%;
+  }
+
+  &__select {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: white;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    outline: none;
+    cursor: pointer;
+    height: 40px;
+
+    &--readonly {
+      background-color: $white;
+      color: #212121;
+      border: none;
+      pointer-events: none;
+      padding: 0;
+    }
+  }
+
+  &__arrow {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #999;
+    pointer-events: none;
+    transition: all 0.2s ease-in-out;
+
+    &--readonly {
+      display: none;
+    }
+  }
+}
