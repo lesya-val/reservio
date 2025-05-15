@@ -4,8 +4,10 @@ import App from "../App.vue";
 import RestaurantListPage from "../views/RestaurantListPage";
 import BookingListPage from "../views/BookingListPage";
 import RestaurantPage from "../views/RestaurantPage";
+import HallsListPage from "../views/HallsListPage/HallsListPage.vue";
 import BookingPage from "../views/BookingPage";
 import EmployeePage from "../views/EmployeePage";
+import HallPage from "../views/HallPage/HallPage.vue";
 import LoginPage from "../views/LoginPage";
 
 const routes = [
@@ -35,14 +37,24 @@ const routes = [
     component: EmployeePage,
   },
   {
-    path: "/booking-list",
-    name: "BookingListPage",
+    path: "/bookings",
+    name: "BookingList",
     component: BookingListPage,
   },
   {
     path: "/bookings/:id",
     name: "Booking",
     component: BookingPage,
+  },
+  {
+    path: "/halls",
+    name: "HallList",
+    component: HallsListPage,
+  },
+  {
+    path: "/halls/:id",
+    name: "Hall",
+    component: HallPage,
   },
 ];
 
