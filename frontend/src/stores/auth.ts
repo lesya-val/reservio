@@ -49,7 +49,7 @@ export const useAuthStore = defineStore("auth", {
 
         return true;
       } catch (error) {
-        console.error("Ошибка авторизации:");
+        console.error("Ошибка авторизации: ", error);
         return false;
       }
     },
