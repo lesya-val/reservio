@@ -1,70 +1,75 @@
-import { Type } from "class-transformer";
+import { BookingStatus } from "@prisma/client";
 import {
   IsString,
   IsNotEmpty,
   IsOptional,
   IsInt,
-  IsDate,
+  IsDateString,
+  IsEnum,
 } from "class-validator";
 
 export class CreateBookingDto {
+  @IsEnum(BookingStatus)
+  @IsOptional()
+  status?: BookingStatus;
+
   @IsString()
   @IsNotEmpty()
   name: string;
 
-  @IsString()Booking
+  @IsString()
   @IsNotEmpty()
   phone: string;
 
-  @IsDate()
+  @IsDateString()
   @IsNotEmpty()
-  @Type(() => Date)
-  date: Date;
+  dateTime: string;
 
   @IsInt()
   @IsNotEmpty()
   guestsCount: number;
 
-  @IsOptional()
   @IsInt()
-  tableNumber?: number;
+  hallId: number;
 
-  @IsOptional()
+  @IsInt()
+  tableId: number;
+
   @IsString()
+  @IsOptional()
   notes?: string;
-
-  @IsInt()
-  @IsNotEmpty()
-  restaurantId: number;
 }
 
 export class UpdateBookingDto {
-  @IsOptional()
   @IsString()
+  @IsOptional()
+  status?: string;
+
+  @IsString()
+  @IsOptional()
   name?: string;
 
-  @IsOptional()
   @IsString()
+  @IsOptional()
   phone?: string;
 
+  @IsString()
   @IsOptional()
-  @IsDate()
-  @Type(() => Date)
-  date?: Date;
+  dateTime?: string;
 
-  @IsOptional()
   @IsInt()
+  @IsOptional()
   guestsCount?: number;
 
-  @IsOptional()
   @IsInt()
-  tableNumber?: number;
-
   @IsOptional()
+  hallId?: number;
+
+  @IsInt()
+  @IsOptional()
+  tableId?: number;
+
   @IsString()
-  notes?: string;
-
   @IsOptional()
-  @IsInt()
-  restaurantId?: number;
+  notes?: string;
 }

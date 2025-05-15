@@ -9,15 +9,22 @@ import {
 } from "@nestjs/common";
 import { BookingsService } from "./bookings.service";
 import { CreateBookingDto, UpdateBookingDto } from "./bookings.dto";
+import { User } from "@/shared/auth/decorators/user.decorator";
+import { UseGuards } from "@nestjs/common";
+import { AuthGuard } from "@nestjs/passport";
 
 @Controller("bookings")
+@UseGuards(AuthGuard("jwt"))
 export class BookingsController {
   constructor(private readonly bookingsService: BookingsService) {}
 
   // Создание бронирования
   @Post()
-  async create(@Body() createBookingDto: CreateBookingDto) {
-    return this.bookingsService.create(createBookingDto);
+  async create(
+    @User("restaurantId") restaurantId: number,
+    @Body() dto: CreateBookingDto
+  ) {
+    return this.bookingsService.create(restaurantId, dto);
   }
 
   // Получение всех бронирований
