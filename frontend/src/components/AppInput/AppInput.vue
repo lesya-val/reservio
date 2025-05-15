@@ -1,10 +1,10 @@
 <template>
   <div class="input">
     <label
-      v-if="label"
+      v-if="readonly"
       :class="['input__label', { 'input__label--readonly': readonly }]"
     >
-      {{ label }}
+      {{ placeholder }}
     </label>
 
     <div :class="inputClasses">
