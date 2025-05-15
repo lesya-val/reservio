@@ -71,4 +71,16 @@
   .grid-stack-item:hover .delete-icon {
     opacity: 1;
   }
+
+  .grid-stack-item--selectable {
+    cursor: pointer;
+
+    &.grid-stack-item--selected {
+      background-color: $dark-yellow;
+      .table-number,
+      .table-capacity {
+        color: white;
+      }
+    }
+  }
 }

@@ -51,8 +51,17 @@ import { showNotification } from "@/hooks/useNotification";
 
 import { Table } from "@/types";
 
-const props = defineProps<{ tables: Table[]; showButton: boolean }>();
-const emit = defineEmits<{ (e: "update:tables", value: Table[]): void }>();
+const props = defineProps<{
+  tables: Table[];
+  showButton?: boolean;
+  selectedTableId: number | null;
+  readonly: boolean;
+  clickable: boolean;
+}>();
+const emit = defineEmits<{
+  (e: "update:tables", value: Table[]): void;
+  (e: "update:selected-table", value: number | null): void;
+}>();
 
 let gs: any;
 const grid = ref<HTMLElement | null>(null);
@@ -60,6 +69,7 @@ const grid = ref<HTMLElement | null>(null);
 const isModalActive = ref(false);
 const tableData = reactive({ capacity: 1 });
 const tablesState = reactive<Table[]>([]);
+const selectedTable = ref<number | null>(null);
 
 const v$ = useVuelidate({ capacity: { required: requiredField() } }, tableData);
 
@@ -100,7 +110,7 @@ const confirmAddTable = async () => {
     y: 0,
     width,
     height,
-    capacity: tableData.capacity,
+    capacity: +tableData.capacity,
   };
 
   tablesState.push(newTable);
@@ -126,13 +136,50 @@ const renderTableContent = (widget: HTMLElement, table: Table) => {
   const contentContainer = widget.querySelector(".grid-stack-item-content");
   if (!contentContainer) return;
 
+  // Очистка предыдущего содержимого
   contentContainer.innerHTML = `
     <div class="grid-stack-item__info">
       <span class="table-number">Стол ${table.number}</span>
       <span class="table-capacity">${table.capacity} чел.</span>
     </div>
-    <span class="delete-icon">×</span>
   `;
+
+  if (props.selectedTableId === table.id) {
+    contentContainer.classList.add("grid-stack-item--selectable");
+    contentContainer.classList.add("grid-stack-item--selected");
+    selectedTable.value = table.id;
+  }
+
+  if (props.clickable) {
+    // Добавь класс для клика
+    contentContainer.classList.add("grid-stack-item--selectable");
+
+    // Обработчик клика по столу
+    contentContainer.addEventListener("click", () => {
+      const isSelected = contentContainer.classList.contains(
+        "grid-stack-item--selected"
+      );
+
+      if (props.readonly && !isSelected) {
+        // Очищаем предыдущий выбор
+        document
+          .querySelectorAll(".grid-stack-item--selected")
+          .forEach((el) => el.classList.remove("grid-stack-item--selected"));
+
+        // Устанавливаем новый
+        contentContainer.classList.add("grid-stack-item--selected");
+        selectedTable.value = table.id;
+      } else if (!props.readonly) {
+        contentContainer.classList.toggle(
+          "grid-stack-item--selected",
+          !isSelected
+        );
+        selectedTable.value = isSelected ? null : table.number;
+      }
+
+      emit("update:selected-table", selectedTable.value);
+    });
+  }
 
   const deleteIcon = contentContainer.querySelector(".delete-icon");
   if (deleteIcon) {
@@ -176,8 +223,7 @@ watch(
   () => props.tables,
   (newTables) => {
     if (gs) setTablesData(newTables);
-  },
-  { immediate: true }
+  }
 );
 
 // Инициализация GridStack
@@ -190,7 +236,9 @@ onMounted(() => {
       margin: 5,
       column: 30,
       float: true,
-      removable: true,
+      removable: props.readonly,
+      disableResize: props.readonly,
+      disableDrag: props.readonly,
     },
     grid.value
   );
