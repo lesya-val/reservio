@@ -4,6 +4,18 @@ export enum Role {
   EMPLOYEE = "EMPLOYEE",
 }
 
+export enum BookingStatus {
+  NEW = "NEW",
+  CONFIRMED = "CONFIRMED",
+  CANCELED = "CANCELED",
+}
+
+export const statusMap = {
+  [BookingStatus.NEW]: "Новая",
+  [BookingStatus.CONFIRMED]: "Подтверждена",
+  [BookingStatus.CANCELED]: "Отменена",
+};
+
 export interface User {
   id: number;
   name: string;
@@ -40,28 +52,25 @@ export interface Hall {
 }
 
 export interface Table {
-  id?: number;
+  id: number;
   number: number;
   capacity: number;
   x: number;
   y: number;
   width: number;
   height: number;
-  hallId?: number;
+  hallId: number;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
 export interface Booking {
-  id: number;
+  status?: string;
+  guestsCount: number;
+  dateTime: string;
   name: string;
   phone: string;
-  date: Date;
-  guestsCount: number;
-  tableNumber: number;
-  notes?: string;
-  restaurantId: number;
-  userId?: number;
-  createdAt?: Date;
-  updatedAt?: Date;
+  notes: string;
+  hallId?: number | null;
+  tableId?: number;
 }
