@@ -75,20 +75,6 @@ const restaurantData = reactive<Restaurant>({
   isActive: true,
 });
 
-const formFields = [
-  {
-    id: "name",
-    label: "Email",
-    placeholder: "Введите email",
-  },
-  {
-    id: "password",
-    label: "Пароль",
-    placeholder: "Введите пароль",
-    type: "password",
-  },
-];
-
 // Получение ошибок валидации
 const v$ = useVuelidate(restaurantValidationRules, restaurantData);
 
