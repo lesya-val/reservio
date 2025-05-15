@@ -1,0 +1,41 @@
+[
+  {
+    "id": "status",
+    "name": "Статус"
+  },
+  {
+    "id": "date",
+    "name": "Дата"
+  },
+  {
+    "id": "time",
+    "name": "Время"
+  },
+  {
+    "id": "guestsCount",
+    "name": "Гостей"
+  },
+  {
+    "id": "hall",
+    "name": "Зал"
+  },
+  {
+    "id": "table",
+    "name": "Стол"
+  },
+  {
+    "id": "name",
+    "name": "Имя"
+  },
+  {
+    "id": "phone",
+    "name": "Телефон"
+  },
+  {
+    "id": "notes",
+    "name": "Комментарий"
+  },
+  {
+    "id": "delete"
+  }
+]
