@@ -12,6 +12,13 @@
     color: $blue;
   }
 
+  &__left {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 20px;
+  }
+
   &__right {
     @include flex-center;
     gap: 20px;
