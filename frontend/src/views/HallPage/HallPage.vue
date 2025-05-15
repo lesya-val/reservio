@@ -24,6 +24,7 @@
             <TablesGrid
               :showButton="formVisible"
               :tables="hallData.tables"
+              :readonly="!formVisible"
               @update:tables="(val) => (hallData.tables = val)"
             />
           </div>
@@ -37,12 +38,7 @@
 import { onMounted, ref, computed, toRaw } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import {
-  AppForm,
-  ListControls,
-  TablesGrid,
-  VDefault,
-} from "@/components";
+import { AppForm, ListControls, TablesGrid, VDefault } from "@/components";
 
 import useVuelidate from "@vuelidate/core";
 import { requiredField } from "@/helpers/validationHelpers";
