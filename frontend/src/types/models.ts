@@ -4,6 +4,12 @@ export enum Role {
   EMPLOYEE = "EMPLOYEE",
 }
 
+export const roleMap = {
+  [Role.SYSTEM_ADMIN]: "Системный администратор",
+  [Role.RESTAURANT_ADMIN]: "Администратор",
+  [Role.EMPLOYEE]: "Сотрудник",
+};
+
 export enum BookingStatus {
   NEW = "NEW",
   CONFIRMED = "CONFIRMED",
