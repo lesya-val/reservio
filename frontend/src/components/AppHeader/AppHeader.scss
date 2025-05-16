@@ -1,50 +1,53 @@
 .header {
-  @include flex-space-between;
-  padding: 25px;
-  gap: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
   border-bottom: 1px solid $light-gray;
+  font-family: "Segoe UI", sans-serif;
 
-  &__left {
-    @include flex-center;
-    gap: 25px;
+  &__left,
+  &__right {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
     cursor: pointer;
   }
 
-  &__logo {
-    width: 64px;
-    height: 64px;
+  &__info {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    cursor: pointer;
   }
 
   &__title {
-    font-family: "Raleway";
-    font-weight: 700;
-  }
-
-  &__center {
-    font-family: "Raleway";
     font-weight: 600;
-    color: $dark-gray;
+    font-size: 20px;
   }
 
-  &__nav {
-    display: flex;
-    gap: 30px;
-  }
-
-  &__menu {
-    @include flex-space-between;
-    gap: 30px;
-  }
-
-  &__profile {
-    &-icon {
-      position: relative;
-      cursor: pointer;
+  &__restaurant {
+    &--prefix {
+      font-weight: 400;
     }
   }
 }
 
 .nav {
+  display: flex;
+  align-items: center;
+  font-weight: 400;
+  font-size: 16px;
+  gap: 30px;
+
+  &__list {
+    display: flex;
+    gap: 30px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
   &__item {
     padding: 10px 20px;
     border-radius: 20px;
@@ -58,6 +61,7 @@
     &--active {
       background-color: $dark-yellow;
       color: $white;
+      font-weight: 500;
 
       &:hover {
         background-color: $yellow;
@@ -67,19 +71,39 @@
   }
 }
 
-.dropdown-menu {
-  position: absolute;
-  z-index: 100;
-  right: 5px;
-  top: 75px;
-  background-color: $white;
-  border-radius: 4px;
-  box-shadow: 0px 2px 10px 0px $light-gray;
+.profile {
+  position: relative;
+  cursor: pointer;
 
+  &__icon {
+    width: 32px;
+    height: 32px;
+    transition: transform 0.3s ease;
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+
+  &__dropdown {
+    position: absolute;
+    right: -20px;
+    top: 40px;
+    background-color: $white;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px 0 rgba($color: #000, $alpha: 0.15);
+    z-index: 100;
+    min-width: 50px;
+  }
+}
+
+.dropdown {
   &__item {
-    display: flex;
-    align-items: center;
-    padding: 8px 18px;
+    padding: 10px 18px;
+    font-size: 14px;
     cursor: pointer;
+
+    &:hover {
+      background-color: $blue-translucent;
+    }
   }
 }
