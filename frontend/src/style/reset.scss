@@ -32,7 +32,7 @@ html {
 body {
   font-size: 14px;
   font-weight: 500;
-  font-family: "Open Sans";
+  font-family: "Segoe UI" ;
   color: #000000;
   background-color: transparent;
 }
@@ -72,6 +72,13 @@ svg {
 
 /* Form */
 
+input,
+textarea {
+  font-size: 14px;
+  font-weight: 500;
+  font-family: "Segoe UI" ;
+}
+
 input::-ms-clear {
   display: none;
 }
@@ -102,4 +109,21 @@ button::-moz-focus-inner {
 
 label {
   cursor: pointer;
+}
+
+select {
+  width: 100%;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  outline: none;
+
+  &::-ms-expand {
+    display: none;
+  }
+
+  option[disabled][hidden] {
+    display: none;
+  }
 }

@@ -21,7 +21,7 @@
   &__title {
     font-size: 24px;
     font-weight: 600;
-    font-family: "Raleway";
+    font-family: "Segoe UI" ;
     align-self: center;
   }
 
@@ -81,8 +81,8 @@ textarea {
   .dp {
     &__input {
       font-size: 14px;
-      font-weight: 400;
-      font-family: "Segoe UI";
+      font-weight: 500;
+      font-family: "Segoe UI" ;
       &_wrap {
         ::placeholder {
           color: #757575;

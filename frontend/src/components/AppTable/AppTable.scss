@@ -1,7 +1,6 @@
 .table {
   max-height: calc(100vh - 260px);
   overflow-y: auto;
-  padding-left: 25px;
 
   &__table {
     width: 100%;
@@ -40,6 +39,10 @@
   &__cell {
     padding: 15px 10px;
     line-height: 2;
+
+    &:first-child {
+      padding-left: 30px;
+    }
 
     &-th {
       text-align: left;
