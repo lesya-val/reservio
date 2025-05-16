@@ -16,19 +16,6 @@
 
         <div class="list-controls__title">{{ title }}</div>
       </div>
-
-      <div v-if="hasActionButton" class="list-controls__right">
-        <AppButton v-if="!isEditMode && !isNewDoc" @click="emit('edit')">
-          Редактировать
-        </AppButton>
-
-        <template v-else>
-          <AppButton view="outlined" @click="goBack">
-            {{ cancelButtonText }}
-          </AppButton>
-          <AppButton @click="emit('save')">{{ actionButtonText }}</AppButton>
-        </template>
-      </div>
     </div>
 
     <div v-if="hasDateSelector" class="list-controls__row">
@@ -48,12 +35,24 @@
       />
     </div>
 
-    <div
-      v-if="hasSearch"
-      style="justify-content: end"
-      class="list-controls__row"
-    >
-      <Search class="list-controls__search" @search="emit('search', $event)" />
+    <div style="justify-content: end" class="list-controls__row">
+      <Search
+        v-if="hasSearch"
+        class="list-controls__search"
+        @search="emit('search', $event)"
+      />
+      <div v-if="hasActionButton" class="list-controls__right">
+        <AppButton v-if="!isEditMode && !isNewDoc" @click="emit('edit')">
+          Редактировать
+        </AppButton>
+
+        <template v-else>
+          <AppButton view="outlined" @click="goBack">
+            {{ cancelButtonText }}
+          </AppButton>
+          <AppButton @click="emit('save')">{{ actionButtonText }}</AppButton>
+        </template>
+      </div>
     </div>
   </div>
 </template>

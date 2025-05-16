@@ -1,11 +1,12 @@
 .list-controls {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  justify-content: space-between;
   padding: 30px 25px;
   gap: 20px;
 
   &__row {
     @include flex-space-between;
+    width: 100%;
     gap: 20px;
   }
 
