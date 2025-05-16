@@ -2,12 +2,13 @@
   <v-default class="employee">
     <ListControls
       :has-search="false"
+      :has-back="!createMode"
       :is-new-doc="createMode"
       :is-edit-mode="isEditMode"
-      :has-back="!createMode"
       @edit="isEditMode = true"
       @save="handleSubmit"
     />
+
     <div class="wrapper">
       <div class="employee__content">
         <AppForm
@@ -24,10 +25,11 @@
 
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from "vue";
+import { useRouter, useRoute } from "vue-router";
 
 import { AppForm, VDefault, ListControls } from "@/components";
-import { useRouter, useRoute } from "vue-router";
-import useVuelidate from "@vuelidate/core";
+import { useVuelidate } from "@vuelidate/core";
+
 import { showNotification } from "@/hooks/useNotification";
 import {
   createEmployee,
@@ -37,36 +39,49 @@ import {
 import { updateRestaurant } from "@/services/restaurantApi";
 import { adminValidationRules } from "./validationRules";
 import { cleanData } from "@/helpers/dataHelpers";
-import { isCreateMode } from "@/helpers/routeHelpers";
-import employeeFields from "./employeeFields.json";
+import { isCreateMode, userRole } from "@/helpers/routeHelpers";
+import employeeCols from "../EmployeeListPage/employeeCols";
+
 import { Role, User } from "@/types";
 
 const router = useRouter();
 const route = useRoute();
-const createMode = isCreateMode();
+
+const createMode = ref(isCreateMode());
 const isEditMode = ref(false);
 
+// Данные сотрудника
 const adminData = reactive({
   id: 0,
   name: "",
   surname: "",
   phone: "",
   email: "",
-  role: Role.RESTAURANT_ADMIN,
+  role: Role.EMPLOYEE,
   restaurantId: +route.params.restaurantId,
 });
 
 const v$ = useVuelidate(adminValidationRules, adminData);
 
+// Фильтр колонок
 const filteredAdminCols = computed(() =>
-  employeeFields.filter((_, index) => index !== 0)
+  employeeCols.filter(
+    (el, index) => index !== 0 && el.id !== "delete" && el.id !== "role"
+  )
 );
 
-const formTitle = computed(() =>
-  createMode.value
-    ? "Добавление администратора"
-    : "Информация об администраторе"
-);
+// Заголовок формы
+const formTitle = computed(() => {
+  const isSystemAdmin = userRole() === "SYSTEM_ADMIN";
+  if (createMode.value) {
+    return isSystemAdmin
+      ? "Добавление администратора"
+      : "Добавление сотрудника";
+  }
+  return isSystemAdmin
+    ? "Информация об администраторе"
+    : "Информация о сотруднике";
+});
 
 const handleSubmit = async () => {
   const isValid = await v$.value.$validate();
@@ -76,34 +91,59 @@ const handleSubmit = async () => {
     return;
   }
 
-  const cleanedData = cleanData<User>(adminData);
-
   try {
+    const payload = cleanData<User>(adminData);
+
+    let result;
+
     if (createMode.value) {
-      const admin = await createEmployee(adminData.restaurantId, cleanedData);
-      await updateRestaurant(adminData.restaurantId, { adminId: admin.id });
+      if (userRole() === "SYSTEM_ADMIN") {
+        const admin = await createEmployee(adminData.restaurantId, {
+          ...payload,
+          role: Role.RESTAURANT_ADMIN,
+        });
+        await updateRestaurant(adminData.restaurantId, { adminId: admin.id });
+      } else {
+        result = await createEmployee(adminData.restaurantId, payload);
+      }
     } else {
-      await updateEmployee(adminData.restaurantId, adminData.id, cleanedData);
+      result = await updateEmployee(
+        adminData.restaurantId,
+        adminData.id,
+        payload
+      );
     }
-    showNotification(
-      createMode.value
-        ? "Сотрудник успешно сохранен!"
-        : "Сотрудник успешно обновлен!",
-      "success"
-    );
-    await router.push({ name: "RestaurantList" });
-  } catch {
+
+    if (result) {
+      showNotification(
+        createMode.value
+          ? "Сотрудник успешно сохранен!"
+          : "Сотрудник успешно обновлен!",
+        "success"
+      );
+
+      const redirectName =
+        userRole() === "SYSTEM_ADMIN" ? "RestaurantList" : "EmployeeList";
+
+      await router.push({ name: redirectName });
+    }
+  } catch (e) {
+    console.error(e);
     showNotification("Ошибка при сохранении сотрудника!");
   }
 };
 
 onMounted(async () => {
   if (!createMode.value) {
-    const employee = await getEmployeeById(
-      adminData.restaurantId,
-      +route.params.id
-    );
-    Object.assign(adminData, employee);
+    try {
+      const employee = await getEmployeeById(
+        adminData.restaurantId,
+        +route.params.id
+      );
+      Object.assign(adminData, employee);
+    } catch (e) {
+      showNotification("Ошибка загрузки сотрудника");
+    }
   }
 });
 </script>
