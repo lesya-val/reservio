@@ -214,11 +214,6 @@ const handleSave = async () => {
     dateTime: new Date(`${date.value}T${time.value}:00`),
   };
 
-  console.log(
-    new Date(`${date.value}T${time.value}:00`),
-    `${date.value}T${time.value}:00`
-  );
-
   try {
     if (createMode.value) {
       const result = await createBooking(payload);
