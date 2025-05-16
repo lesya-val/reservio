@@ -1,5 +1,6 @@
 .list-controls {
-  @include flex-column;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   padding: 30px 25px;
   gap: 20px;
 
@@ -28,9 +29,45 @@
     color: $dark-gray;
     font-size: 24px;
     font-family: Raleway;
+    font-weight: 600;
   }
 
   &__search {
     width: 16rem;
+  }
+}
+
+.list-controls__date-selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: #414b58;
+  width: 100%;
+  gap: 10px;
+}
+
+:deep() {
+  .dp--clear-btn,
+  .dp__input {
+    display: none;
+  }
+
+  .dp__input_icon {
+    left: -5%;
+    padding: 0;
+    transition: all 0.3s ease;
+    color: #414b58;
+
+    &:hover {
+      color: $blue;
+    }
+  }
+
+  .dp__outer_menu_wrap,
+  .dp--menu-wrapper {
+    top: 1.5rem !important;
+    left: auto !important;
+    right: 50% !important;
   }
 }

@@ -3,8 +3,10 @@
     <ListControls
       :has-back="false"
       :has-action-button="false"
+      :has-date-selector="true"
       title="Управление бронированиями"
       @search="handleSearch"
+      @update:date="onDateChanged"
     />
 
     <AppTable
@@ -54,7 +56,7 @@
   </AppModal>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, reactive, computed } from "vue";
 import { useRouter } from "vue-router";
 
@@ -84,25 +86,17 @@ import { formattedDate } from "@/helpers/dataHelpers";
 const router = useRouter();
 const authStore = useAuthStore();
 
+// Состояние модального окна смены пароля
 const isModalActive = ref(false);
 
-const bookings = ref();
+// Список всех броней
+const bookings = ref([]);
 
+// Поиск и дата
 const searchQuery = ref("");
+const selectedDate = ref(new Date());
 
-// Фильтрация по всем полям
-const filteredBookings = computed(() => {
-  const query = searchQuery.value.toLowerCase();
-
-  return !query
-    ? bookings.value
-    : bookings.value.filter((r) =>
-        Object.values(r).some((val) =>
-          String(val).toLowerCase().includes(query)
-        )
-      );
-});
-
+// Пароль для модалки
 const passwordData = reactive({
   oldPassword: "",
   newPassword: "",
@@ -110,6 +104,80 @@ const passwordData = reactive({
 
 const v$ = useVuelidate(passwordValidationRules, passwordData);
 
+// Форматирование данных брони (с отложенными полями)
+const formatBookingData = async (bookings) => {
+  return await Promise.all(
+    bookings.map(async (booking) => {
+      const [dateStr, timeStr] = booking.dateTime.split("T");
+      const formatDate = formattedDate(dateStr);
+      const formatTime = timeStr?.slice(0, 5) || "";
+
+      let hallName = "Не указан";
+      let tableNumber = null;
+
+      if (booking.tableId) {
+        try {
+          const table = await getTableById(booking.tableId);
+          const hall = await getHallById(table.hallId);
+
+          hallName = hall.name;
+          tableNumber = table.number;
+        } catch (e) {
+          console.warn("Столик не найден", booking.tableId);
+        }
+      }
+
+      return {
+        ...booking,
+        date: formatDate,
+        time: formatTime,
+        hall: hallName,
+        table: tableNumber,
+        status: statusMap[booking.status] || booking.status,
+      };
+    })
+  );
+};
+
+// Фильтрация по дате
+const filteredByDate = computed(() => {
+  const today = new Date(selectedDate.value);
+  const dateStart = new Date(today.setHours(0, 0, 0, 0));
+  const dateEnd = new Date(today.setHours(23, 59, 59, 999));
+
+  return bookings.value.filter((booking) => {
+    const bookingDate = new Date(booking.dateTime).getTime();
+    return (
+      bookingDate >= dateStart.getTime() && bookingDate <= dateEnd.getTime()
+    );
+  });
+});
+
+// Фильтрация по строке поиска
+const filteredBookings = computed(() => {
+  const query = searchQuery.value.toLowerCase();
+
+  return !query
+    ? filteredByDate.value
+    : filteredByDate.value.filter((r) =>
+        Object.values(r).some((val) =>
+          String(val).toLowerCase().includes(query)
+        )
+      );
+});
+
+// Загрузка броней при монтировании
+const init = async () => {
+  const rawBookings = await getBookings();
+  const formatted = await formatBookingData(rawBookings);
+  bookings.value = formatted;
+
+  if (authStore.user?.isTempPassword) {
+    isModalActive.value = true;
+  }
+};
+
+// Методы работы с паролем
 const handleChangePassword = async () => {
   const isValid = await v$.value.$validate();
   if (!isValid) {
@@ -126,68 +194,31 @@ const handleChangePassword = async () => {
 
   if (response) {
     authStore.updateUser({ isTempPassword: false });
-
     showNotification("Пароль успешно изменён!", "success");
     isModalActive.value = false;
-  } else showNotification("Ошибка при изменении пароля!");
+  } else {
+    showNotification("Ошибка при изменении пароля!");
+  }
 };
 
+// Удаление брони
 const deleteItem = async ({ id }) => {
   try {
     await deleteBooking(id);
     bookings.value = bookings.value.filter((r) => r.id !== id);
   } catch (e) {
-    showNotification("Ошибка при удалении ресторана");
+    showNotification("Ошибка при удалении брони");
   }
 };
 
-const formatBookingData = async (bookings) => {
-  const formatted = [];
-
-  for (const booking of bookings) {
-    const [dateStr, timeStr] = booking.dateTime.split("T");
-    const formatDate = formattedDate(dateStr);
-    const formatTime = timeStr?.slice(0, 5) || "";
-
-    let hallName = "Не указан";
-    let tableNumber = "";
-
-    if (booking.tableId) {
-      try {
-        const table = await getTableById(booking.tableId);
-        const hall = await getHallById(table.hallId);
-
-        hallName = hall.name;
-        tableNumber = table.number;
-      } catch (e) {
-        console.warn("Столик не найден", booking.tableId);
-      }
-    }
-
-    formatted.push({
-      ...booking,
-      date: formatDate,
-      time: formatTime,
-      hall: hallName,
-      table: tableNumber,
-      status: statusMap[booking.status] || booking.status,
-    });
-  }
-
-  return formatted;
+// Поиск
+const handleSearch = (v) => {
+  searchQuery.value = v;
 };
 
-const init = async () => {
-  const rawBookings = await getBookings();
-  bookings.value = await formatBookingData(rawBookings);
-
-  if (authStore.user?.isTempPassword) {
-    isModalActive.value = true;
-  }
-};
-
-const addBooking = () => {
-  router.push({ name: "Booking", params: { id: "create" } });
+// Изменение даты
+const onDateChanged = (date) => {
+  selectedDate.value = date;
 };
 
 onMounted(init);
