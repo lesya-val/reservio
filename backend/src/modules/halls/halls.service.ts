@@ -15,7 +15,7 @@ export class HallsService {
         ...hallData,
         restaurantId,
         tables: {
-          create: tables.map((table) => ({
+          create: tables?.map((table) => ({
             number: table.number,
             capacity: table.capacity,
             x: table.x,

@@ -18,8 +18,7 @@ export class CreateHallDto {
   capacity: number;
 
   @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => CreateTableDto)
+  @IsOptional()
   tables: CreateTableDto[];
 }
 
