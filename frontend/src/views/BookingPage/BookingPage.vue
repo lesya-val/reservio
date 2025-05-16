@@ -77,7 +77,7 @@
               :readonly="!(createMode || isEditMode)"
             />
             <textarea
-              v-if="bookingData.notes"
+              v-if="createMode || bookingData.notes"
               v-model="bookingData.notes"
               placeholder="Пожелания"
               :readonly="!(createMode || isEditMode)"
