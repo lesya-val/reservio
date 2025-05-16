@@ -24,7 +24,7 @@
     </AppButton>
   </v-default>
 
-  <AppModal v-if="isModalActive" @close="handleCloseModal">
+  <AppModal v-if="isModalActive" @close="isModalActive = false">
     <template #title>
       <p class="modal__title">Смена временного пароля</p>
     </template>
@@ -219,6 +219,11 @@ const handleSearch = (v) => {
 // Изменение даты
 const onDateChanged = (date) => {
   selectedDate.value = date;
+};
+
+// Создание брони
+const addBooking = () => {
+  router.push({ name: "Booking", params: { id: "create" } });
 };
 
 onMounted(init);
