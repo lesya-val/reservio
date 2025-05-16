@@ -54,7 +54,7 @@ import { Table } from "@/types";
 const props = defineProps<{
   tables: Table[];
   showButton?: boolean;
-  selectedTableId: number | null;
+  selectedTableId?: number | null;
   readonly: boolean;
   clickable: boolean;
 }>();
@@ -144,7 +144,7 @@ const renderTableContent = (widget: HTMLElement, table: Table) => {
     </div>
   `;
 
-  if (props.selectedTableId === table.id) {
+  if (props.selectedTableId && props.selectedTableId === table.id) {
     contentContainer.classList.add("grid-stack-item--selectable");
     contentContainer.classList.add("grid-stack-item--selected");
     selectedTable.value = table.id;
