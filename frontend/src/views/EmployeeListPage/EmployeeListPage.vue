@@ -89,7 +89,7 @@ const init = async () => {
 // Удаление сотрудника и обновление списка
 const deleteItem = async ({ id }: User) => {
   try {
-    // await deleteEmployee(id);
+    await deleteEmployee(authStore.user.restaurantId, id);
     employees.value = employees.value.filter((r) => r.id !== id);
   } catch (e) {
     showNotification("Ошибка при удалении сотрудника");
