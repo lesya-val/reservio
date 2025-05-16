@@ -24,7 +24,7 @@
             />
           </div>
           <div class="halls__card-info">
-            <p>Количество свободных столов:</p>
+            <p>Количество столов:</p>
             <p>{{ hall.capacity }}</p>
           </div>
         </div>
