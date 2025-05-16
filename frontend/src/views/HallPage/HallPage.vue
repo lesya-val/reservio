@@ -74,7 +74,6 @@ const handleSave = async () => {
 
   const payload = {
     ...hallData.value,
-    tables: toRaw(hallData.value.tables),
     capacity: +hallData.value.tables.length,
   };
 
