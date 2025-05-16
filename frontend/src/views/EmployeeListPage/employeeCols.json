@@ -4,6 +4,10 @@
     "name": "№"
   },
   {
+    "id": "role",
+    "name": "Роль"
+  },
+  {
     "id": "name",
     "name": "Имя"
   },
@@ -18,5 +22,8 @@
   {
     "id": "email",
     "name": "Email"
+  },
+  {
+    "id": "delete"
   }
 ]

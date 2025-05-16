@@ -4,10 +4,11 @@ import App from "../App.vue";
 import RestaurantListPage from "../views/RestaurantListPage";
 import BookingListPage from "../views/BookingListPage";
 import RestaurantPage from "../views/RestaurantPage";
-import HallsListPage from "../views/HallsListPage/HallsListPage.vue";
+import HallsListPage from "../views/HallsListPage";
+import EmployeeListPage from "../views/EmployeeListPage";
 import BookingPage from "../views/BookingPage";
 import EmployeePage from "../views/EmployeePage";
-import HallPage from "../views/HallPage/HallPage.vue";
+import HallPage from "../views/HallPage";
 import LoginPage from "../views/LoginPage";
 
 const routes = [
@@ -30,6 +31,11 @@ const routes = [
     path: "/restaurants/:id",
     name: "Restaurant",
     component: RestaurantPage,
+  },
+  {
+    path: "/employees",
+    name: "EmployeeList",
+    component: EmployeeListPage,
   },
   {
     path: "/restaurants/:restaurantId/employees/:id?",
