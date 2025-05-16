@@ -70,6 +70,7 @@ const props = defineProps<{
   cols: TableColumn[];
   data: Array<{ [key: string]: any }>;
   itemPageName: string;
+  params?: any;
 }>();
 
 const emit = defineEmits<{
@@ -98,7 +99,10 @@ const handleCellAction = (col: TableColumn, item: any) => {
     isModalActive.value = true;
     itemToDelete.value = item;
   } else {
-    router.push({ name: props.itemPageName, params: { id: item.id } });
+    router.push({
+      name: props.itemPageName,
+      params: props.params ? props.params : { id: item.id },
+    });
   }
 };
 </script>
