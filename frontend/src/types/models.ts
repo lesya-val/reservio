@@ -66,6 +66,7 @@ export interface Table {
   width: number;
   height: number;
   hallId: number;
+  bookings?: Booking[];
   createdAt?: Date;
   updatedAt?: Date;
 }
