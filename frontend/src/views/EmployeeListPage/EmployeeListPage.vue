@@ -61,13 +61,20 @@ const params = {
 const filteredEmployees = computed(() => {
   const query = searchQuery.value.toLowerCase();
 
-  return !query
+  const filtered = !query
     ? employees.value
     : employees.value.filter((r) =>
         Object.values(r).some((val) =>
           String(val).toLowerCase().includes(query)
         )
       );
+
+  // Сортируем так, чтобы админ был первым
+  return filtered.sort((a, b) => {
+    if (a.role === "Администратор") return -1;
+    if (b.role === "Администратор") return 1;
+    return 0;
+  });
 });
 
 // Загрузка сотрудников при монтировании
