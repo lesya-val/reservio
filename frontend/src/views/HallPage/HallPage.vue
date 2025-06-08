@@ -15,7 +15,7 @@
             <h2 v-if="!formVisible">{{ hallData.name }}</h2>
             <AppForm
               v-if="formVisible"
-              :title="!formVisible ? 'Добавление зала' : 'Редактирование стола'"
+              :title="createMode ? 'Добавление зала' : 'Редактирование зала'"
               :model="hallData"
               :cols="hallFields"
               :validation="v$"
