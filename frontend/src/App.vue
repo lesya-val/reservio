@@ -2,6 +2,8 @@
   <div class="app">
     <router-view />
 
+    <PreBookingNotifications />
+
     <AppNotification
       v-if="notification.isVisible"
       :type="notification.type"
@@ -14,6 +16,7 @@
 
 <script setup lang="ts">
 import AppNotification from "@/components/AppNotification";
+import PreBookingNotifications from "./components/PreBookingNotifications/PreBookingNotifications.vue";
 import { notification, hideNotification } from "@/hooks/useNotification";
 </script>
 
