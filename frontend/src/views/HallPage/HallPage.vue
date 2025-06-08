@@ -24,7 +24,7 @@
             <TablesGrid
               :showButton="formVisible"
               :tables="hallData.tables"
-              :readonly="!formVisible"
+              :readonly="false"
               :clickable="false"
               @update:tables="(val) => (hallData.tables = val)"
             />

@@ -154,6 +154,7 @@ const renderTableContent = (widget: HTMLElement, table: Table) => {
     <div class="grid-stack-item__info">
       <span class="table-number">Стол ${table.number}</span>
       <span class="table-capacity">${table.capacity} чел.</span>
+      ${!props.readonly ? '<span class="delete-icon">×</span>' : ""}
     </div>
   `;
 
@@ -288,9 +289,8 @@ onMounted(() => {
       margin: 5,
       column: 30,
       float: true,
-      removable: props.readonly,
-      disableResize: props.readonly,
       disableDrag: props.readonly,
+      disableResize: props.readonly,
     },
     grid.value
   );
