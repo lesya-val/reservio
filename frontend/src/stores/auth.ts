@@ -1,17 +1,28 @@
 import { defineStore } from "pinia";
 
 interface AuthState {
-  token: string | null;
   user: any | null;
   isAuthenticated: boolean;
 }
 
 export const useAuthStore = defineStore("auth", {
-  state: (): AuthState => ({
-    token: localStorage.getItem("token"),
-    user: JSON.parse(localStorage.getItem("user") || "null"),
-    isAuthenticated: !!localStorage.getItem("token"),
-  }),
+  state: (): AuthState => {
+    const storedUser = localStorage.getItem("user");
+
+    // Проверяем, что storedUser — валидный JSON
+    let parsedUser = null;
+    try {
+      parsedUser = storedUser ? JSON.parse(storedUser) : null;
+    } catch (e) {
+      console.warn("Невалидные данные в localStorage для 'user':", e);
+      localStorage.removeItem("user");
+    }
+
+    return {
+      user: parsedUser,
+      isAuthenticated: !!parsedUser,
+    };
+  },
 
   actions: {
     async login(loginData: any, router: any) {
@@ -21,44 +32,38 @@ export const useAuthStore = defineStore("auth", {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            email: loginData.email,
-            password: loginData.password,
-          }),
+          credentials: "include",
+          body: JSON.stringify(loginData),
         });
 
         if (!response.ok) {
-          throw new Error("Ошибка");
+          throw new Error("Ошибка авторизации");
         }
 
         const data = await response.json();
-        const { access_token, user } = data;
+        this.user = data.user;
 
-        this.token = access_token;
-        this.user = user;
-        this.isAuthenticated = true;
-
-        localStorage.setItem("token", access_token);
-        localStorage.setItem("user", JSON.stringify(user));
-
-        if (user.role === "SYSTEM_ADMIN") {
-          await router.push({ name: "RestaurantList" });
+        if (this.user && this.user.role === "SYSTEM_ADMIN") {
+          router.push({ name: "RestaurantList" });
         } else {
-          await router.push({ name: "BookingList" });
+          router.push({ name: "BookingList" });
         }
+
+        // Сохраняем только публичные данные
+        localStorage.setItem("user", JSON.stringify(this.user));
+
+        this.isAuthenticated = true;
 
         return true;
       } catch (error) {
-        console.error("Ошибка авторизации: ", error);
+        console.error("Ошибка авторизации:", error);
         return false;
       }
     },
 
     logout() {
-      this.token = null;
       this.user = null;
       this.isAuthenticated = false;
-      localStorage.removeItem("token");
       localStorage.removeItem("user");
     },
 
