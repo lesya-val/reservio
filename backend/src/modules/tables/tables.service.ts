@@ -22,6 +22,41 @@ export class TablesService {
     return table;
   }
 
+  async findByIdWithBookings(id: number, date: string) {
+    const table = await this.prisma.table.findUnique({
+      where: { id },
+      include: {
+        bookings: {
+          where: {
+            dateTime: {
+              gte: new Date(date), // Больше или равно началу дня
+              lt: new Date(
+                new Date(date).setDate(new Date(date).getDate() + 1)
+              ), // Меньше начала следующего дня
+            },
+            status: {
+              not: "CANCELED", // Исключаем отмененные брони
+            },
+          },
+          select: {
+            id: true,
+            dateTime: true,
+            status: true,
+            guestsCount: true,
+            name: true,
+            phone: true,
+          },
+        },
+      },
+    });
+
+    if (!table) {
+      throw new Error("Стол не найден");
+    }
+
+    return table;
+  }
+
   async create(data: CreateTableDto) {
     return this.prisma.table.create({ data });
   }

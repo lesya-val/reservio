@@ -7,6 +7,7 @@ import {
   Patch,
   Delete,
   UseGuards,
+  Query,
 } from "@nestjs/common";
 import { TablesService } from "./tables.service";
 import { CreateTableDto, UpdateTableDto } from "./tables.dto";
@@ -25,6 +26,14 @@ export class TablesController {
   @Get(":id")
   findOne(@Param("id") id: string) {
     return this.tablesService.findById(+id);
+  }
+
+  @Get(":id/bookings")
+  findOneWithBookings(@Param("id") id: string, @Query("date") date: string) {
+    if (!date) {
+      throw new Error("Необходимо указать дату");
+    }
+    return this.tablesService.findByIdWithBookings(+id, date);
   }
 
   @Post()

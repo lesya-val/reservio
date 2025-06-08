@@ -4,6 +4,7 @@
       <div ref="grid" class="grid-stack" />
     </div>
 
+    <!-- Кнопка добавления стола -->
     <AppButton v-if="showButton" class="add-button" @click="openAddTableModal">
       <template #icon-after>
         <AppIcon value="plus" width="20px" height="20px" />
@@ -11,6 +12,7 @@
       <p>Добавить стол</p>
     </AppButton>
 
+    <!-- Модальное окно для добавления -->
     <AppModal v-if="isModalActive" @close="closeAddTableModal">
       <template #title>
         <p class="grid__modal">Добавление стола</p>
@@ -40,8 +42,10 @@
 import { ref, onMounted, reactive, watch } from "vue";
 import { GridStack } from "gridstack";
 
+// Компоненты UI-библиотеки
 import { AppButton, AppIcon, AppInput, AppModal } from "../index";
 
+// Хелперы
 import { getErrorMessage } from "@/helpers/errorHelpers";
 import { requiredField } from "@/helpers/validationHelpers";
 import useVuelidate from "@vuelidate/core";
@@ -49,15 +53,21 @@ import "gridstack/dist/gridstack.min.css";
 
 import { showNotification } from "@/hooks/useNotification";
 
+// Типы
 import { Table } from "@/types";
 
+// Props
 const props = defineProps<{
   tables: Table[];
   showButton?: boolean;
   selectedTableId?: number | null;
   readonly: boolean;
   clickable: boolean;
+  guestsCount?: number;
+  dateTime?: string;
 }>();
+
+// Emits
 const emit = defineEmits<{
   (e: "update:tables", value: Table[]): void;
   (e: "update:selected-table", value: number | null): void;
@@ -66,8 +76,11 @@ const emit = defineEmits<{
 let gs: any;
 const grid = ref<HTMLElement | null>(null);
 
+// Состояние модального окна и данные формы
 const isModalActive = ref(false);
 const tableData = reactive({ capacity: 1 });
+
+// Локальное состояние таблиц
 const tablesState = reactive<Table[]>([]);
 const selectedTable = ref<number | null>(null);
 
@@ -144,6 +157,43 @@ const renderTableContent = (widget: HTMLElement, table: Table) => {
     </div>
   `;
 
+  // Проверяем вместимость
+  const isTableSuitable =
+    !props.guestsCount || table.capacity >= props.guestsCount;
+
+  // Проверяем занятость стола
+  const isTableBooked = table.bookings?.some((booking) => {
+    if (!props.dateTime) return false;
+
+    const bookingDateTime = new Date(booking.dateTime);
+    const selectedDateTime = new Date(props.dateTime);
+
+    // Проверяем, что бронирования не пересекаются
+    // Допустим, что бронирование длится 2 часа
+    const bookingEndTime = new Date(
+      bookingDateTime.getTime() + 2 * 60 * 60 * 1000
+    );
+    const selectedEndTime = new Date(
+      selectedDateTime.getTime() + 2 * 60 * 60 * 1000
+    );
+
+    return (
+      (selectedDateTime >= bookingDateTime &&
+        selectedDateTime < bookingEndTime) ||
+      (selectedEndTime > bookingDateTime &&
+        selectedEndTime <= bookingEndTime) ||
+      (selectedDateTime <= bookingDateTime && selectedEndTime >= bookingEndTime)
+    );
+  });
+
+  if (!isTableSuitable) {
+    contentContainer.classList.add("grid-stack-item--disabled");
+  }
+
+  if (isTableBooked) {
+    contentContainer.classList.add("grid-stack-item--booked");
+  }
+
   if (props.selectedTableId && props.selectedTableId === table.id) {
     contentContainer.classList.add("grid-stack-item--selectable");
     contentContainer.classList.add("grid-stack-item--selected");
@@ -151,8 +201,10 @@ const renderTableContent = (widget: HTMLElement, table: Table) => {
   }
 
   if (props.clickable) {
-    // Добавь класс для клика
-    contentContainer.classList.add("grid-stack-item--selectable");
+    // Добавляем класс для клика только если стол доступен
+    if (isTableSuitable && !isTableBooked) {
+      contentContainer.classList.add("grid-stack-item--selectable");
+    }
 
     // Обработчик клика по столу
     contentContainer.addEventListener("click", () => {
