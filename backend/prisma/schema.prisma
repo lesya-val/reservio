@@ -15,7 +15,7 @@ enum Role {
 
 enum BookingStatus {
   NEW       @map("Новая")
-  CONFIRMED @map("Подтверждена")
+  CONFIRMED @map("Активна")
   CANCELED  @map("Отменена")
 }
 

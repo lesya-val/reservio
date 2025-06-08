@@ -18,7 +18,7 @@ export enum BookingStatus {
 
 export const statusMap = {
   [BookingStatus.NEW]: "Новая",
-  [BookingStatus.CONFIRMED]: "Подтверждена",
+  [BookingStatus.CONFIRMED]: "Активна",
   [BookingStatus.CANCELED]: "Отменена",
 };
 
