@@ -77,8 +77,8 @@ import { useVuelidate } from "@vuelidate/core";
 import { changePassword } from "../../services/userApi";
 import { getErrorMessage } from "../../helpers/errorHelpers";
 import { deleteBooking, getBookings } from "@/services/bookingApi";
-import { getTableById } from "@/services/tableApi";
-import { getHallById } from "@/services/hallsApi";
+import { getTables } from "@/services/tableApi";
+import { getHalls } from "@/services/hallsApi";
 import { passwordValidationRules } from "./validationRules";
 import { statusMap } from "@/types";
 import { formattedDate } from "@/helpers/dataHelpers";
@@ -106,37 +106,36 @@ const v$ = useVuelidate(passwordValidationRules, passwordData);
 
 // Форматирование данных брони (с отложенными полями)
 const formatBookingData = async (bookings) => {
-  return await Promise.all(
-    bookings.map(async (booking) => {
-      const [dateStr, timeStr] = booking.dateTime.split("T");
-      const formatDate = formattedDate(dateStr);
-      const formatTime = timeStr?.slice(0, 5) || "";
+  const tables = await getTables();
+  const halls = await getHalls();
 
-      let hallName = "Не указан";
-      let tableNumber = null;
+  return bookings.map((booking) => {
+    const [dateStr, timeStr] = booking.dateTime.split("T");
+    const formatDate = formattedDate(dateStr);
+    const formatTime = timeStr?.slice(0, 5) || "";
 
-      if (booking.tableId) {
-        try {
-          const table = await getTableById(booking.tableId);
-          const hall = await getHallById(table.hallId);
+    let hallName = "Не указан";
+    let tableNumber = null;
 
-          hallName = hall.name;
-          tableNumber = table.number;
-        } catch (e) {
-          console.warn("Столик не найден", booking.tableId);
-        }
+    if (booking.tableId) {
+      const table = tables.find((t) => t.id === booking.tableId);
+      if (table && table.hallId) {
+        const hall = halls.find((h) => h.id === table.hallId);
+
+        hallName = hall?.name || "Зал не найден";
+        tableNumber = table.number;
       }
+    }
 
-      return {
-        ...booking,
-        date: formatDate,
-        time: formatTime,
-        hall: hallName,
-        table: tableNumber,
-        status: statusMap[booking.status] || booking.status,
-      };
-    })
-  );
+    return {
+      ...booking,
+      date: formatDate,
+      time: formatTime,
+      hall: hallName,
+      table: tableNumber,
+      status: statusMap[booking.status] || booking.status,
+    };
+  });
 };
 
 // Фильтрация по дате
