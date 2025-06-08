@@ -102,7 +102,9 @@ const handleSubmit = async () => {
           ...payload,
           role: Role.RESTAURANT_ADMIN,
         });
-        await updateRestaurant(adminData.restaurantId, { adminId: admin.id });
+        result = await updateRestaurant(adminData.restaurantId, {
+          adminId: admin.id,
+        });
       } else {
         result = await createEmployee(adminData.restaurantId, payload);
       }
@@ -121,6 +123,7 @@ const handleSubmit = async () => {
           : "Сотрудник успешно обновлен!",
         "success"
       );
+
 
       const redirectName =
         userRole() === "SYSTEM_ADMIN" ? "RestaurantList" : "EmployeeList";
