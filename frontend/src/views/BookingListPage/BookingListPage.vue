@@ -156,13 +156,20 @@ const filteredByDate = computed(() => {
 const filteredBookings = computed(() => {
   const query = searchQuery.value.toLowerCase();
 
-  return !query
+  const filtered = !query
     ? filteredByDate.value
     : filteredByDate.value.filter((r) =>
         Object.values(r).some((val) =>
           String(val).toLowerCase().includes(query)
         )
       );
+
+  // Добавляем сортировку по времени
+  return filtered.sort((a, b) => {
+    const timeA = a.time || "";
+    const timeB = b.time || "";
+    return timeA.localeCompare(timeB);
+  });
 });
 
 // Загрузка броней при монтировании
