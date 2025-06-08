@@ -15,7 +15,7 @@
 
     <div class="header__right">
       <nav class="header__nav nav">
-        <ul v-if="userRole !== 'EMPLOYEE'" class="nav__list">
+        <ul v-if="userRole !== 'SYSTEM_ADMIN'" class="nav__list">
           <li
             v-for="(item, index) in menuItems"
             :key="index"
