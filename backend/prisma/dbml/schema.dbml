@@ -1,0 +1,130 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table restaurants {
+  id Int [pk, increment]
+  name String [not null]
+  address String [not null]
+  phone String [not null]
+  email String
+  isActive Boolean [not null, default: true]
+  users users [not null]
+  adminId Int [unique]
+  admin users
+  bookings bookings [not null]
+  halls halls [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  PreBooking PreBooking [not null]
+}
+
+Table halls {
+  id Int [pk, increment]
+  name String [not null]
+  capacity Int [not null]
+  restaurantId Int [not null]
+  restaurant restaurants [not null]
+  tables tables [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table tables {
+  id Int [pk, increment]
+  number Int [not null]
+  capacity Int [not null]
+  x Int [not null]
+  y Int [not null]
+  width Int [not null]
+  height Int [not null]
+  hallId Int [not null]
+  hall halls [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  Booking bookings [not null]
+}
+
+Table users {
+  id Int [pk, increment]
+  name String [not null]
+  surname String [not null]
+  phone String
+  email String [not null]
+  password String
+  role Role [not null]
+  restaurantId Int
+  restaurant restaurants
+  managedRestaurant restaurants
+  isTempPassword Boolean [not null, default: true]
+  bookings bookings [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table bookings {
+  id Int [pk, increment]
+  restaurantId Int [not null]
+  restaurant restaurants [not null]
+  userId Int
+  user users
+  tableId Int
+  table tables
+  name String [not null]
+  phone String [not null]
+  email String [not null]
+  status BookingStatus
+  dateTime DateTime [not null]
+  guestsCount Int [not null]
+  notes String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table PreBooking {
+  id Int [pk, increment]
+  restaurantId Int [not null]
+  restaurant restaurants [not null]
+  name String [not null]
+  phone String [not null]
+  guestsCount Int [not null]
+  dateTime DateTime [not null]
+  notes String
+  status PreBookingStatusEnum [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Enum Role {
+  SYSTEM_ADMIN
+  RESTAURANT_ADMIN
+  EMPLOYEE
+}
+
+Enum BookingStatus {
+  NEW
+  CONFIRMED
+  CANCELED
+}
+
+Enum PreBookingStatusEnum {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+Ref: restaurants.adminId - users.id
+
+Ref: halls.restaurantId > restaurants.id [delete: Cascade]
+
+Ref: tables.hallId > halls.id [delete: Cascade]
+
+Ref: users.restaurantId > restaurants.id [delete: Cascade]
+
+Ref: bookings.restaurantId > restaurants.id [delete: Cascade]
+
+Ref: bookings.userId > users.id [delete: Cascade]
+
+Ref: bookings.tableId > tables.id [delete: Cascade]
+
+Ref: PreBooking.restaurantId > restaurants.id [delete: Cascade]
