@@ -3,6 +3,11 @@
   flex-direction: column;
   gap: 5px;
   width: 100%;
+  background-color: $white;
+
+  ::placeholder {
+    color: #9e9e9e;
+  }
 
   &__label {
     white-space: nowrap;
