@@ -2,7 +2,7 @@
   @include flex-column;
   height: 100vh;
   gap: 30px;
-  background-color: rgba($color: $light-gray, $alpha: 0.5);
+  background-color: rgba($color: $light-gray, $alpha: 0.4);
 
   &__header {
     @include flex-align-center;
