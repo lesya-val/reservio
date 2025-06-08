@@ -6,19 +6,22 @@
       v-model="searchValue"
       :placeholder="'Поиск'"
       :view="'text'"
+      @input="handleSearch"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { AppIcon, AppInput } from "../index";
 
 const searchValue = ref("");
 
 const emit = defineEmits(["search"]);
 
-emit("search", searchValue.value);
+const handleSearch = () => {
+  emit("search", searchValue.value);
+};
 </script>
 
 <style scoped lang="scss">
