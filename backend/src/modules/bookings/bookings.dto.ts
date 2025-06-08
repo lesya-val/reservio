@@ -37,6 +37,10 @@ export class CreateBookingDto {
 
   @IsString()
   @IsOptional()
+  email?: string;
+
+  @IsString()
+  @IsOptional()
   notes?: string;
 }
 
@@ -68,6 +72,10 @@ export class UpdateBookingDto {
   @IsInt()
   @IsOptional()
   tableId?: number;
+
+  @IsString()
+  @IsOptional()
+  email?: string;
 
   @IsString()
   @IsOptional()

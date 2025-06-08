@@ -22,9 +22,10 @@ export class BookingsController {
   @Post()
   async create(
     @User("restaurantId") restaurantId: number,
+    @User("id") userId: number,
     @Body() dto: CreateBookingDto
   ) {
-    return this.bookingsService.create(restaurantId, dto);
+    return this.bookingsService.create(restaurantId, userId, dto);
   }
 
   // Получение всех бронирований
