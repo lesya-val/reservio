@@ -1,19 +1,12 @@
 import { useAuthStore } from "../stores/auth";
 
 export const createApiClient = () => {
-  const getHeaders = () => {
-    const token = localStorage.getItem("token");
-    return {
-      "Content-Type": "application/json",
-      Authorization: token ? `Bearer ${token}` : "",
-    };
-  };
-
   const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
     const response = await fetch(url, {
       ...options,
+      credentials: "include",
       headers: {
-        ...getHeaders(),
+        "Content-Type": "application/json",
         ...(options.headers || {}),
       },
     });
