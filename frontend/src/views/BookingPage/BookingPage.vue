@@ -1,5 +1,6 @@
 <template>
   <v-default class="booking">
+    <!-- <WidgetPage /> -->
     <ListControls
       :has-search="false"
       :is-new-doc="createMode"
@@ -108,6 +109,8 @@
                 :readonly="true"
                 :clickable="createMode || isEditMode"
                 :selected-table-id="bookingData.tableId"
+                :guests-count="bookingData.guestsCount"
+                :date-time="dateTime"
                 @update:tables="(val) => (tables = val)"
                 @update:selected-table="selectedTable"
               />
@@ -147,7 +150,8 @@ import {
 } from "@/services/bookingApi";
 import { useRoute, useRouter } from "vue-router";
 import { formattedDate } from "@/helpers/dataHelpers";
-import { getTableById } from "@/services/tableApi";
+import { getTableById, getTableWithBookings } from "@/services/tableApi";
+import WidgetPage from "../WidgetPage/WidgetPage.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -159,6 +163,11 @@ const hallsOptions = ref();
 
 const date = ref("");
 const time = ref("");
+
+const dateTime = computed(() => {
+  if (!date.value || !time.value) return undefined;
+  return `${date.value}T${time.value}:00`;
+});
 
 const statusOptions = Object.entries(statusMap).map(([value, label]) => ({
   value,
@@ -191,12 +200,40 @@ const guestsOptions = Array.from({ length: 50 }, (_, i) => ({
   value: i + 1,
 }));
 
-const selectedHall = async (id) => {
-  const hall = await getHallById(id);
-  bookingData.hallId = +id;
-  tables.value = hall.tables;
-};
+const selectedHall = async (id: number | string) => {
+  try {
+    const hall = await getHallById(id);
 
+    if (!hall) {
+      console.warn("Зал не найден");
+      tables.value = [];
+      return;
+    }
+
+    // Сохраняем ID зала
+    bookingData.hallId = +id;
+
+    // Получаем все столы зала
+    const tablesWithBookings = await Promise.all(
+      hall.tables.map(async (table) => {
+        if (date.value) {
+          const tableWithBookings = await getTableWithBookings(
+            table.id,
+            date.value
+          );
+          return tableWithBookings;
+        }
+        return table;
+      })
+    );
+
+    tables.value = tablesWithBookings;
+    console.log(tables.value);
+  } catch (e) {
+    console.error("Ошибка при загрузке зала:", e);
+    tables.value = [];
+  }
+};
 const selectedTable = async (table) => {
   bookingData.tableId = table;
 };
@@ -210,8 +247,9 @@ const handleSave = async () => {
 
   const payload = {
     ...bookingData,
+    email: route.query.email,
     guestsCount: +bookingData.guestsCount,
-    dateTime: new Date(`${date.value}T${time.value}:00`),
+    dateTime: new Date(`${date.value}T${time.value}:00+03:00`),
   };
 
   try {
@@ -240,15 +278,39 @@ onMounted(async () => {
     value: hall.id,
   }));
 
-  if (!createMode.value) {
+  const query = route.query;
+  if (query.name) {
+    // Заполняем данные из предварительной заявки
+    bookingData.name = query.name as string;
+    bookingData.phone = query.phone as string;
+    bookingData.guestsCount = Number(query.guestsCount);
+
+    // Разбиваем dateTime на дату и время
+    const dateTime = new Date(query.dateTime as string);
+    date.value = dateTime.toISOString().split("T")[0];
+    time.value = dateTime.toLocaleTimeString("ru-RU", {
+      hour: "2-digit",
+      minute: "2-digit",
+      timeZone: "Europe/Moscow",
+    });
+
+    if (query.notes) {
+      bookingData.notes = query.notes as string;
+    }
+  } else if (!createMode.value) {
+    // Существующая логика загрузки бронирования
     try {
       const data = await getBookingById(+route.params.id);
       const table = await getTableById(data.tableId);
       const hall = await getHallById(table.hallId);
 
-      const [dateStr, timeStr] = data.dateTime.split("T");
-      date.value = dateStr;
-      time.value = timeStr?.slice(0, 5) || "";
+      const dateTime = new Date(data.dateTime);
+      date.value = dateTime.toISOString().split("T")[0];
+      time.value = dateTime.toLocaleTimeString("ru-RU", {
+        hour: "2-digit",
+        minute: "2-digit",
+        timeZone: "Europe/Moscow",
+      });
 
       bookingData.status = data.status;
       bookingData.guestsCount = data.guestsCount;
