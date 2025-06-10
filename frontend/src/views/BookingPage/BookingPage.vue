@@ -9,13 +9,6 @@
       @edit="isEditMode = true"
       @save="handleSave"
     />
-    <!-- <iframe
-      src="https://reservio.onrender.com/widget?id=21"
-      width="100%"
-      height="650"
-      style="border: none; max-width: 500px"
-    >
-    </iframe> -->
     <div class="wrapper">
       <div class="booking__content">
         <div class="booking__layout">
