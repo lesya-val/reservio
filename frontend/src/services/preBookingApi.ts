@@ -18,3 +18,24 @@ export const rejectPreBooking = async (request: { id: number }) => {
   });
   return await response.json();
 };
+
+export const createPreBooking = async (
+  restaurantId: number,
+  data: {
+    name: string;
+    phone: string;
+    email?: string;
+    guestsCount: number;
+    dateTime: string;
+    notes?: string;
+  }
+) => {
+  const response = await fetch(`${BASE_URL}?restaurantId=${restaurantId}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  return await response.json();
+};
