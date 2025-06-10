@@ -78,13 +78,20 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
-  const publicPages = ["/login"];
+  const publicPages = ["/login", "/widget"];
   const authRequired = !publicPages.includes(to.path);
 
-  if (authRequired && !authStore.isAuthenticated) {
+  // Если страница публичная - пропускаем
+  if (!authRequired) {
+    return next();
+  }
+
+  // Если пользователь не аутентифицирован - редирект на логин
+  if (!authStore.isAuthenticated) {
     return next("/login");
   }
 
+  // Если все проверки пройдены - пропускаем
   next();
 });
 
