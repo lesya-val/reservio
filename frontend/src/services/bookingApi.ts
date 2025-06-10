@@ -1,7 +1,7 @@
 import { Booking } from "../types/index";
 import apiClient from "./apiClient";
 
-const BASE_URL = "http://localhost:3000/bookings";
+const BASE_URL = "https://reservio-backend.onrender.com/bookings";
 
 // Получить список всех бронирований
 export const getBookings = async (): Promise<Booking[]> => {

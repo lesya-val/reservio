@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:3000/pre-bookings";
+const BASE_URL = "https://reservio-backend.onrender.com/pre-bookings";
 
 export const getPendingRequests = async (restaurantId: number) => {
   const response = await fetch(`${BASE_URL}?restaurantId=${restaurantId}`);

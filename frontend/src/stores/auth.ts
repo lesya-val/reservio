@@ -27,14 +27,17 @@ export const useAuthStore = defineStore("auth", {
   actions: {
     async login(loginData: any, router: any) {
       try {
-        const response = await fetch("http://localhost:3000/auth/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify(loginData),
-        });
+        const response = await fetch(
+          "https://reservio-backend.onrender.com/auth/login",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify(loginData),
+          }
+        );
 
         if (!response.ok) {
           throw new Error("Ошибка авторизации");

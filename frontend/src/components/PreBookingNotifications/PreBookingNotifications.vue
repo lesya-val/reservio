@@ -48,7 +48,7 @@ const pendingRequests = ref([]);
 onMounted(() => {
   if (!useAuthStore().user) return;
 
-  const socket = io("http://localhost:3000", {
+  const socket = io("https://reservio-backend.onrender.com/", {
     query: {
       restaurantId: useAuthStore().user.restaurantId,
     },

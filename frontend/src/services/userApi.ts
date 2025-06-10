@@ -1,7 +1,7 @@
 import { User } from "../types/index";
 import apiClient from "./apiClient";
 
-const BASE_URL = "http://localhost:3000/restaurants";
+const BASE_URL = "https://reservio-backend.onrender.com/restaurants";
 
 // Получить список всех сотрудников ресторана
 export const getEmployeesByRestaurantId = async (

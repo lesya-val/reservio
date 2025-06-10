@@ -1,7 +1,7 @@
 import { Table } from "../types/index";
 import apiClient from "@/services/apiClient";
 
-const BASE_URL = "http://localhost:3000/tables";
+const BASE_URL = "https://reservio-backend.onrender.com/tables";
 
 // Получить все столы
 export const getTables = async (): Promise<Table[]> => {

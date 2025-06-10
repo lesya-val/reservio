@@ -1,7 +1,7 @@
 import { Restaurant } from "../types";
 import apiClient from "./apiClient";
 
-const BASE_URL = "http://localhost:3000/restaurants";
+const BASE_URL = "https://reservio-backend.onrender.com/restaurants";
 
 // Получить список всех ресторанов
 export const getRestaurants = async (): Promise<Restaurant[]> => {
