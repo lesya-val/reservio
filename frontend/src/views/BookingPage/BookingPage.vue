@@ -1,6 +1,5 @@
 <template>
   <v-default class="booking">
-    <!-- <WidgetPage /> -->
     <ListControls
       :has-search="false"
       :is-new-doc="createMode"
@@ -10,7 +9,13 @@
       @edit="isEditMode = true"
       @save="handleSave"
     />
-
+    <!-- <iframe
+      src="http://localhost:5173/widget?id=21"
+      width="100%"
+      height="650"
+      style="border: none; max-width: 500px"
+    >
+    </iframe> -->
     <div class="wrapper">
       <div class="booking__content">
         <div class="booking__layout">
@@ -151,7 +156,6 @@ import {
 import { useRoute, useRouter } from "vue-router";
 import { formattedDate } from "@/helpers/dataHelpers";
 import { getTableById, getTableWithBookings } from "@/services/tableApi";
-import WidgetPage from "../WidgetPage/WidgetPage.vue";
 
 const route = useRoute();
 const router = useRouter();

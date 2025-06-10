@@ -3,6 +3,7 @@ import {
   validPhone,
   maxLengthRule,
   minValueRule,
+  validEmail,
 } from "@/helpers/validationHelpers";
 
 export const bookingValidationRules = {
@@ -12,6 +13,10 @@ export const bookingValidationRules = {
   phone: {
     required: requiredField(),
     validPhone: validPhone(),
+  },
+  email: {
+    required: requiredField(),
+    validPhone: validEmail(),
   },
   guestsCount: {
     required: requiredField(),
