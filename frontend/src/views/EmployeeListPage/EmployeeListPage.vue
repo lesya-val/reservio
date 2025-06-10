@@ -115,5 +115,5 @@ onMounted(init);
 </script>
 
 <style scoped lang="scss">
-@import "./employeeListPage.scss";
+@import "./EmployeeListPage.scss";
 </style>
