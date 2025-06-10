@@ -33,7 +33,6 @@ export class EmployeesService {
     // Генерация временного пароля
     const temporaryPassword = generateTemporaryPassword();
 
-    
     // Хэширование пароля
     const hashedPassword = await hashPassword(temporaryPassword);
 
@@ -49,11 +48,11 @@ export class EmployeesService {
     });
 
     // Используем MailService из DI
-    // await this.mailService.sendTemporaryPasswordEmail(
-    //   createEmployeeDto.email,
-    //   temporaryPassword,
-    //   employeeData
-    // );
+    await this.mailService.sendTemporaryPasswordEmail(
+      createEmployeeDto.email,
+      temporaryPassword,
+      employeeData
+    );
 
     return createdEmployee;
   }
