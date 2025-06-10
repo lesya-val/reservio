@@ -48,11 +48,11 @@ export class EmployeesService {
     });
 
     // Используем MailService из DI
-    await this.mailService.sendTemporaryPasswordEmail(
-      createEmployeeDto.email,
-      temporaryPassword,
-      employeeData
-    );
+    // await this.mailService.sendTemporaryPasswordEmail(
+    //   createEmployeeDto.email,
+    //   temporaryPassword,
+    //   employeeData
+    // );
 
     return createdEmployee;
   }
