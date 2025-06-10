@@ -10,6 +10,7 @@ import BookingPage from "../views/BookingPage";
 import EmployeePage from "../views/EmployeePage";
 import HallPage from "../views/HallPage";
 import LoginPage from "../views/LoginPage";
+import WidgetFrame from "../views/Widget";
 
 const routes = [
   {
@@ -61,6 +62,12 @@ const routes = [
     path: "/halls/:id",
     name: "Hall",
     component: HallPage,
+  },
+  {
+    path: "/widget",
+    name: "Widget",
+    component: WidgetFrame,
+    meta: { public: true }, // Делаем маршрут публичным
   },
 ];
 

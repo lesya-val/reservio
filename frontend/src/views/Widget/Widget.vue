@@ -2,12 +2,13 @@
   <div class="widget-form">
     <h2>Забронировать столик</h2>
 
-    <form @submit.prevent="submitBooking" class="booking-widget">
+    <div class="booking-widget">
       <AppInput
         v-model="booking.guestsCount"
         placeholder="Количество гостей"
         type="number"
         :min="1"
+        :error="getErrorMessage(v$.guestsCount)"
       />
       <VueDatePicker
         v-model="booking.date"
@@ -43,29 +44,25 @@
         :error="getErrorMessage(v$.email)"
       />
       <textarea v-model="booking.notes" placeholder="Пожелания" />
-      <AppButton style="background-color: #414b58" type="submit">
+      <AppButton @click="submitForm" style="background-color: #414b58">
         Забронировать
       </AppButton>
-    </form>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { reactive } from "vue";
 import { AppInput, AppButton } from "@/components";
-
 import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import { getErrorMessage } from "@/helpers/errorHelpers";
 import { bookingValidationRules } from "../BookingPage/validationRules";
 import useVuelidate from "@vuelidate/core";
 import { formattedDate } from "@/helpers/dataHelpers";
+import { createPreBooking } from "@/services/preBookingApi";
 
-const props = defineProps<{
-  restaurantId: number;
-}>();
-
-const booking = ref({
+const booking = reactive({
   name: "",
   phone: "",
   email: "",
@@ -78,26 +75,46 @@ const booking = ref({
 // Получение ошибок валидации
 const v$ = useVuelidate(bookingValidationRules, booking);
 
-const submitBooking = async () => {
+// Получаем restaurantId из props
+const props = defineProps<{
+  restaurantId: number;
+}>();
+
+const submitForm = async () => {
   try {
-    const response = await fetch("http://localhost:3000/bookings", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(booking.value),
+    // Формируем дату и время в нужном формате
+    const dateTime = new Date(
+      `${booking.date}T${booking.time}:00`
+    ).toISOString();
+
+    await createPreBooking(props.restaurantId, {
+      name: booking.name,
+      phone: booking.phone,
+      email: booking.email,
+      guestsCount: parseInt(booking.guestsCount),
+      dateTime,
+      notes: booking.notes,
     });
 
-    if (response.ok) {
-      alert("Бронь отправлена! Скоро с вами свяжутся.");
-    } else {
-      alert("Ошибка при отправке");
-    }
-  } catch (e) {
-    console.error(e);
-    alert("Не удалось отправить бронь");
-}
+    alert("Бронирование успешно создано!");
+
+    // Очищаем форму после успешной отправки
+    booking = {
+      name: "",
+      phone: "",
+      email: "",
+      guestsCount: "",
+      date: "",
+      time: "",
+      notes: "",
+    };
+  } catch (error) {
+    console.error("Ошибка при бронировании:", error);
+    alert("Ошибка при бронировании");
+  }
 };
 </script>
 
 <style scoped lang="scss">
-@import "./WidgetPage";
+@import "./Widget";
 </style>
