@@ -18,7 +18,7 @@ export class AuthController {
     // Установка куки
     res.cookie("auth_token", access_token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
       sameSite: "none",
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 дней
     });
