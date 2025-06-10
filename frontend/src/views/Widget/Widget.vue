@@ -99,7 +99,7 @@ const submitForm = async () => {
     alert("Бронирование успешно создано!");
 
     // Очищаем форму после успешной отправки
-    booking = {
+    Object.assign(booking, {
       name: "",
       phone: "",
       email: "",
@@ -107,7 +107,7 @@ const submitForm = async () => {
       date: "",
       time: "",
       notes: "",
-    };
+    });
   } catch (error) {
     console.error("Ошибка при бронировании:", error);
     alert("Ошибка при бронировании");
