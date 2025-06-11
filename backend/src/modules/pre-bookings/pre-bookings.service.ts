@@ -93,4 +93,18 @@ export class PreBookingsService {
 
     return updatedRequest;
   }
+
+  async deleteRequest(id: number) {
+    const preBooking = await this.prisma.preBooking.findUnique({
+      where: { id },
+    });
+
+    if (!preBooking) {
+      throw new Error("Заявка не найдена");
+    }
+
+    return this.prisma.preBooking.delete({
+      where: { id },
+    });
+  }
 }

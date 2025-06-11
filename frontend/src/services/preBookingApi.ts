@@ -39,3 +39,10 @@ export const createPreBooking = async (
   });
   return await response.json();
 };
+
+export const deletePreBooking = async (id: number) => {
+  const response = await fetch(`${BASE_URL}/${id}`, {
+    method: "DELETE",
+  });
+  return await response.json();
+};

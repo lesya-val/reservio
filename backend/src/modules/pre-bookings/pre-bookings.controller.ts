@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Param, Query } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Param,
+  Query,
+  Delete,
+} from "@nestjs/common";
 import { PreBookingsService } from "./pre-bookings.service";
 import { CreatePreBookingDto } from "./pre-bookings.dto";
 
@@ -19,6 +27,12 @@ export class PreBookingsController {
     @Body() dto: CreatePreBookingDto
   ) {
     return this.preBookingsService.create(+restaurantId, dto);
+  }
+
+  // Удаление заявки
+  @Delete(":id")
+  async delete(@Param("id") id: string) {
+    return this.preBookingsService.deleteRequest(+id);
   }
 
   // Подтверждение

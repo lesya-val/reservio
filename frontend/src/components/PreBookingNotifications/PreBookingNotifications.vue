@@ -6,7 +6,15 @@
         :key="request.id"
         class="pre-booking__card"
       >
-        <h4>Новая заявка</h4>
+        <div class="pre-booking__card-header">
+          <h4>Новая заявка</h4>
+          <button
+            class="pre-booking__delete-btn"
+            @click="deleteRequest(request)"
+          >
+            ×
+          </button>
+        </div>
         <p><strong>Имя:</strong> {{ request.name }}</p>
         <p><strong>Телефон:</strong> {{ request.phone }}</p>
         <p><strong>Дата:</strong> {{ formattedDate(request.dateTime) }}</p>
@@ -35,6 +43,7 @@ import {
   getPendingRequests,
   acceptPreBooking,
   rejectPreBooking,
+  deletePreBooking,
 } from "@/services/preBookingApi";
 import { useRouter } from "vue-router";
 import { formattedDate } from "@/helpers/dataHelpers";
@@ -81,6 +90,13 @@ const rejectRequest = async (request) => {
     (r) => r.id !== request.id
   );
   await router.push({ name: "BookingList" });
+};
+
+const deleteRequest = async (request) => {
+  await deletePreBooking(request.id);
+  pendingRequests.value = pendingRequests.value.filter(
+    (r) => r.id !== request.id
+  );
 };
 </script>
 
